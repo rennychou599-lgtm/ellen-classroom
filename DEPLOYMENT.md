@@ -25,7 +25,7 @@ git commit -m "Initial commit: 鈺倫の教室项目"
 2. 将代码推送到 GitHub：
 
 ```bash
-git remote add origin https://github.com/你的用户名/ellen-classroom.git
+git remote add origin https://github.com/rennychou599-lgtm/ellen-classroom.git
 git branch -M main
 git push -u origin main
 ```
