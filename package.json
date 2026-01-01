@@ -1,0 +1,13 @@
+{
+  "name": "ellen-classroom",
+  "version": "1.0.0",
+  "description": "鈺倫の教室 - 学习管理平台",
+  "private": true,
+  "scripts": {
+    "start": "cd backend && node server.js",
+    "install-deps": "cd backend && npm install"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
