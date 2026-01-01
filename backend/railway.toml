@@ -1,9 +1,8 @@
 [build]
 builder = "RAILPACK"
-buildCommand = "cd backend && npm install"
 
 [deploy]
-startCommand = "cd backend && node server.js"
+startCommand = "node server.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
