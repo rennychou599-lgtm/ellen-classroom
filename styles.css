@@ -2395,7 +2395,13 @@ textarea.form-control {
     }
 
     .noticeboard-wrapper {
-        gap: 8px;
+        gap: 6px !important;
+        padding: 0 0.5rem;
+    }
+
+    .noticeboard-btn {
+        flex-shrink: 0;
+        z-index: 10;
     }
 
     .noticeboard-btn {
@@ -2487,15 +2493,25 @@ textarea.form-control {
     }
 
     .noticeboard-container {
-        min-height: 200px;
+        min-height: auto !important;
+        padding: 0.5rem 0;
+    }
+
+    .noticeboard-slide {
+        width: 90% !important;
+    }
+
+    .noticeboard-slide.active {
+        width: 90% !important;
     }
 
     .notice-card {
-        padding: 1.75rem 1.5rem;
-        gap: 1.25rem;
-        min-height: 180px;
-        flex-direction: column;
-        text-align: center;
+        padding: 1.5rem 1.25rem !important;
+        gap: 1rem !important;
+        min-height: auto !important;
+        flex-direction: column !important;
+        text-align: center !important;
+        border-radius: 12px !important;
     }
 
     .notice-icon {
@@ -2523,13 +2539,36 @@ textarea.form-control {
     .notice-card>div[style*="display: flex"] {
         flex-direction: column !important;
         gap: 1rem !important;
+        align-items: center !important;
     }
 
     .notice-card>div[style*="display: flex"]>div[style*="width: 45%"] {
         width: 100% !important;
         max-width: 100% !important;
-        height: 150px !important;
+        height: 180px !important;
         margin-bottom: 0.5rem;
+    }
+
+    .notice-card .notice-content {
+        width: 100% !important;
+        text-align: center !important;
+        padding: 0 0.5rem;
+    }
+
+    .notice-card .notice-title {
+        font-size: 1.15rem !important;
+        margin-bottom: 0.75rem !important;
+        line-height: 1.4 !important;
+    }
+
+    .notice-card .notice-text {
+        font-size: 0.9rem !important;
+        line-height: 1.6 !important;
+        margin-bottom: 0.75rem !important;
+        -webkit-line-clamp: 4 !important;
+        display: -webkit-box !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
     }
 
     .noticeboard-indicators {
