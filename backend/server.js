@@ -11,7 +11,15 @@ const progressRoutes = require('./routes/progress');
 const feedbackRoutes = require('./routes/feedback');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+// 确保 PORT 是有效的整数
+let PORT = parseInt(process.env.PORT, 10);
+
+// 验证 PORT 是否有效
+if (isNaN(PORT) || PORT < 0 || PORT > 65535) {
+  console.warn('⚠️  无效的 PORT 值:', process.env.PORT);
+  console.warn('使用默认端口 3000');
+  PORT = 3000;
+}
 
 // 中间件
 app.use(cors({
