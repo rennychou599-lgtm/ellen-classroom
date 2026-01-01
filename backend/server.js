@@ -33,6 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 // 注意：__dirname 是 backend 目录，所以 '../' 指向项目根目录
 const staticPath = path.join(__dirname, '../');
 console.log('📁 静态文件路径:', staticPath);
+console.log('📁 __dirname:', __dirname);
 app.use(express.static(staticPath));
 
 // 健康检查
