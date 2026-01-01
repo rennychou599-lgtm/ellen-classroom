@@ -59,7 +59,14 @@ app.get('*', (req, res, next) => {
     return next();
   }
   // 否则返回 index.html（用于 SPA 路由）
-  res.sendFile(path.join(__dirname, '../index.html'));
+  const indexPath = path.join(__dirname, '../index.html');
+  console.log('📄 返回 index.html，路径:', indexPath);
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error('❌ 无法发送 index.html:', err.message);
+      return next();
+    }
+  });
 });
 
 // 404 处理
