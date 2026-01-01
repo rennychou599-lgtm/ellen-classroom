@@ -22,7 +22,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // 提供静态文件（前端）
-app.use(express.static(path.join(__dirname, '../')));
+// 注意：__dirname 是 backend 目录，所以 '../' 指向项目根目录
+const staticPath = path.join(__dirname, '../');
+console.log('📁 静态文件路径:', staticPath);
+app.use(express.static(staticPath));
 
 // 健康检查
 app.get('/health', (req, res) => {
@@ -72,10 +75,11 @@ async function startServer() {
     console.log('⚠️  警告: 数据库连接失败，但服务器仍会启动');
   }
 
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 服务器运行在端口 ${PORT}`);
     console.log(`📡 API 地址: http://localhost:${PORT}/api`);
     console.log(`🌍 环境: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🌐 监听地址: 0.0.0.0:${PORT}`);
   });
 }
 
