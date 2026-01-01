@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成績查詢 | 鈺倫の教室</title>
+    <link rel="icon" type="image/png" href="Ellennoback.png">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Zhi+Mang+Xing&family=Ma+Shan+Zheng&family=Caveat:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .grades-page {
+            min-height: 80vh;
+            padding: 4rem 2rem;
+            background: #ffffff;
+        }
+
+        .grades-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        /* 初始狀態：如果已登入，隱藏登入表單 */
+        .login-card.checking-login {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .login-card h2 {
+            color: #000000;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #000000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .grades-display {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .grades-display.active {
+            display: block;
+        }
+
+        .student-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 12px;
+            border: 2px solid #e1e8ed;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .student-info-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
+        }
+
+        .student-info-text h3 {
+            color: #2c3e50;
+            margin: 0 0 0.25rem 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .student-info-text p {
+            margin: 0;
+            color: #5a6c7d;
+            font-size: 0.9rem;
+        }
+
+        .student-info-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .back-btn,
+        .logout-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn {
+            background: white;
+            color: #3498db;
+            border: 2px solid #3498db;
+        }
+
+        .back-btn:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        /* 成績表格容器 */
+        .grades-table-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            margin-top: 1rem;
+        }
+
+        .grades-table-header {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .grades-table-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .grades-table-header h3 i {
+            margin-right: 0.5rem;
+            color: #ecf0f1;
+        }
+
+
+        .grades-table-wrapper {
+            max-height: 350px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease;
+            background: #f8f9fa;
+            border-top: 2px solid var(--border-color);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+
+        /* 自定義滾動條樣式 */
+        .grades-table-wrapper::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .grades-table-wrapper::-webkit-scrollbar-track {
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .grades-table-wrapper::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            border-radius: 5px;
+            border: 2px solid #ecf0f1;
+        }
+
+        .grades-table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .grades-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+            background: white;
+        }
+
+        .grades-table th,
+        .grades-table td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+            border-left: none;
+            border-right: none;
+        }
+
+        .grades-table td {
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .grades-table th {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+            padding: 0.75rem 1rem;
+        }
+
+        .filter-header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .filter-header span {
+            font-size: 0.95rem;
+            white-space: nowrap;
+            color: white;
+            font-weight: 500;
+        }
+
+        .filter-select {
+            flex: 1;
+            min-width: 80px;
+            padding: 0.4rem 1.8rem 0.4rem 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+        }
+
+        .filter-select:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-select:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-select option {
+            background: #34495e;
+            color: white;
+        }
+
+        .grades-table tbody tr {
+            background: white;
+            transition: background 0.2s;
+        }
+
+        .grades-table tbody tr:hover {
+            background: #f0f4ff;
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .grades-table tbody tr:nth-child(even) {
+            background: #fafbfc;
+        }
+
+        .grades-table tbody tr:nth-child(even):hover {
+            background: #f0f4ff;
+        }
+
+        .grade-score {
+            font-weight: 600;
+            font-size: 1.1rem;
+            background: transparent !important;
+        }
+
+        .grade-excellent {
+            color: var(--text-primary);
+            background: transparent !important;
+        }
+
+        .grade-good {
+            color: var(--text-primary);
+            background: transparent !important;
+        }
+
+        .grade-average {
+            color: var(--text-primary);
+            background: transparent !important;
+        }
+
+        .grade-poor {
+            color: #dc3545;
+            background: transparent !important;
+        }
+
+        .grades-table td.grade-score,
+        .grades-table td[class*="grade-"] {
+            background: transparent !important;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card:nth-child(1),
+        .summary-card:nth-child(2) {
+            justify-self: start;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .summary-card:nth-child(3),
+        .summary-card:nth-child(4) {
+            justify-self: end;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* 成績曲線圖容器 */
+        .grades-chart-container {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-icon-wrapper {
+            flex-shrink: 0;
+        }
+
+        .chart-icon {
+            width: 50px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .chart-title {
+            color: var(--text-primary);
+            margin: 0;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-title i {
+            color: var(--primary-color);
+        }
+
+        #gradesChart {
+            max-height: 400px;
+            width: 100% !important;
+            height: 400px !important;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .grades-container {
+                padding: 0 1rem;
+            }
+
+            .grades-chart-container {
+                padding: 1.5rem;
+            }
+
+            .chart-header {
+                gap: 0.6rem;
+                margin-bottom: 1rem;
+            }
+
+            .chart-icon {
+                width: 40px;
+            }
+
+            .chart-title {
+                font-size: 1.2rem;
+            }
+
+            #gradesChart {
+                height: 300px !important;
+            }
+
+            .grades-table-header {
+                padding: 1rem 1.5rem;
+            }
+
+            .grades-table-header h3 {
+                font-size: 1.1rem;
+            }
+
+            .grades-table-wrapper {
+                max-height: 280px;
+            }
+
+            .grades-table th,
+            .grades-table td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.9rem;
+                text-align: center;
+            }
+
+            .filter-header {
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
+
+            .filter-header span {
+                font-size: 0.8rem;
+            }
+
+            .filter-select {
+                padding: 0.3rem 1.5rem 0.3rem 0.4rem;
+                font-size: 0.75rem;
+                min-width: 60px;
+            }
+
+            .summary-cards {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+
+            .summary-card {
+                padding: 0.7rem 0.8rem;
+                border: 1.5px solid #bdc3c7;
+            }
+
+            .summary-card h4 {
+                font-size: 0.7rem;
+                color: #5a6c7d;
+            }
+
+            .summary-card .value {
+                font-size: 1.1rem;
+                color: #2c3e50;
+            }
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #ecf0f1 0%, #ffffff 100%);
+            color: #2c3e50;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #bdc3c7;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            border-color: #95a5a6;
+        }
+
+        .summary-card h4 {
+            margin: 0 0 0.3rem 0;
+            font-size: 0.75rem;
+            color: #5a6c7d;
+            font-weight: 500;
+        }
+
+        .summary-card .value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        /* 需加強科目醒目提醒 */
+        .summary-card-warning {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%) !important;
+            border: 2px solid #f39c12 !important;
+            animation: pulseWarning 2s ease-in-out infinite;
+        }
+
+        .summary-card-warning h4 {
+            color: #d68910 !important;
+            font-weight: 600 !important;
+        }
+
+        .summary-card-warning .value {
+            color: #e67e22 !important;
+            font-weight: 700 !important;
+            font-size: 1.4rem !important;
+        }
+
+        @keyframes pulseWarning {
+
+            0%,
+            100% {
+                box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 4px 12px rgba(243, 156, 18, 0.5);
+            }
+        }
+
+        /* 最優秀科目表揚樣式 */
+        .summary-card-excellent {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%) !important;
+            border: 2px solid #28a745 !important;
+            animation: pulseExcellent 2s ease-in-out infinite;
+        }
+
+        .summary-card-excellent h4 {
+            color: #155724 !important;
+            font-weight: 600 !important;
+        }
+
+        .summary-card-excellent .value {
+            color: #28a745 !important;
+            font-weight: 700 !important;
+            font-size: 1.4rem !important;
+        }
+
+        @keyframes pulseExcellent {
+
+            0%,
+            100% {
+                box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 4px 12px rgba(40, 167, 69, 0.5);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 導航欄 -->
+    <header class="site-header">
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="site-branding">
+                <a href="index.html" class="logo-link">
+                    <img src="Ellennoback.png" alt="鈺倫の教室 Logo" class="logo-image">
+                    <div class="logo-text">
+                        <span class="site-title">鈺倫の教室</span>
+                        <span class="site-tagline">Ellen's class</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Header 倒數顯示 -->
+            <div class="header-countdown" aria-live="polite">
+                <i class="fas fa-hourglass-half"></i>
+                <span id="headerCountdown">會考倒數 0 天</span>
+            </div>
+
+            <!-- 主導航菜單 -->
+            <nav class="main-navigation">
+                <ul class="nav-menu">
+                    <li class="menu-item">
+                        <a href="index.html" class="menu-link">
+                            <i class="fas fa-home"></i>
+                            <span>首頁</span>
+                        </a>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>會考須知</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="index.html#exam-time" class="menu-link">考試時間</a></li>
+                            <li><a href="index.html#exam-subjects" class="menu-link">考試科目與範圍</a></li>
+                            <li><a href="index.html#exam-location" class="menu-link">考試地點</a></li>
+                            <li><a href="index.html#exam-important" class="menu-link">重要事項</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-book"></i>
+                            <span>學習地圖</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="grades.html" class="menu-link">成績追蹤</a></li>
+                            <li><a href="reflection.html" class="menu-link">學習心得</a></li>
+                            <li><a href="progress.html" class="menu-link">複習進度</a></li>
+                            <li><a href="feedback.html" class="menu-link">老師回饋</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-book-reader"></i>
+                            <span>班級點滴</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="class-901.html" class="menu-link">九年一班</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="index.html#about" class="menu-link">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>關於本站</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- 右側按鈕 -->
+            <div class="header-actions">
+                <button class="btn btn-outline" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                    <span>搜尋</span>
+                </button>
+                <button class="btn btn-outline" id="loginBtn">
+                    <i class="fas fa-user"></i>
+                    <span>會員登入</span>
+                </button>
+            </div>
+
+            <!-- 行動選單按鈕 -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="選單">
+                <span class="hamburger-icon"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 成績查詢頁面 -->
+    <section class="grades-page">
+        <div class="grades-container">
+            <!-- 登入表單 -->
+            <div class="login-card checking-login" id="loginCard">
+                <h2><i class="fas fa-graduation-cap"></i> 成績查詢系統</h2>
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-exclamation-circle"></i> 學號或密碼錯誤，請重新輸入
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="studentId"><i class="fas fa-id-card"></i> 學號</label>
+                        <input type="text" id="studentId" name="studentId" placeholder="請輸入學號" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> 密碼</label>
+                        <input type="password" id="password" name="password" placeholder="請輸入密碼" required>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> 登入查詢
+                    </button>
+                </form>
+            </div>
+
+            <!-- 成績顯示區 -->
+            <div class="grades-display" id="gradesDisplay">
+                <div class="student-info">
+                    <div class="student-info-left">
+                        <div class="student-avatar" id="studentAvatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="student-info-text">
+                            <h3><span id="displayStudentName">學生</span></h3>
+                            <p><i class="fas fa-id-card"></i> 學號：<span id="displayStudentId">-</span></p>
+                        </div>
+                    </div>
+                    <div class="student-info-actions">
+                        <a href="index.html" class="back-btn">
+                            <i class="fas fa-home"></i> 返回首頁
+                        </a>
+                        <button class="logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> 登出
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 成績曲線圖 -->
+                <div class="grades-chart-container">
+                    <div class="chart-header">
+                        <div class="chart-icon-wrapper">
+                            <img src="images/report.png" alt="成績報告" class="chart-icon">
+                        </div>
+                        <h3 class="chart-title">
+                            成績趨勢圖
+                        </h3>
+                    </div>
+                    <canvas id="gradesChart"></canvas>
+                </div>
+
+                <!-- 成績總覽卡片 -->
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <h4>平均分數</h4>
+                        <p class="value" id="averageScore">-</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>考試次數</h4>
+                        <p class="value" id="examCount">-</p>
+                    </div>
+                    <div class="summary-card summary-card-excellent" id="bestSubjectCard">
+                        <h4>最優秀科目</h4>
+                        <p class="value" id="bestSubject">-</p>
+                    </div>
+                    <div class="summary-card summary-card-warning" id="weakSubjectCard">
+                        <h4>需加強科目</h4>
+                        <p class="value" id="weakSubject">-</p>
+                    </div>
+                </div>
+
+                <!-- 成績表格 -->
+                <div class="grades-table-container">
+                    <div class="grades-table-header">
+                        <h3>
+                            <i class="fas fa-table"></i> 詳細成績
+                        </h3>
+                    </div>
+                    <div class="grades-table-wrapper" id="gradesTableWrapper">
+                        <table class="grades-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="filter-header">
+                                            <span>科目</span>
+                                            <select class="filter-select" id="filterSubject" title="篩選科目">
+                                                <option value="">全部</option>
+                                            </select>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="filter-header">
+                                            <span>日期</span>
+                                            <select class="filter-select" id="filterDate" title="篩選日期">
+                                                <option value="">全部</option>
+                                            </select>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="filter-header">
+                                            <span>成績</span>
+                                            <select class="filter-select" id="filterScore" title="篩選成績">
+                                                <option value="">全部</option>
+                                                <option value="90-100">90-100分</option>
+                                                <option value="80-89">80-89分</option>
+                                                <option value="70-79">70-79分</option>
+                                                <option value="60-69">60-69分</option>
+                                                <option value="0-59">0-59分</option>
+                                            </select>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="filter-header">
+                                            <span>全班平均</span>
+                                            <select class="filter-select" id="filterAverage" title="篩選全班平均">
+                                                <option value="">全部</option>
+                                                <option value="90-100">90-100分</option>
+                                                <option value="80-89">80-89分</option>
+                                                <option value="70-79">70-79分</option>
+                                                <option value="60-69">60-69分</option>
+                                                <option value="0-59">0-59分</option>
+                                            </select>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="gradesTableBody">
+                                <!-- 成績資料將由 JavaScript 動態生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // 會考倒數計時
+        function updateCountdown() {
+            const examDate = new Date('2026-05-15T09:00:00');
+            const now = new Date();
+            const timeLeft = examDate - now;
+
+            if (timeLeft < 0) {
+                const headerEl = document.getElementById('headerCountdown');
+                if (headerEl) headerEl.textContent = '會考倒數 0 天';
+                return;
+            }
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const headerEl = document.getElementById('headerCountdown');
+            if (headerEl) headerEl.textContent = `會考倒數 ${days} 天`;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // ========================================
+        // API 服務層（方便之後替換為後端API）
+        // ========================================
+        const ApiService = {
+            // 登入驗證（之後可替換為：POST /api/auth/login）
+            async login(studentId, password) {
+                // 模擬API延遲
+                await new Promise(resolve => setTimeout(resolve, 300));
+                return this.getStudentData(studentId, password);
+            },
+
+            // 獲取學生資料（之後可替換為：GET /api/students/:id）
+            getStudentData(studentId, password) {
+                const student = studentsDatabase[studentId];
+                if (student && student.password === password) {
+                    return { success: true, data: student };
+                }
+                return { success: false, message: '學號或密碼錯誤' };
+            },
+
+            // 獲取成績資料（之後可替換為：GET /api/students/:id/grades）
+            async getGrades(studentId) {
+                await new Promise(resolve => setTimeout(resolve, 200));
+                const student = studentsDatabase[studentId];
+                return student ? student.grades : [];
+            },
+
+            // 獲取老師回饋（之後可替換為：GET /api/students/:id/feedback）
+            async getFeedback(studentId) {
+                await new Promise(resolve => setTimeout(resolve, 200));
+                return feedbackDatabase[studentId] || [];
+            }
+        };
+
+        // ========================================
+        // 模擬資料庫（之後將由後端API取代）
+        // ========================================
+        const studentsDatabase = {
+            'A100': {
+                password: '999',
+                name: '測試學生',
+                grades: [
+                    { subject: '國文', date: '2025/09/15', score: 45, month: '9月' },
+                    { subject: '數學', date: '2025/09/20', score: 30, month: '9月' },
+                    { subject: '英文', date: '2025/09/18', score: 60, month: '9月' },
+                    { subject: '自然', date: '2025/09/22', score: 55, month: '9月' },
+                    { subject: '社會', date: '2025/09/25', score: 40, month: '9月' },
+                    { subject: '國文', date: '2025/10/12', score: 55, month: '10月' },
+                    { subject: '數學', date: '2025/10/15', score: 45, month: '10月' },
+                    { subject: '英文', date: '2025/10/18', score: 70, month: '10月' },
+                    { subject: '自然', date: '2025/10/20', score: 65, month: '10月' },
+                    { subject: '社會', date: '2025/10/22', score: 50, month: '10月' },
+                    { subject: '國文', date: '2025/11/10', score: 70, month: '11月' },
+                    { subject: '數學', date: '2025/11/15', score: 60, month: '11月' },
+                    { subject: '英文', date: '2025/11/18', score: 85, month: '11月' },
+                    { subject: '自然', date: '2025/11/20', score: 75, month: '11月' },
+                    { subject: '社會', date: '2025/11/22', score: 65, month: '11月' },
+                    { subject: '國文', date: '2025/12/10', score: 85, month: '12月' },
+                    { subject: '數學', date: '2025/12/15', score: 75, month: '12月' },
+                    { subject: '英文', date: '2025/12/18', score: 95, month: '12月' },
+                    { subject: '自然', date: '2025/12/20', score: 90, month: '12月' },
+                    { subject: '社會', date: '2025/12/22', score: 80, month: '12月' }
+                ]
+            },
+            '1001': {
+                password: '1234', name: '王小明', grades: [
+                    { subject: '國文', date: '2025/11/15', score: 88, month: '11月' },
+                    { subject: '數學', date: '2025/11/20', score: 82, month: '11月' },
+                    { subject: '英文', date: '2025/11/18', score: 85, month: '11月' },
+                    { subject: '國文', date: '2025/12/10', score: 91, month: '12月' },
+                    { subject: '數學', date: '2025/12/15', score: 85, month: '12月' },
+                    { subject: '英文', date: '2025/12/20', score: 88, month: '12月' }
+                ]
+            },
+            '1002': {
+                password: '1234', name: '張三', grades: [
+                    { subject: '國文', date: '2025/11/15', score: 97, month: '11月' },
+                    { subject: '數學', date: '2025/11/20', score: 93, month: '11月' },
+                    { subject: '英文', date: '2025/11/18', score: 95, month: '11月' },
+                    { subject: '國文', date: '2025/12/10', score: 99, month: '12月' },
+                    { subject: '數學', date: '2025/12/15', score: 95, month: '12月' },
+                    { subject: '英文', date: '2025/12/20', score: 97, month: '12月' }
+                ]
+            },
+            '1003': {
+                password: '1234', name: '李四', grades: [
+                    { subject: '國文', date: '2025/11/15', score: 98, month: '11月' },
+                    { subject: '數學', date: '2025/11/20', score: 96, month: '11月' },
+                    { subject: '英文', date: '2025/11/18', score: 97, month: '11月' },
+                    { subject: '國文', date: '2025/12/10', score: 100, month: '12月' },
+                    { subject: '數學', date: '2025/12/15', score: 98, month: '12月' },
+                    { subject: '英文', date: '2025/12/20', score: 99, month: '12月' }
+                ]
+            }
+        };
+
+        const feedbackDatabase = {
+            'A100': [
+                {
+                    date: '2025/12/25',
+                    subject: '綜合表現',
+                    content: '測試學生整體表現優秀，各科成績穩定。建議可以加強數學的應用題練習，提升解題技巧。繼續保持學習熱忱！',
+                    teacher: '鈺倫老師'
+                },
+                {
+                    date: '2025/12/20',
+                    subject: '英文',
+                    content: '英文成績進步明顯，單字量持續增加。建議多閱讀英文文章，提升語感和閱讀理解能力。',
+                    teacher: '鈺倫老師'
+                }
+            ],
+            '1001': [
+                {
+                    date: '2025/12/20',
+                    subject: '國文',
+                    content: '小明在國文方面表現優秀，閱讀理解能力很強。建議可以多練習寫作，提升表達能力。',
+                    teacher: '鈺倫老師'
+                },
+                {
+                    date: '2025/12/15',
+                    subject: '數學',
+                    content: '數學基礎穩固，但在應用題方面還需要加強。建議多做練習題，培養解題思路。',
+                    teacher: '鈺倫老師'
+                }
+            ],
+            '1002': [
+                {
+                    date: '2025/12/22',
+                    subject: '英文',
+                    content: '張三的英文成績非常優秀，單字量豐富。建議可以多閱讀英文文章，提升語感。',
+                    teacher: '鈺倫老師'
+                }
+            ],
+            '1003': [
+                {
+                    date: '2025/12/25',
+                    subject: '國文',
+                    content: '李四各方面表現都很優秀，是班上的模範生。繼續保持，相信會考一定能取得好成績！',
+                    teacher: '鈺倫老師'
+                }
+            ]
+        };
+
+        // 登入表單處理
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const studentId = document.getElementById('studentId').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // 使用API服務進行登入驗證
+            const result = await ApiService.login(studentId, password);
+
+            if (result.success) {
+                // 登入成功
+                errorMessage.classList.remove('active');
+                // 保存登入狀態
+                const student = result.data;
+                if (typeof AuthManager !== 'undefined') {
+                    AuthManager.saveLogin(studentId, student.name);
+                }
+                showGrades(studentId);
+            } else {
+                // 登入失敗
+                errorMessage.classList.add('active');
+            }
+        });
+
+        // 圖表實例
+        let gradesChart = null;
+
+        // 顯示成績
+        async function showGrades(studentId) {
+            const loginCard = document.getElementById('loginCard');
+            const gradesDisplay = document.getElementById('gradesDisplay');
+            const tableBody = document.getElementById('gradesTableBody');
+
+            // 獲取學生資料和成績
+            // 如果學生資料存在，直接使用；否則嘗試從 API 獲取
+            let student;
+            if (studentsDatabase[studentId]) {
+                student = studentsDatabase[studentId];
+            } else {
+                const studentResult = await ApiService.getStudentData(studentId, '');
+                if (studentResult.success) {
+                    student = studentResult.data;
+                } else {
+                    console.error('無法獲取學生資料');
+                    return;
+                }
+            }
+            const grades = await ApiService.getGrades(studentId);
+
+            // 隱藏登入表單，顯示成績
+            loginCard.style.display = 'none';
+            gradesDisplay.classList.add('active');
+
+            // 顯示學生姓名和學號
+            document.getElementById('displayStudentName').textContent = student.name;
+            document.getElementById('displayStudentId').textContent = studentId;
+
+            // 更新頭像顯示學生姓名首字
+            const avatar = document.getElementById('studentAvatar');
+            avatar.innerHTML = student.name.charAt(0);
+
+            // 計算統計資料
+            const scores = grades.map(g => g.score);
+            const average = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+
+            // 計算最優秀科目（平均分最高的科目）
+            const subjectAverages = {};
+            grades.forEach(grade => {
+                if (!subjectAverages[grade.subject]) {
+                    subjectAverages[grade.subject] = { total: 0, count: 0 };
+                }
+                subjectAverages[grade.subject].total += grade.score;
+                subjectAverages[grade.subject].count++;
+            });
+
+            let bestSubject = '-';
+            let bestAverage = 0;
+            for (const [subject, data] of Object.entries(subjectAverages)) {
+                const avg = Math.round(data.total / data.count);
+                if (avg > bestAverage) {
+                    bestAverage = avg;
+                    bestSubject = subject;
+                }
+            }
+
+            // 計算需加強科目（平均分最低且低於60分的科目）
+            let weakSubject = '-';
+            let weakAverage = 100;
+            for (const [subject, data] of Object.entries(subjectAverages)) {
+                const avg = Math.round(data.total / data.count);
+                if (avg < weakAverage && avg < 60) {
+                    weakAverage = avg;
+                    weakSubject = subject;
+                }
+            }
+            // 如果沒有低於60分的科目，找最低分的科目
+            if (weakSubject === '-') {
+                for (const [subject, data] of Object.entries(subjectAverages)) {
+                    const avg = Math.round(data.total / data.count);
+                    if (avg < weakAverage) {
+                        weakAverage = avg;
+                        weakSubject = subject;
+                    }
+                }
+            }
+
+            // 考試次數（總成績記錄數）
+            const examCount = grades.length;
+
+            document.getElementById('averageScore').textContent = average;
+            document.getElementById('bestSubject').textContent = bestSubject;
+            document.getElementById('weakSubject').textContent = weakSubject;
+            document.getElementById('examCount').textContent = examCount;
+
+            // 繪製成績曲線圖
+            drawGradesChart(grades);
+
+            // 生成成績表格
+            renderGradesTable(grades);
+
+            // 初始化篩選功能
+            initFilters(grades);
+
+        }
+
+        // 儲存所有成績資料（用於篩選）
+        let allGrades = [];
+
+        // 渲染成績表格
+        function renderGradesTable(grades) {
+            const tableBody = document.getElementById('gradesTableBody');
+            tableBody.innerHTML = '';
+
+            if (grades.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-secondary);">沒有符合條件的成績記錄</td>';
+                tableBody.appendChild(row);
+                return;
+            }
+
+            grades.forEach(grade => {
+                const row = document.createElement('tr');
+                const gradeClass = getGradeClass(grade.score);
+                const classAverage = getClassAverage(grade.subject, grade.date);
+
+                row.innerHTML = `
+                    <td>${grade.subject}</td>
+                    <td>${grade.date}</td>
+                    <td class="grade-score ${gradeClass}">${grade.score}</td>
+                    <td>${classAverage}</td>
+                `;
+                row.setAttribute('data-subject', grade.subject);
+                row.setAttribute('data-date', grade.date);
+                row.setAttribute('data-score', grade.score);
+                row.setAttribute('data-average', classAverage);
+                tableBody.appendChild(row);
+            });
+        }
+
+        // 初始化篩選功能
+        function initFilters(grades) {
+            allGrades = grades;
+
+            // 填充科目篩選選項
+            const subjects = [...new Set(grades.map(g => g.subject))].sort();
+            const filterSubject = document.getElementById('filterSubject');
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                filterSubject.appendChild(option);
+            });
+
+            // 填充日期篩選選項
+            const dates = [...new Set(grades.map(g => {
+                // 提取月份
+                if (g.month) {
+                    return g.month;
+                } else {
+                    const dateMatch = g.date.match(/\/(\d+)\//);
+                    if (dateMatch) {
+                        const monthNum = parseInt(dateMatch[1]);
+                        return `${monthNum}月`;
+                    }
+                    return g.date;
+                }
+            }))].sort((a, b) => {
+                const aNum = parseInt(a);
+                const bNum = parseInt(b);
+                return aNum - bNum;
+            });
+            const filterDate = document.getElementById('filterDate');
+            dates.forEach(date => {
+                const option = document.createElement('option');
+                option.value = date;
+                option.textContent = date;
+                filterDate.appendChild(option);
+            });
+
+            // 綁定篩選事件
+            document.getElementById('filterSubject').addEventListener('change', applyFilters);
+            document.getElementById('filterDate').addEventListener('change', applyFilters);
+            document.getElementById('filterScore').addEventListener('change', applyFilters);
+            document.getElementById('filterAverage').addEventListener('change', applyFilters);
+        }
+
+        // 應用篩選
+        function applyFilters() {
+            const subjectFilter = document.getElementById('filterSubject').value;
+            const dateFilter = document.getElementById('filterDate').value;
+            const scoreFilter = document.getElementById('filterScore').value;
+            const averageFilter = document.getElementById('filterAverage').value;
+
+            let filteredGrades = allGrades.filter(grade => {
+                // 科目篩選
+                if (subjectFilter && grade.subject !== subjectFilter) {
+                    return false;
+                }
+
+                // 日期篩選
+                if (dateFilter) {
+                    let gradeMonth;
+                    if (grade.month) {
+                        gradeMonth = grade.month;
+                    } else {
+                        const dateMatch = grade.date.match(/\/(\d+)\//);
+                        if (dateMatch) {
+                            const monthNum = parseInt(dateMatch[1]);
+                            gradeMonth = `${monthNum}月`;
+                        } else {
+                            gradeMonth = grade.date;
+                        }
+                    }
+                    if (gradeMonth !== dateFilter) {
+                        return false;
+                    }
+                }
+
+                // 成績篩選
+                if (scoreFilter) {
+                    const [min, max] = scoreFilter.split('-').map(Number);
+                    if (grade.score < min || grade.score > max) {
+                        return false;
+                    }
+                }
+
+                // 全班平均篩選
+                if (averageFilter) {
+                    const classAverage = getClassAverage(grade.subject, grade.date);
+                    const [min, max] = averageFilter.split('-').map(Number);
+                    if (classAverage < min || classAverage > max) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+
+            renderGradesTable(filteredGrades);
+        }
+
+
+        // 繪製成績曲線圖
+        function drawGradesChart(grades) {
+            // 獲取所有月份並排序
+            const monthsSet = new Set();
+            grades.forEach(grade => {
+                let month;
+                if (grade.month) {
+                    month = grade.month;
+                } else {
+                    const dateMatch = grade.date.match(/\/(\d+)\//);
+                    if (dateMatch) {
+                        const monthNum = parseInt(dateMatch[1]);
+                        month = `${monthNum}月`;
+                    } else {
+                        month = '未知';
+                    }
+                }
+                monthsSet.add(month);
+            });
+            const months = Array.from(monthsSet).sort((a, b) => {
+                const aNum = parseInt(a);
+                const bNum = parseInt(b);
+                return aNum - bNum;
+            });
+
+            // 定義科目和對應的顏色
+            const subjects = ['國文', '英文', '數學', '自然', '社會'];
+            const subjectColors = {
+                '國文': {
+                    border: 'rgb(255, 99, 132)',
+                    background: 'rgba(255, 99, 132, 0.1)'
+                },
+                '英文': {
+                    border: 'rgb(54, 162, 235)',
+                    background: 'rgba(54, 162, 235, 0.1)'
+                },
+                '數學': {
+                    border: 'rgb(255, 206, 86)',
+                    background: 'rgba(255, 206, 86, 0.1)'
+                },
+                '自然': {
+                    border: 'rgb(75, 192, 192)',
+                    background: 'rgba(75, 192, 192, 0.1)'
+                },
+                '社會': {
+                    border: 'rgb(153, 102, 255)',
+                    background: 'rgba(153, 102, 255, 0.1)'
+                }
+            };
+
+            // 為每個科目準備數據
+            const datasets = subjects.map(subject => {
+                const data = months.map(month => {
+                    // 找到該月份該科目的成績
+                    const grade = grades.find(g => {
+                        let gMonth;
+                        if (g.month) {
+                            gMonth = g.month;
+                        } else {
+                            const dateMatch = g.date.match(/\/(\d+)\//);
+                            if (dateMatch) {
+                                const monthNum = parseInt(dateMatch[1]);
+                                gMonth = `${monthNum}月`;
+                            } else {
+                                gMonth = '未知';
+                            }
+                        }
+                        return g.subject === subject && gMonth === month;
+                    });
+                    return grade ? grade.score : null;
+                });
+
+                const colors = subjectColors[subject] || {
+                    border: 'rgb(102, 126, 234)',
+                    background: 'rgba(102, 126, 234, 0.1)'
+                };
+
+                return {
+                    label: subject,
+                    data: data,
+                    borderColor: colors.border,
+                    backgroundColor: colors.background,
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: colors.border,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    spanGaps: false
+                };
+            });
+
+            // 銷毀舊圖表（如果存在）
+            if (gradesChart) {
+                gradesChart.destroy();
+            }
+
+            // 創建新圖表
+            const ctx = document.getElementById('gradesChart');
+            if (!ctx) return;
+
+            gradesChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 2.5,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    family: "'Noto Sans TC', sans-serif"
+                                },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            titleFont: {
+                                size: 14,
+                                family: "'Noto Sans TC', sans-serif"
+                            },
+                            bodyFont: {
+                                size: 13,
+                                family: "'Noto Sans TC', sans-serif"
+                            },
+                            callbacks: {
+                                label: function (context) {
+                                    return `${context.dataset.label}: ${context.parsed.y} 分`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 0,
+                            max: 100,
+                            ticks: {
+                                stepSize: 10,
+                                font: {
+                                    size: 12,
+                                    family: "'Noto Sans TC', sans-serif"
+                                },
+                                callback: function (value) {
+                                    return value + ' 分';
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '成績',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold',
+                                    family: "'Noto Sans TC', sans-serif"
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    size: 12,
+                                    family: "'Noto Sans TC', sans-serif"
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '月份',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold',
+                                    family: "'Noto Sans TC', sans-serif"
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 取得成績等級樣式
+        function getGradeClass(score) {
+            if (score >= 90) return 'grade-excellent';
+            if (score >= 80) return 'grade-good';
+            if (score >= 60) return 'grade-average';
+            return 'grade-poor';
+        }
+
+        // 取得全班平均（模擬數據，之後可從後端API獲取）
+        function getClassAverage(subject, date) {
+            // 模擬全班平均數據（根據科目和日期）
+            const averageData = {
+                '國文': { '9月': 75, '10月': 78, '11月': 82, '12月': 85 },
+                '英文': { '9月': 72, '10月': 75, '11月': 80, '12月': 83 },
+                '數學': { '9月': 68, '10月': 72, '11月': 76, '12月': 80 },
+                '自然': { '9月': 74, '10月': 77, '11月': 81, '12月': 84 },
+                '社會': { '9月': 73, '10月': 76, '11月': 79, '12月': 82 }
+            };
+
+            // 從日期提取月份
+            let month;
+            const dateMatch = date.match(/\/(\d+)\//);
+            if (dateMatch) {
+                const monthNum = parseInt(dateMatch[1]);
+                month = `${monthNum}月`;
+            } else {
+                month = date;
+            }
+
+            return averageData[subject] && averageData[subject][month] ? averageData[subject][month] : 75;
+        }
+
+        // 登出功能
+        document.getElementById('logoutBtn')?.addEventListener('click', function () {
+            // 使用 AuthManager 統一登出，清除全局登入狀態並跳轉到首頁
+            if (typeof AuthManager !== 'undefined') {
+                AuthManager.logout();
+            } else {
+                // 如果 AuthManager 未加載，手動清除登入狀態
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        });
+
+        // 立即檢查登入狀態（不等待 DOMContentLoaded）
+        (function checkLoginStatusImmediately() {
+            // 同步檢查 localStorage（不依賴 auth.js）
+            try {
+                const currentUserData = localStorage.getItem('currentUser');
+                if (currentUserData) {
+                    const currentUser = JSON.parse(currentUserData);
+                    if (currentUser && currentUser.studentId) {
+                        const studentId = currentUser.studentId;
+                        // 立即隱藏登入表單
+                        const loginCard = document.getElementById('loginCard');
+                        if (loginCard) {
+                            loginCard.classList.remove('checking-login');
+                            loginCard.style.display = 'none';
+                        }
+                        // 等待 DOM 加載完成後顯示內容
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', async function () {
+                                if (studentsDatabase[studentId]) {
+                                    await showGrades(studentId);
+                                }
+                            });
+                        } else {
+                            // DOM 已加載，立即執行
+                            if (studentsDatabase[studentId]) {
+                                showGrades(studentId);
+                            }
+                        }
+                        return; // 已登入，不需要繼續
+                    }
+                }
+            } catch (e) {
+                console.error('檢查登入狀態時出錯:', e);
+            }
+
+            // 未登入，顯示登入表單
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function () {
+                    const loginCard = document.getElementById('loginCard');
+                    if (loginCard) {
+                        loginCard.classList.remove('checking-login');
+                        loginCard.style.display = 'block';
+                    }
+                });
+            } else {
+                const loginCard = document.getElementById('loginCard');
+                if (loginCard) {
+                    loginCard.classList.remove('checking-login');
+                    loginCard.style.display = 'block';
+                }
+            }
+        })();
+    </script>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>鈺倫の教室</span>
+                    </div>
+                    <p class="footer-description">
+                        專業的學習管理平台<br>
+                        陪伴學生邁向成功
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <h4>快速連結</h4>
+                    <ul>
+                        <li><a href="index.html">首頁</a></li>
+                        <li><a href="index.html#exam-time">考試時間</a></li>
+                        <li><a href="index.html#exam-subjects">考試科目與範圍</a></li>
+                        <li><a href="index.html#course">課程內容</a></li>
+                        <li><a href="aboutme.html">關於老師</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>聯絡資訊</h4>
+                    <p><i class="fas fa-envelope"></i> ellen@example.com</p>
+                    <p><i class="fas fa-phone"></i> (02) 1234-5678</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 鈺倫の教室. All rights reserved. <span style="margin-left: 1rem; color: #5a6c7d;">Version
+                        1.0</span></p>
+            </div>
+        </div>
+    </footer>
+    <script src="auth.js"></script>
+</body>
+
+</html>

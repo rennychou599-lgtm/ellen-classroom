@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>九年一班 | 鈺倫の教室</title>
+    <link rel="icon" type="image/png" href="Ellennoback.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Zhi+Mang+Xing&family=Ma+Shan+Zheng&family=Caveat:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .class-page {
+            min-height: 80vh;
+            padding: 4rem 2rem;
+            background: #ffffff;
+        }
+
+        .class-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .class-hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 16px;
+            border: 2px solid #e1e8ed;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .class-hero h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .class-hero .class-subtitle {
+            color: #5a6c7d;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .class-hero .class-teacher {
+            color: #3498db;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .class-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            color: #3498db;
+        }
+
+        .class-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .info-card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
+        }
+
+        .info-card h3 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card p {
+            color: #5a6c7d;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .class-description {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+            margin-bottom: 2rem;
+        }
+
+        .class-description p {
+            color: #2c3e50;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+        }
+
+        .class-description p:last-child {
+            margin-bottom: 0;
+        }
+
+        .class-activities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            border-left-color: #2980b9;
+        }
+
+        .activity-card h4 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .activity-card h4 i {
+            color: #3498db;
+        }
+
+        .activity-card p {
+            color: #5a6c7d;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .class-hero h1 {
+                font-size: 2rem;
+            }
+
+            .class-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .class-activities {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 導航欄 -->
+    <header class="site-header">
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="site-branding">
+                <a href="index.html" class="logo-link">
+                    <img src="Ellennoback.png" alt="鈺倫の教室 Logo" class="logo-image">
+                    <div class="logo-text">
+                        <span class="site-title">鈺倫の教室</span>
+                        <span class="site-tagline">Ellen's class</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Header 倒數顯示 -->
+            <div class="header-countdown" aria-live="polite">
+                <i class="fas fa-hourglass-half"></i>
+                <span id="headerCountdown">會考倒數 0 天</span>
+            </div>
+
+            <!-- 主導航菜單 -->
+            <nav class="main-navigation">
+                <ul class="nav-menu">
+                    <li class="menu-item">
+                        <a href="index.html" class="menu-link">
+                            <i class="fas fa-home"></i>
+                            <span>首頁</span>
+                        </a>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>會考須知</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="index.html#exam-time" class="menu-link">考試時間</a></li>
+                            <li><a href="index.html#exam-subjects" class="menu-link">考試科目與範圍</a></li>
+                            <li><a href="index.html#exam-location" class="menu-link">考試地點</a></li>
+                            <li><a href="index.html#exam-important" class="menu-link">重要事項</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-book"></i>
+                            <span>學習地圖</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="grades.html" class="menu-link">成績追蹤</a></li>
+                            <li><a href="reflection.html" class="menu-link">學習心得</a></li>
+                            <li><a href="progress.html" class="menu-link">複習進度</a></li>
+                            <li><a href="feedback.html" class="menu-link">老師回饋</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-book-reader"></i>
+                            <span>班級點滴</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="class-901.html" class="menu-link">九年一班</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="index.html#about" class="menu-link">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>關於本站</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- 右側按鈕 -->
+            <div class="header-actions">
+                <button class="btn btn-outline" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                    <span>搜尋</span>
+                </button>
+                <button class="btn btn-outline" id="loginBtn">
+                    <i class="fas fa-user"></i>
+                    <span>會員登入</span>
+                </button>
+            </div>
+
+            <!-- 行動選單按鈕 -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="選單">
+                <span class="hamburger-icon"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 九年一班介紹頁面 -->
+    <section class="class-page">
+        <div class="class-container">
+            <!-- 班級標題區 -->
+            <div class="class-hero">
+                <h1>九年一班</h1>
+                <p class="class-subtitle">鹿鳴國中 | 2025學年度</p>
+                <p class="class-teacher">
+                    <i class="fas fa-user-tie"></i> 導師：鈺倫老師
+                </p>
+            </div>
+
+            <!-- 班級資訊 -->
+            <div class="class-section">
+                <h2 class="section-title">
+                    <i class="fas fa-info-circle"></i>
+                    班級資訊
+                </h2>
+                <div class="class-info-grid">
+                    <div class="info-card">
+                        <div class="info-card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>班級人數</h3>
+                        <p>共 30 位學生</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>學年度</h3>
+                        <p>2025學年度</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>會考目標</h3>
+                        <p>2026年5月會考</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-icon">
+                            <i class="fas fa-school"></i>
+                        </div>
+                        <h3>學校</h3>
+                        <p>彰化縣鹿鳴國中</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 班級介紹 -->
+            <div class="class-section">
+                <h2 class="section-title">
+                    <i class="fas fa-book-open"></i>
+                    班級介紹
+                </h2>
+                <div class="class-description">
+                    <p>
+                        九年一班是一個充滿活力與學習熱忱的班級。在鈺倫老師的帶領下，我們致力於培養學生的自主學習能力，鼓勵同學們互相幫助、共同成長。
+                    </p>
+                    <p>
+                        本班注重學生的全面發展，不僅在學業上追求卓越，也重視品德教育與團隊合作。我們相信，透過持續的努力與互相支持，每位同學都能在會考中發揮最佳表現。
+                    </p>
+                    <p>
+                        班級氣氛融洽，同學之間互相鼓勵、共同進步。我們定期舉辦班級活動，增進彼此的感情，也讓學習變得更加有趣。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 班級活動 -->
+            <div class="class-section">
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i>
+                    班級活動
+                </h2>
+                <div class="class-activities">
+                    <div class="activity-card">
+                        <h4>
+                            <i class="fas fa-utensils"></i>
+                            園遊會
+                        </h4>
+                        <p>每年舉辦的園遊會活動，同學們準備各種美食與遊戲，展現創意與團隊合作精神。</p>
+                    </div>
+                    <div class="activity-card">
+                        <h4>
+                            <i class="fas fa-book-reader"></i>
+                            閱讀活動
+                        </h4>
+                        <p>定期舉辦閱讀分享會，鼓勵同學們閱讀課外書籍，拓展視野與知識。</p>
+                    </div>
+                    <div class="activity-card">
+                        <h4>
+                            <i class="fas fa-trophy"></i>
+                            學習競賽
+                        </h4>
+                        <p>參與校內外各項學習競賽，如拼字比賽、數學競賽等，提升學習動機與成就感。</p>
+                    </div>
+                    <div class="activity-card">
+                        <h4>
+                            <i class="fas fa-heart"></i>
+                            班級服務
+                        </h4>
+                        <p>定期進行班級環境整理與社區服務，培養責任感與服務精神。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 學習目標 -->
+            <div class="class-section">
+                <h2 class="section-title">
+                    <i class="fas fa-bullseye"></i>
+                    學習目標
+                </h2>
+                <div class="class-description">
+                    <p>
+                        <strong>學業目標：</strong>每位同學都能在會考中發揮最佳實力，達成個人設定的目標學校。
+                    </p>
+                    <p>
+                        <strong>品德目標：</strong>培養良好的學習態度與品格，成為負責任、有同理心的好學生。
+                    </p>
+                    <p>
+                        <strong>團隊目標：</strong>建立互相支持、共同進步的班級氛圍，讓每位同學都能感受到班級的溫暖。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>鈺倫の教室</span>
+                    </div>
+                    <p class="footer-description">
+                        專業的學習管理平台<br>
+                        陪伴學生邁向成功
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <h4>快速連結</h4>
+                    <ul>
+                        <li><a href="index.html">首頁</a></li>
+                        <li><a href="index.html#exam-time">考試時間</a></li>
+                        <li><a href="index.html#exam-subjects">考試科目與範圍</a></li>
+                        <li><a href="index.html#course">課程內容</a></li>
+                        <li><a href="aboutme.html">關於老師</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>聯絡資訊</h4>
+                    <p><i class="fas fa-envelope"></i> ellen@example.com</p>
+                    <p><i class="fas fa-phone"></i> (02) 1234-5678</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 鈺倫の教室. All rights reserved. <span style="margin-left: 1rem; color: #5a6c7d;">Version
+                        1.0</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 會考倒數計時
+        function updateCountdown() {
+            const examDate = new Date('2026-05-15T09:00:00');
+            const now = new Date();
+            const timeLeft = examDate - now;
+
+            if (timeLeft < 0) {
+                const headerEl = document.getElementById('headerCountdown');
+                if (headerEl) headerEl.textContent = '會考倒數 0 天';
+                return;
+            }
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const headerEl = document.getElementById('headerCountdown');
+            if (headerEl) headerEl.textContent = `會考倒數 ${days} 天`;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+    <script src="auth.js"></script>
+</body>
+
+</html>

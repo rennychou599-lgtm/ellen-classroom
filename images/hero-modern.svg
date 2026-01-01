@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350">
+  <!-- 背景裝飾圓點 -->
+  <circle cx="50" cy="50" r="3" fill="#667eea" opacity="0.1"/>
+  <circle cx="450" cy="80" r="4" fill="#764ba2" opacity="0.1"/>
+  <circle cx="480" cy="320" r="3" fill="#667eea" opacity="0.1"/>
+  <circle cx="20" cy="300" r="2" fill="#764ba2" opacity="0.1"/>
+  
+  <!-- 主要人物 - 老師 -->
+  <circle cx="200" cy="180" r="35" fill="#fff" stroke="#667eea" stroke-width="2"/>
+  
+  <!-- 老師頭髮 -->
+  <path d="M 170 160 Q 200 145 230 160" fill="#2c3e50"/>
+  
+  <!-- 老師眼睛 -->
+  <circle cx="190" cy="175" r="4" fill="#667eea"/>
+  <circle cx="210" cy="175" r="4" fill="#667eea"/>
+  
+  <!-- 老師微笑 -->
+  <path d="M 185 190 Q 200 200 215 190" stroke="#667eea" stroke-width="2" fill="none"/>
+  
+  <!-- 老師身體 -->
+  <rect x="180" y="215" width="40" height="60" rx="8" fill="#667eea"/>
+  
+  <!-- 老師手臂 -->
+  <rect x="160" y="225" width="20" height="40" rx="10" fill="#fff"/>
+  <rect x="220" y="225" width="20" height="40" rx="10" fill="#fff"/>
+  
+  <!-- 老師指向 -->
+  <line x1="180" y1="235" x2="120" y2="200" stroke="#667eea" stroke-width="3" stroke-dasharray="3,3" opacity="0.6"/>
+  
+  <!-- 學生 -->
+  <circle cx="350" cy="200" r="30" fill="#fff" stroke="#764ba2" stroke-width="2"/>
+  
+  <!-- 學生頭髮 -->
+  <path d="M 325 185 Q 350 175 375 185" fill="#8B4513"/>
+  
+  <!-- 學生眼睛 -->
+  <circle cx="340" cy="195" r="3" fill="#764ba2"/>
+  <circle cx="360" cy="195" r="3" fill="#764ba2"/>
+  
+  <!-- 學生微笑 -->
+  <path d="M 335 205 Q 350 210 365 205" stroke="#764ba2" stroke-width="2" fill="none"/>
+  
+  <!-- 學生身體 -->
+  <rect x="335" y="230" width="30" height="50" rx="6" fill="#764ba2"/>
+  
+  <!-- 學生手臂 -->
+  <rect x="320" y="235" width="15" height="35" rx="7" fill="#fff"/>
+  <rect x="365" y="235" width="15" height="35" rx="7" fill="#fff"/>
+  
+  <!-- 學生舉手 -->
+  <line x1="327" y1="235" x2="320" y2="180" stroke="#764ba2" stroke-width="3"/>
+  <circle cx="320" cy="180" r="4" fill="#764ba2"/>
+  
+  <!-- 書本 -->
+  <rect x="80" y="250" width="50" height="70" rx="4" fill="#667eea" opacity="0.8"/>
+  <rect x="85" y="245" width="40" height="65" rx="3" fill="#764ba2" opacity="0.8"/>
+  <rect x="90" y="240" width="30" height="60" rx="3" fill="#FFD700" opacity="0.8"/>
+  
+  <!-- 書本標籤 -->
+  <text x="105" y="275" text-anchor="middle" font-size="10" font-weight="bold" fill="#fff">數學</text>
+  <text x="105" y="295" text-anchor="middle" font-size="10" font-weight="bold" fill="#fff">英文</text>
+  <text x="105" y="315" text-anchor="middle" font-size="10" font-weight="bold" fill="#fff">國文</text>
+  
+  <!-- 筆記本 -->
+  <rect x="380" y="180" width="35" height="45" rx="3" fill="#fff" stroke="#764ba2" stroke-width="2"/>
+  <line x1="385" y1="190" x2="410" y2="190" stroke="#764ba2" stroke-width="1" opacity="0.6"/>
+  <line x1="385" y1="195" x2="410" y2="195" stroke="#764ba2" stroke-width="1" opacity="0.6"/>
+  <line x1="385" y1="200" x2="410" y2="200" stroke="#764ba2" stroke-width="1" opacity="0.6"/>
+  
+  <!-- 筆 -->
+  <rect x="395" y="175" width="2" height="20" rx="1" fill="#764ba2"/>
+  <polygon points="396,175 400,172 394,172" fill="#FFD700"/>
+  
+  <!-- 對話框 -->
+  <ellipse cx="280" cy="120" rx="60" ry="25" fill="#fff" stroke="#667eea" stroke-width="2"/>
+  <text x="280" y="125" text-anchor="middle" font-size="12" font-weight="bold" fill="#667eea">學習很有趣！</text>
+  <polygon points="250,140 240,150 260,150" fill="#fff" stroke="#667eea" stroke-width="2"/>
+  
+  <!-- 知識流動效果 -->
+  <circle cx="250" cy="160" r="2" fill="#667eea" opacity="0.6">
+    <animate attributeName="cy" values="160;200;160" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="270" cy="170" r="1.5" fill="#764ba2" opacity="0.6">
+    <animate attributeName="cy" values="170;210;170" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="290" cy="165" r="2" fill="#FFD700" opacity="0.6">
+    <animate attributeName="cy" values="165;205;165" dur="2.2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- 裝飾星星 -->
+  <path d="M 100 80 L 103 86 L 109 87 L 105 92 L 106 98 L 100 95 L 94 98 L 95 92 L 91 87 L 97 86 Z" fill="#FFD700" opacity="0.4"/>
+  <path d="M 400 100 L 403 106 L 409 107 L 405 112 L 406 118 L 400 115 L 394 118 L 395 112 L 391 107 L 397 106 Z" fill="#667eea" opacity="0.4"/>
+  <path d="M 250 50 L 253 56 L 259 57 L 255 62 L 256 68 L 250 65 L 244 68 L 245 62 L 241 57 L 247 56 Z" fill="#764ba2" opacity="0.4"/>
+</svg>

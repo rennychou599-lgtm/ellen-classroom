@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老師回饋 | 鈺倫の教室</title>
+    <link rel="icon" type="image/png" href="Ellennoback.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Zhi+Mang+Xing&family=Ma+Shan+Zheng&family=Caveat:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .feedback-page {
+            min-height: 80vh;
+            padding: 4rem 2rem;
+            background: #ffffff;
+        }
+
+        .feedback-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        /* 初始狀態：如果已登入，隱藏登入表單 */
+        .login-card.checking-login {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .login-card h2 {
+            color: #000000;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            color: #2c3e50;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #34495e;
+            box-shadow: 0 0 0 2px rgba(52, 73, 94, 0.1);
+        }
+
+        .form-group label {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #000000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .feedback-display {
+            display: none;
+        }
+
+        .feedback-display.active {
+            display: block;
+        }
+
+        .student-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 12px;
+            border: 2px solid #e1e8ed;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .student-info-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
+        }
+
+        .student-info-text h3 {
+            color: #2c3e50;
+            margin: 0 0 0.25rem 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .student-info-text p {
+            margin: 0;
+            color: #5a6c7d;
+            font-size: 0.9rem;
+        }
+
+        .student-info-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .back-btn,
+        .logout-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn {
+            background: white;
+            color: #3498db;
+            border: 2px solid #3498db;
+        }
+
+        .back-btn:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        .feedback-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .feedback-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 2px solid #e1e8ed;
+            transition: all 0.3s ease;
+            position: relative;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* 信件樣式 - 未讀取 */
+        .feedback-card.unread {
+            border-left: 5px solid #3498db;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            box-shadow: 0 4px 16px rgba(52, 152, 219, 0.15);
+        }
+
+        .feedback-card.unread::before {
+            content: '';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 12px;
+            height: 12px;
+            background: #3498db;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+        }
+
+        /* 信件樣式 - 已讀取 */
+        .feedback-card.read {
+            border-left: 5px solid #95a5a6;
+            background: #ffffff;
+            opacity: 0.9;
+        }
+
+        .feedback-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .feedback-card.unread:hover {
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.2);
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .feedback-card.unread .feedback-header {
+            border-bottom-color: #d5e8f7;
+        }
+
+        .feedback-date {
+            color: #5a6c7d;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feedback-card.unread .feedback-date {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .feedback-card.unread .feedback-date::before {
+            content: '📬';
+            font-size: 1rem;
+        }
+
+        .feedback-card.read .feedback-date::before {
+            content: '📭';
+            font-size: 1rem;
+        }
+
+        .feedback-subject {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(44, 62, 80, 0.2);
+        }
+
+        .feedback-stats {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .stat-badge {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 184, 148, 0.35);
+            transition: all 0.3s ease;
+        }
+
+        .stat-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 184, 148, 0.4);
+        }
+
+        .feedback-content {
+            color: #2c3e50;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #e1e8ed;
+        }
+
+        .feedback-card.unread .feedback-content {
+            background: linear-gradient(135deg, #ebf5fb 0%, #f8f9fa 100%);
+            border-left-color: #3498db;
+            font-weight: 500;
+        }
+
+        .feedback-card.read .feedback-content {
+            background: #f8f9fa;
+            opacity: 0.85;
+        }
+
+        .feedback-teacher {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #3498db;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #5a6c7d;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 導航欄 -->
+    <header class="site-header">
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="site-branding">
+                <a href="index.html" class="logo-link">
+                    <img src="Ellennoback.png" alt="鈺倫の教室 Logo" class="logo-image">
+                    <div class="logo-text">
+                        <span class="site-title">鈺倫の教室</span>
+                        <span class="site-tagline">Ellen's class</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Header 倒數顯示 -->
+            <div class="header-countdown" aria-live="polite">
+                <i class="fas fa-hourglass-half"></i>
+                <span id="headerCountdown">會考倒數 0 天</span>
+            </div>
+
+            <!-- 主導航菜單 -->
+            <nav class="main-navigation">
+                <ul class="nav-menu">
+                    <li class="menu-item">
+                        <a href="index.html" class="menu-link">
+                            <i class="fas fa-home"></i>
+                            <span>首頁</span>
+                        </a>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>會考須知</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="index.html#exam-time" class="menu-link">考試時間</a></li>
+                            <li><a href="index.html#exam-subjects" class="menu-link">考試科目與範圍</a></li>
+                            <li><a href="index.html#exam-location" class="menu-link">考試地點</a></li>
+                            <li><a href="index.html#exam-important" class="menu-link">重要事項</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-book"></i>
+                            <span>學習地圖</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="grades.html" class="menu-link">成績追蹤</a></li>
+                            <li><a href="reflection.html" class="menu-link">學習心得</a></li>
+                            <li><a href="progress.html" class="menu-link">複習進度</a></li>
+                            <li><a href="feedback.html" class="menu-link">老師回饋</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-book-reader"></i>
+                            <span>班級點滴</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="class-901.html" class="menu-link">九年一班</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="index.html#about" class="menu-link">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>關於本站</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- 右側按鈕 -->
+            <div class="header-actions">
+                <button class="btn btn-outline" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                    <span>搜尋</span>
+                </button>
+                <button class="btn btn-outline" id="loginBtn">
+                    <i class="fas fa-user"></i>
+                    <span>會員登入</span>
+                </button>
+            </div>
+
+            <!-- 行動選單按鈕 -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="選單">
+                <span class="hamburger-icon"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 老師回饋頁面 -->
+    <section class="feedback-page">
+        <div class="feedback-container">
+            <!-- 登入表單 -->
+            <div class="login-card checking-login" id="loginCard">
+                <h2><i class="fas fa-comments"></i> 老師回饋系統</h2>
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-exclamation-circle"></i> 學號或密碼錯誤，請重新輸入
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="studentId"><i class="fas fa-id-card"></i> 學號</label>
+                        <input type="text" id="studentId" name="studentId" placeholder="請輸入學號" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> 密碼</label>
+                        <input type="password" id="password" name="password" placeholder="請輸入密碼" required>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> 登入
+                    </button>
+                </form>
+            </div>
+
+            <!-- 老師回饋功能區 -->
+            <div class="feedback-display" id="feedbackDisplay">
+                <div class="student-info">
+                    <div class="student-info-left">
+                        <div class="student-avatar" id="studentAvatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="student-info-text">
+                            <h3><span id="displayStudentName">學生</span></h3>
+                            <p><i class="fas fa-id-card"></i> 學號：<span id="displayStudentId">-</span></p>
+                        </div>
+                    </div>
+                    <div class="student-info-actions">
+                        <a href="index.html" class="back-btn">
+                            <i class="fas fa-home"></i> 返回首頁
+                        </a>
+                        <button class="logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> 登出
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 收信提示與統計 -->
+                <div
+                    style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); border: 1px solid #e1e8ed;">
+                    <!-- 收信提示 -->
+                    <div
+                        style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e1e8ed;">
+                        <img src="images/post.png" alt="收信"
+                            style="width: 80px; height: auto; flex-shrink: 0; object-fit: contain;">
+                        <p style="color: #2c3e50; font-size: 1.2rem; font-weight: 600; margin: 0;">
+                            鈺倫老師：同學，請收信囉！
+                        </p>
+                    </div>
+
+                    <!-- 統計資訊 -->
+                    <div class="feedback-stats"
+                        style="display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; justify-content: center;">
+                        <div class="stat-badge">
+                            <i class="fas fa-envelope"></i>
+                            <span>所有信件：<strong id="totalFeedbackCount">0</strong></span>
+                        </div>
+                        <div class="stat-badge">
+                            <i class="fas fa-envelope-open"></i>
+                            <span>未讀取：<strong id="unreadFeedbackCount">0</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feedback-list" id="feedbackList">
+                    <div class="empty-state">
+                        <i class="fas fa-comments"></i>
+                        <p>目前還沒有老師回饋<br>老師會根據你的學習狀況給予回饋</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>鈺倫の教室</span>
+                    </div>
+                    <p class="footer-description">
+                        專業的學習管理平台<br>
+                        陪伴學生邁向成功
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <h4>快速連結</h4>
+                    <ul>
+                        <li><a href="index.html">首頁</a></li>
+                        <li><a href="index.html#exam-time">考試時間</a></li>
+                        <li><a href="index.html#exam-subjects">考試科目與範圍</a></li>
+                        <li><a href="index.html#course">課程內容</a></li>
+                        <li><a href="aboutme.html">關於老師</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>聯絡資訊</h4>
+                    <p><i class="fas fa-envelope"></i> ellen@example.com</p>
+                    <p><i class="fas fa-phone"></i> (02) 1234-5678</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 鈺倫の教室. All rights reserved. <span style="margin-left: 1rem; color: #5a6c7d;">Version
+                        1.0</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 會考倒數計時
+        function updateCountdown() {
+            const examDate = new Date('2026-05-15T09:00:00');
+            const now = new Date();
+            const timeLeft = examDate - now;
+
+            if (timeLeft < 0) {
+                const headerEl = document.getElementById('headerCountdown');
+                if (headerEl) headerEl.textContent = '會考倒數 0 天';
+                return;
+            }
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const headerEl = document.getElementById('headerCountdown');
+            if (headerEl) headerEl.textContent = `會考倒數 ${days} 天`;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // ========================================
+        // API 服務層（方便之後替換為後端API）
+        // ========================================
+        const ApiService = {
+            async login(studentId, password) {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                return this.getStudentData(studentId, password);
+            },
+
+            getStudentData(studentId, password) {
+                const student = studentsDatabase[studentId];
+                if (student && student.password === password) {
+                    return { success: true, data: student };
+                }
+                return { success: false, message: '學號或密碼錯誤' };
+            },
+
+            // 獲取老師回饋（之後可替換為：GET /api/students/:id/feedback）
+            async getFeedback(studentId) {
+                await new Promise(resolve => setTimeout(resolve, 200));
+                return feedbackDatabase[studentId] || [];
+            }
+        };
+
+        // ========================================
+        // 模擬資料庫（之後將由後端API取代）
+        // ========================================
+        const studentsDatabase = {
+            'A100': {
+                password: '999',
+                name: '測試學生'
+            },
+            '1001': {
+                password: '1234', name: '王小明'
+            },
+            '1002': {
+                password: '1234', name: '張三'
+            },
+            '1003': {
+                password: '1234', name: '李四'
+            }
+        };
+
+        // 模擬老師回饋資料（實際應用中應該從後端API獲取）
+        const feedbackDatabase = {
+            'A100': [
+                {
+                    date: '2025/12/25',
+                    subject: '綜合表現',
+                    content: '測試學生整體表現優秀，各科成績穩定。建議可以加強數學的應用題練習，提升解題技巧。繼續保持學習熱忱！',
+                    teacher: '鈺倫老師'
+                },
+                {
+                    date: '2025/12/20',
+                    subject: '英文',
+                    content: '英文成績進步明顯，單字量持續增加。建議多閱讀英文文章，提升語感和閱讀理解能力。',
+                    teacher: '鈺倫老師'
+                }
+            ],
+            '1001': [
+                {
+                    date: '2025/12/20',
+                    subject: '國文',
+                    content: '小明在國文方面表現優秀，閱讀理解能力很強。建議可以多練習寫作，提升表達能力。',
+                    teacher: '鈺倫老師'
+                },
+                {
+                    date: '2025/12/15',
+                    subject: '數學',
+                    content: '數學基礎穩固，但在應用題方面還需要加強。建議多做練習題，培養解題思路。',
+                    teacher: '鈺倫老師'
+                }
+            ],
+            '1002': [
+                {
+                    date: '2025/12/22',
+                    subject: '英文',
+                    content: '張三的英文成績非常優秀，單字量豐富。建議可以多閱讀英文文章，提升語感。',
+                    teacher: '鈺倫老師'
+                }
+            ],
+            '1003': [
+                {
+                    date: '2025/12/25',
+                    subject: '國文',
+                    content: '李四各方面表現都很優秀，是班上的模範生。繼續保持，相信會考一定能取得好成績！',
+                    teacher: '鈺倫老師'
+                }
+            ]
+        };
+
+        // 登入表單處理
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const studentId = document.getElementById('studentId').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // 使用API服務進行登入驗證
+            const result = await ApiService.login(studentId, password);
+
+            if (result.success) {
+                // 登入成功
+                errorMessage.classList.remove('active');
+                // 保存登入狀態
+                const student = result.data;
+                if (typeof AuthManager !== 'undefined') {
+                    AuthManager.saveLogin(studentId, student.name);
+                }
+                showFeedback(studentId);
+            } else {
+                // 登入失敗
+                errorMessage.classList.add('active');
+            }
+        });
+
+        // 顯示老師回饋功能
+        async function showFeedback(studentId) {
+            // 獲取學生資料
+            let student;
+            if (studentsDatabase[studentId]) {
+                student = studentsDatabase[studentId];
+            } else {
+                const studentResult = await ApiService.getStudentData(studentId, '');
+                if (studentResult.success) {
+                    student = studentResult.data;
+                } else {
+                    console.error('無法獲取學生資料');
+                    return;
+                }
+            }
+            const loginCard = document.getElementById('loginCard');
+            const feedbackDisplay = document.getElementById('feedbackDisplay');
+
+            // 隱藏登入表單，顯示功能區
+            loginCard.style.display = 'none';
+            feedbackDisplay.classList.add('active');
+
+            // 顯示學生姓名和學號
+            document.getElementById('displayStudentName').textContent = student.name;
+            document.getElementById('displayStudentId').textContent = studentId;
+
+            // 更新頭像顯示學生姓名首字
+            const avatar = document.getElementById('studentAvatar');
+            avatar.innerHTML = student.name.charAt(0);
+
+            // 載入老師回饋（使用API服務）
+            await loadFeedback(studentId);
+        }
+
+        // 載入老師回饋
+        async function loadFeedback(studentId) {
+            const feedbackList = document.getElementById('feedbackList');
+            const feedbacks = await ApiService.getFeedback(studentId);
+
+            // 更新統計資訊
+            document.getElementById('totalFeedbackCount').textContent = feedbacks.length;
+
+            if (feedbacks.length === 0) {
+                document.getElementById('unreadFeedbackCount').textContent = 0;
+                feedbackList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-comments"></i>
+                        <p>目前還沒有老師回饋<br>老師會根據你的學習狀況給予回饋</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let unreadCount = 0;
+
+            feedbackList.innerHTML = feedbacks.map((feedback, index) => {
+                // 檢查是否已讀取（從 localStorage）
+                const readKey = `feedback_read_${studentId}_${index}`;
+                const isRead = localStorage.getItem(readKey) === 'true';
+                const cardClass = isRead ? 'read' : 'unread';
+
+                // 統計未讀取數量
+                if (!isRead) {
+                    unreadCount++;
+                }
+
+                return `
+                <div class="feedback-card ${cardClass}" data-index="${index}" data-student-id="${studentId}">
+                    <div class="feedback-header">
+                        <span class="feedback-date">${feedback.date}</span>
+                        <span class="feedback-subject">${feedback.subject}</span>
+                    </div>
+                    <div class="feedback-content">
+                        ${feedback.content}
+                    </div>
+                    <div class="feedback-teacher">
+                        <i class="fas fa-user-tie"></i>
+                        <span>${feedback.teacher}</span>
+                    </div>
+                </div>
+            `;
+            }).join('');
+
+            // 更新統計資訊
+            document.getElementById('totalFeedbackCount').textContent = feedbacks.length;
+            document.getElementById('unreadFeedbackCount').textContent = unreadCount;
+
+            // 添加點擊事件：標記為已讀
+            document.querySelectorAll('.feedback-card').forEach(card => {
+                card.addEventListener('click', function () {
+                    const studentId = this.dataset.studentId;
+                    const index = this.dataset.index;
+                    const readKey = `feedback_read_${studentId}_${index}`;
+
+                    if (!localStorage.getItem(readKey)) {
+                        localStorage.setItem(readKey, 'true');
+                        this.classList.remove('unread');
+                        this.classList.add('read');
+
+                        // 更新未讀取數量
+                        const currentUnread = parseInt(document.getElementById('unreadFeedbackCount').textContent);
+                        document.getElementById('unreadFeedbackCount').textContent = Math.max(0, currentUnread - 1);
+                    }
+                });
+            });
+        }
+
+        // 登出功能
+        document.getElementById('logoutBtn')?.addEventListener('click', function () {
+            // 使用 AuthManager 統一登出，清除全局登入狀態並跳轉到首頁
+            if (typeof AuthManager !== 'undefined') {
+                AuthManager.logout();
+            } else {
+                // 如果 AuthManager 未加載，手動清除登入狀態
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        });
+
+        // 立即檢查登入狀態（不等待 DOMContentLoaded）
+        (function checkLoginStatusImmediately() {
+            // 同步檢查 localStorage（不依賴 auth.js）
+            try {
+                const currentUserData = localStorage.getItem('currentUser');
+                if (currentUserData) {
+                    const currentUser = JSON.parse(currentUserData);
+                    if (currentUser && currentUser.studentId) {
+                        const studentId = currentUser.studentId;
+                        // 立即隱藏登入表單
+                        const loginCard = document.getElementById('loginCard');
+                        if (loginCard) {
+                            loginCard.classList.remove('checking-login');
+                            loginCard.style.display = 'none';
+                        }
+                        // 等待 DOM 加載完成後顯示內容
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', async function () {
+                                if (studentsDatabase[studentId]) {
+                                    await showFeedback(studentId);
+                                }
+                            });
+                        } else {
+                            if (studentsDatabase[studentId]) {
+                                showFeedback(studentId);
+                            }
+                        }
+                        return; // 已登入，不需要繼續
+                    }
+                }
+            } catch (e) {
+                console.error('檢查登入狀態時出錯:', e);
+            }
+
+            // 未登入，顯示登入表單
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function () {
+                    const loginCard = document.getElementById('loginCard');
+                    if (loginCard) {
+                        loginCard.classList.remove('checking-login');
+                        loginCard.style.display = 'block';
+                    }
+                });
+            } else {
+                const loginCard = document.getElementById('loginCard');
+                if (loginCard) {
+                    loginCard.classList.remove('checking-login');
+                    loginCard.style.display = 'block';
+                }
+            }
+        })();
+    </script>
+    <script src="auth.js"></script>
+</body>
+
+</html>

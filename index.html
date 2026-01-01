@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鈺倫の教室 | 智慧學習管理平台</title>
+    <link rel="icon" type="image/png" href="Ellennoback.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 登入模态框样式 */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .login-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .login-modal-content {
+            position: relative;
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .login-modal.active .login-modal-content {
+            transform: scale(1);
+        }
+
+        .login-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            line-height: 1;
+            transition: color 0.3s;
+        }
+
+        .login-modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .login-modal .login-card {
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        .login-modal .login-card h2 {
+            color: #000000;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .login-modal .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .login-modal .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .login-modal .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .login-modal .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .login-modal .login-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #000000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-modal .login-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .login-modal .error-message {
+            display: none;
+            background: #fee;
+            color: #c33;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .login-modal .error-message.active {
+            display: block;
+        }
+
+        .login-modal .error-message i {
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .login-modal-content {
+                padding: 2rem 1.5rem;
+                width: 95%;
+            }
+
+            .login-modal .login-card h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Zhi+Mang+Xing&family=Ma+Shan+Zheng&family=Caveat:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- 導航欄 -->
+    <header class="site-header">
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="site-branding">
+                <a href="#" class="logo-link">
+                    <img src="Ellennoback.png" alt="鈺倫の教室 Logo" class="logo-image">
+                    <div class="logo-text">
+                        <span class="site-title">鈺倫の教室</span>
+                        <span class="site-tagline">Ellen's class</span>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- Header 倒數顯示 -->
+            <div class="header-countdown" aria-live="polite">
+                <i class="fas fa-hourglass-half"></i>
+                <span id="headerCountdown">會考倒數 0 天</span>
+            </div>
+
+
+            <!-- 主導航菜單 -->
+            <nav class="main-navigation">
+                <ul class="nav-menu">
+
+
+
+                    <li class="menu-item">
+                        <a href="index.html" class="menu-link active">
+                            <i class="fas fa-home"></i>
+                            <span>首頁</span>
+                        </a>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>會考須知</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="#exam-time" class="menu-link">考試時間</a></li>
+                            <li><a href="#exam-subjects" class="menu-link">考試科目與範圍</a></li>
+                            <li><a href="#exam-location" class="menu-link">考試地點</a></li>
+                            <li><a href="#exam-important" class="menu-link">重要事項</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-book"></i>
+                            <span>學習地圖</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="grades.html" class="menu-link">成績追蹤</a></li>
+                            <li><a href="reflection.html" class="menu-link">學習心得</a></li>
+                            <li><a href="progress.html" class="menu-link">複習進度</a></li>
+                            <li><a href="feedback.html" class="menu-link">老師回饋</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-book-reader"></i>
+                            <span>班級點滴</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="class-901.html" class="menu-link">九年一班</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#about" class="menu-link">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>關於本站</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- 右側按鈕 -->
+            <div class="header-actions">
+                <button class="btn btn-outline" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                    <span>搜尋</span>
+                </button>
+                <button class="btn btn-outline" id="loginBtn">
+                    <i class="fas fa-user"></i>
+                    <span>會員登入</span>
+                </button>
+            </div>
+
+            <!-- 手機版菜單按鈕 -->
+            <button class="mobile-menu-toggle" aria-label="開啟選單">
+                <span class="hamburger-icon"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 主內容區域 -->
+    <main class="site-main">
+        <!-- Hero 橫幅區 -->
+        <section class="hero-banner" id="home">
+            <div class="hero-container">
+                <div class="hero-visual">
+                    <span class="bubble" style="--duration: 18s; --delay: 0s; top: 10%; left: 5%;">🧋</span>
+                    <span class="bubble" style="--duration: 15s; --delay: 1.5s; top: 25%; left: 90%;">🥤</span>
+                    <span class="bubble" style="--duration: 20s; --delay: 3s; top: 55%; left: 8%;">🍹</span>
+                    <span class="bubble" style="--duration: 16s; --delay: 0.5s; top: 75%; left: 85%;">🧃</span>
+                    <span class="bubble" style="--duration: 22s; --delay: 2s; top: 35%; left: 3%;">🫖</span>
+                    <span class="bubble" style="--duration: 14s; --delay: 4s; top: 65%; left: 92%;">☕</span>
+                    <span class="bubble" style="--duration: 19s; --delay: 1s; top: 85%; left: 12%;">🥛</span>
+                    <span class="bubble" style="--duration: 17s; --delay: 2.5s; top: 15%; left: 78%;">🧊</span>
+                    <span class="bubble" style="--duration: 21s; --delay: 0.8s; top: 45%; left: 95%;">🧋</span>
+                    <span class="bubble" style="--duration: 13s; --delay: 3.5s; top: 5%; left: 45%;">🥤</span>
+                    <span class="bubble" style="--duration: 23s; --delay: 1.2s; top: 90%; left: 60%;">🍹</span>
+                    <span class="bubble" style="--duration: 16s; --delay: 4.5s; top: 30%; left: 50%;">🧃</span>
+                    <span class="bubble" style="--duration: 18s; --delay: 2.8s; top: 70%; left: 25%;">🫖</span>
+                    <span class="bubble" style="--duration: 15s; --delay: 0.3s; top: 50%; left: 70%;">☕</span>
+                    <span class="bubble" style="--duration: 20s; --delay: 3.8s; top: 20%; left: 35%;">🥛</span>
+                    <div class="hero-illustration">
+                        <div class="noticeboard-carousel">
+                            <div class="noticeboard-header">
+                                <div class="announcement-character">
+                                    <img src="EllenANN.png" alt="最新公告" class="announcement-image">
+                                    <div class="roar-text-container">
+                                        <span class="roar-text">
+                                            <span class="roar-char char-1">愛</span>
+                                            <span class="roar-char char-2">注</span>
+                                            <span class="roar-char char-3">意</span>
+                                            <span class="roar-char char-4">喔</span>
+                                            <span class="roar-char char-5">！</span>
+                                            <span class="roar-char char-6">！</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <p class="section-description">鈺倫老師：請務必要留意公告內容</p>
+                            </div>
+                            <div class="noticeboard-wrapper">
+                                <button class="noticeboard-btn noticeboard-btn-prev" id="noticeboardPrevBtn"
+                                    aria-label="上一則">
+                                    <i class="fas fa-hand-point-right"></i>
+                                </button>
+                                <div class="noticeboard-container">
+                                    <div class="noticeboard-slide active" data-index="0">
+                                        <div class="notice-card">
+                                            <div style="display: flex; gap: 1.75rem; align-items: center; width: 100%;">
+                                                <div
+                                                    style="flex-shrink: 0; width: 45%; max-width: 300px; height: 180px; display: flex; align-items: center; justify-content: center;">
+                                                    <img src="ellenlogo.png" alt="鈺倫の教室"
+                                                        style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;">
+                                                </div>
+                                                <div class="notice-content" style="flex: 1;">
+                                                    <h4 class="notice-title" style="color: #000000 !important;">
+                                                        鈺倫の教室 - 網站使用教學 🌐</h4>
+                                                    <p class="notice-text" style="color: #000000 !important;">
+                                                        歡迎來到這個網站，本站專為國中學生開發，提供學生可以透過這個網站在家或是在閒暇時間先做課程的預習、複習、檢討等等。</p>
+                                                    <span class="notice-date"
+                                                        style="color: #ff6b6b !important; opacity: 1 !important; font-weight: 600 !important;">2025年12月</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="noticeboard-slide" data-index="1">
+                                        <div class="notice-card">
+                                            <div style="display: flex; gap: 1.75rem; align-items: center; width: 100%;">
+                                                <div
+                                                    style="flex-shrink: 0; width: 45%; max-width: 300px; height: 180px; display: flex; align-items: center; justify-content: center;">
+                                                    <img src="images/web.png" alt="拼字網站"
+                                                        style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;">
+                                                </div>
+                                                <div class="notice-content" style="flex: 1;">
+                                                    <h4 class="notice-title" style="color: #000000 !important;">
+                                                        佳音全國閱讀暨拼字比賽 溪湖分校拼字網站介紹</h4>
+                                                    <p class="notice-text" style="color: #000000 !important;">
+                                                        帶班老師Teacher
+                                                        Ben以Cursor開發的拼字比賽額外練習網站，讓同學在課堂有不一樣的體驗，一起來看看這個富有特色的練習網站吧！
+                                                    </p>
+                                                    <span class="notice-date"
+                                                        style="color: #ff6b6b !important; opacity: 1 !important; font-weight: 600 !important;">2025年8月2日</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="noticeboard-slide" data-index="2">
+                                        <div class="notice-card">
+                                            <div style="display: flex; gap: 1.75rem; align-items: center; width: 100%;">
+                                                <div
+                                                    style="flex-shrink: 0; width: 45%; max-width: 300px; height: 180px; display: flex; align-items: center; justify-content: center;">
+                                                    <img src="images/goal-settings.png" alt="學習目標"
+                                                        style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;">
+                                                </div>
+                                                <div class="notice-content" style="flex: 1;">
+                                                    <h4 class="notice-title" style="color: #000000 !important;">📌
+                                                        2026年1月學習目標</h4>
+                                                    <p class="notice-text" style="color: #000000 !important;">
+                                                        本篇規劃2026年1月每位學生需要達到的目標，學生可以自行利用空閒時間去準備、預習與練習
+                                                    </p>
+                                                    <span class="notice-date"
+                                                        style="color: #ff6b6b !important; opacity: 1 !important; font-weight: 600 !important;">2025年12月28日</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="noticeboard-slide" data-index="3">
+                                        <div class="notice-card carnival-card">
+                                            <div style="display: flex; gap: 1.75rem; align-items: center; width: 100%;">
+                                                <div
+                                                    style="flex-shrink: 0; width: 45%; max-width: 300px; height: 180px; display: flex; align-items: center; justify-content: center;">
+                                                    <img src="images/bull1.png" alt="園遊會照片"
+                                                        style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;">
+                                                </div>
+                                                <div class="notice-content" style="flex: 1;">
+                                                    <h4 class="notice-title carnival-title">鹿鳴國中 九年1班烤個100分🍗 🍢</h4>
+                                                    <p class="notice-text carnival-text">一年一度的園遊會這次學生準備香噴噴的烤雞肉、烤豬肉、滷豆干
+                                                        讓我們一起回顧這次遊園會的精彩照片吧！
+                                                    </p>
+                                                    <span class="notice-date">2025年12月4日</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 可以在這裡添加更多公告卡片 -->
+                                </div>
+                                <button class="noticeboard-btn noticeboard-btn-next" id="noticeboardNextBtn"
+                                    aria-label="下一則">
+                                    <i class="fas fa-hand-point-left"></i>
+                                </button>
+                            </div>
+                            <div class="noticeboard-indicators" id="noticeboardIndicators">
+                                <!-- 指示器將由 JavaScript 動態生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- 核心功能區 -->
+        <section class="features-section" id="course">
+            <div class="content-container">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <img src="ellenbull.png" alt="學習地圖圖標" class="section-title-icon">
+                        學習地圖
+                    </h2>
+                    <p class="section-description">「書在平時讀，事到臨頭不慌忙。」 — 邱鈺倫.<br>"Study in everyday moments, so you won't
+                        panic when it truly matters." - Ellen.C</p>
+                </div>
+
+                <div class="features-grid">
+                    <article class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="feature-title">成績追蹤</h3>
+                        <p class="feature-description">
+                            即時查看各科成績，掌握學習進度，了解優勢與待加強的科目
+                        </p>
+                        <a href="grades.html" class="feature-link">
+                            查看成績
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </article>
+
+                    <article class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-pen"></i>
+                        </div>
+                        <h3 class="feature-title">學習心得</h3>
+                        <p class="feature-description">
+                            記錄每日學習心得，建立個人知識庫，培養反思與總結能力
+                        </p>
+                        <a href="reflection.html" class="feature-link">
+                            寫心得
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </article>
+
+                    <article class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h3 class="feature-title">複習進度</h3>
+                        <p class="feature-description">
+                            系統化管理複習計畫，清楚標記學習進度，提升複習效率
+                        </p>
+                        <a href="progress.html" class="feature-link">
+                            查看進度
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </article>
+
+                    <article class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3 class="feature-title">老師回饋</h3>
+                        <p class="feature-description">
+                            獲得老師的專業建議與評語，針對性改進學習方法
+                        </p>
+                        <a href="feedback.html" class="feature-link">
+                            查看回饋
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- 成績查詢區 -->
+
+
+        <!-- 成績顯示區（登入後顯示） -->
+        <div class="grades-card" id="gradesCard" style="display: none;">
+            <div class="card-header">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">學生 1000</span>
+                </div>
+                <button class="btn btn-outline btn-sm" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    登出
+                </button>
+            </div>
+            <div class="grades-content" id="gradesContent">
+                <!-- 成績內容將由 JavaScript 動態生成 -->
+            </div>
+        </div>
+        </div>
+        </section>
+
+        <!-- ========================================
+             學習心得區 - 已隱藏
+             如需顯示，請移除下方的註解標記
+        ========================================
+        <section class="reflection-section" id="reflection">
+            <div class="content-container">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-lightbulb"></i>
+                        學習心得
+                    </h2>
+                    <p class="section-description">記錄學習過程，培養思考習慣</p>
+                </div>
+
+                <div class="reflection-grid">
+                    <div class="reflection-form-card">
+                        <h3 class="card-title">新增心得</h3>
+                        <form id="reflectionForm">
+                            <div class="form-group">
+                                <label for="reflectionDate">日期</label>
+                                <input type="date" id="reflectionDate" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reflectionSubject">科目</label>
+                                <select id="reflectionSubject" class="form-control" required>
+                                    <option value="">請選擇科目</option>
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="數學">數學</option>
+                                    <option value="自然">自然</option>
+                                    <option value="社會">社會</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="reflectionContent">心得內容</label>
+                                <textarea id="reflectionContent" class="form-control" rows="5"
+                                    placeholder="今天學到了什麼？有什麼收穫或困難？" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fas fa-save"></i>
+                                儲存心得
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="reflection-list-card">
+                        <h3 class="card-title">我的心得記錄</h3>
+                        <div class="reflection-list" id="reflectionList">
+                            <div class="empty-state">
+                                <i class="fas fa-file-alt"></i>
+                                <p>還沒有心得記錄<br>開始記錄你的學習心得吧！</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        ======================================== -->
+
+        <!-- ========================================
+             複習進度追蹤區 - 已隱藏
+             如需顯示，請移除下方的註解標記
+        ========================================
+        <section class="progress-section" id="progress">
+            <div class="content-container">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-clipboard-check"></i>
+                        複習進度追蹤
+                    </h2>
+                    <p class="section-description">系統化管理各科複習進度</p>
+                </div>
+
+                <div class="progress-controls">
+                    <div class="progress-stats">
+                        <div class="stat-badge">
+                            <i class="fas fa-calendar-week"></i>
+                            <span>總週數：20週</span>
+                        </div>
+                        <div class="stat-badge">
+                            <i class="fas fa-book"></i>
+                            <span>總科目：7科</span>
+                        </div>
+                        <div class="stat-badge">
+                            <i class="fas fa-check-circle"></i>
+                            <span>完成度：<strong id="completionRate">0%</strong></span>
+                        </div>
+                    </div>
+                    <div class="progress-actions">
+                        <button class="btn btn-outline btn-sm" id="resetProgress">
+                            <i class="fas fa-undo"></i>
+                            重置
+                        </button>
+                        <button class="btn btn-primary btn-sm" id="exportProgress">
+                            <i class="fas fa-download"></i>
+                            匯出
+                        </button>
+                    </div>
+                </div>
+
+                <div class="progress-table-wrapper">
+                    <table class="progress-table" id="progressTable">
+                        <thead>
+                            <tr>
+                                <th>週次</th>
+                                <th>國文</th>
+                                <th>英文</th>
+                                <th>數學</th>
+                                <th>自然</th>
+                                <th>歷史</th>
+                                <th>地理</th>
+                                <th>公民</th>
+                            </tr>
+                        </thead>
+                        <tbody id="progressTableBody">
+                            <!-- 表格內容由 JavaScript 生成 -->
+        <!-- </tbody> -->
+        <!-- </table> -->
+        <!-- </div> -->
+
+        <!-- <div class="progress-legend">
+            <div class="legend-item">
+                <span class="legend-color not-started"></span>
+                <span>未開始</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color in-progress"></span>
+                <span>進行中</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color completed"></span>
+                <span>已完成</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color reviewed"></span>
+                <span>已複習</span>
+            </div>
+        </div>
+        </div>
+        </section>
+     
+
+        <!-- 關於作者區 -->
+        <section class="about-author-section" id="about">
+            <div class="content-container">
+                <div class="about-author-content">
+                    <h2 class="about-author-title">謙虛學習，與人共進</h2>
+                    <p class="about-author-text">
+                        我是邱鈺倫，「鈺倫の教室」的作者，畢業於國立臺灣師範大學中文系，目前就讀國立清華大學學習科學與科技研究所。
+                        同時，目前任職於彰化縣鹿鳴國中班級導師，過去曾任職於彰化縣立成功高中教學組長、國立新竹科學園區實驗中學代理教師、安親班補教老師、國中家教等職務。
+                    </p>
+                    <p class="about-author-text">
+                        開發「鈺倫の教室」這個網站的初衷在於將目前上課教學的內容以數位的方式呈現在網路上，提供學生「課前預習」、「課後複習」、「平時練習」等三項目標，幫助學生可以彈性學習，同時，也希望學生可以在線上即時查到自己的成績、傳遞自己的學習心得給老師，讓老師更能理解學生的情況，去優化未來的課程。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>鈺倫の教室</span>
+                    </div>
+                    <p class="footer-description">
+                        專業的學習管理平台<br>
+                        陪伴學生邁向成功
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <h4>快速連結</h4>
+                    <ul>
+                        <li><a href="#home">首頁</a></li>
+                        <li><a href="#exam-time">考試時間</a></li>
+                        <li><a href="#exam-subjects">考試科目與範圍</a></li>
+                        <li><a href="#course">課程內容</a></li>
+                        <li><a href="#about">關於本站</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>聯絡資訊</h4>
+                    <p><i class="fas fa-envelope"></i> ellen@example.com</p>
+                    <p><i class="fas fa-phone"></i> (02) 1234-5678</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 鈺倫の教室. All rights reserved. <span style="margin-left: 1rem; color: #5a6c7d;">Version
+                        1.0</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 登入模态框 -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-modal-content">
+            <button class="login-modal-close" id="closeLoginModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="login-card">
+                <h2><i class="fas fa-graduation-cap"></i> 會員登入</h2>
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-exclamation-circle"></i> 學號或密碼錯誤，請重新輸入
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="modalStudentId"><i class="fas fa-id-card"></i> 學號</label>
+                        <input type="text" id="modalStudentId" name="studentId" placeholder="請輸入學號" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalPassword"><i class="fas fa-lock"></i> 密碼</label>
+                        <input type="password" id="modalPassword" name="password" placeholder="請輸入密碼" required>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> 登入
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // 首頁登入功能
+        (function () {
+            // 模擬學生資料庫（與其他頁面一致）
+            const studentsDatabase = {
+                'A100': {
+                    password: '999',
+                    name: '測試學生'
+                },
+                '1001': {
+                    password: '1234', name: '王小明'
+                },
+                '1002': {
+                    password: '1234', name: '張三'
+                },
+                '1003': {
+                    password: '1234', name: '李四'
+                }
+            };
+
+            // API 服務層
+            const ApiService = {
+                async login(studentId, password) {
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                    return this.getStudentData(studentId, password);
+                },
+
+                getStudentData(studentId, password) {
+                    const student = studentsDatabase[studentId];
+                    if (student && student.password === password) {
+                        return { success: true, data: student };
+                    }
+                    return { success: false, message: '學號或密碼錯誤' };
+                }
+            };
+
+            // 登入表單處理
+            const loginForm = document.getElementById('loginForm');
+            const loginModal = document.getElementById('loginModal');
+            const closeLoginModal = document.getElementById('closeLoginModal');
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (loginForm) {
+                loginForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    const studentId = document.getElementById('modalStudentId').value;
+                    const password = document.getElementById('modalPassword').value;
+
+                    // 使用API服務進行登入驗證
+                    const result = await ApiService.login(studentId, password);
+
+                    if (result.success) {
+                        // 登入成功
+                        errorMessage.classList.remove('active');
+
+                        // 保存登入狀態
+                        const student = result.data;
+                        if (typeof AuthManager !== 'undefined') {
+                            AuthManager.saveLogin(studentId, student.name);
+                        }
+
+                        // 關閉模态框
+                        loginModal.classList.remove('active');
+
+                        // 清空表單
+                        loginForm.reset();
+                    } else {
+                        // 登入失敗
+                        errorMessage.classList.add('active');
+                    }
+                });
+            }
+
+            // 關閉模态框
+            if (closeLoginModal) {
+                closeLoginModal.addEventListener('click', function () {
+                    loginModal.classList.remove('active');
+                    errorMessage.classList.remove('active');
+                    loginForm.reset();
+                });
+            }
+
+            // 點擊模态框背景關閉
+            if (loginModal) {
+                loginModal.addEventListener('click', function (e) {
+                    if (e.target === loginModal) {
+                        loginModal.classList.remove('active');
+                        errorMessage.classList.remove('active');
+                        loginForm.reset();
+                    }
+                });
+            }
+
+            // 等待 auth.js 加载完成后，覆盖登录按钮行为
+            function setupLoginButton() {
+                const loginBtn = document.getElementById('loginBtn');
+                if (loginBtn) {
+                    // 移除舊的事件監聽器标记
+                    loginBtn.removeAttribute('data-listener-attached');
+
+                    // 移除所有现有的事件监听器（通过克隆节点）
+                    const newLoginBtn = loginBtn.cloneNode(true);
+                    loginBtn.parentNode.replaceChild(newLoginBtn, loginBtn);
+
+                    // 添加新的事件監聽器
+                    newLoginBtn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (typeof AuthManager !== 'undefined' && !AuthManager.isLoggedIn()) {
+                            loginModal.classList.add('active');
+                        }
+                    });
+                }
+            }
+
+            // 页面加载时设置
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function () {
+                    setTimeout(setupLoginButton, 200);
+                });
+            } else {
+                setTimeout(setupLoginButton, 200);
+            }
+        })();
+    </script>
+</body>
+
+</html>

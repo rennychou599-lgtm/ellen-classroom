@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <!-- 背景裝飾元素 -->
+  <circle cx="80" cy="60" r="4" fill="#FFD700" opacity="0.3"/>
+  <circle cx="520" cy="80" r="6" fill="#4A90E2" opacity="0.3"/>
+  <circle cx="550" cy="350" r="5" fill="#FFD700" opacity="0.3"/>
+  <circle cx="50" cy="320" r="3" fill="#4A90E2" opacity="0.3"/>
+  
+  <!-- 建築物/科技結構 -->
+  <rect x="200" y="180" width="200" height="120" rx="8" fill="#E8F4FD" stroke="#4A90E2" stroke-width="2"/>
+  <rect x="210" y="190" width="40" height="100" rx="4" fill="#4A90E2" opacity="0.7"/>
+  <rect x="260" y="190" width="40" height="100" rx="4" fill="#4A90E2" opacity="0.7"/>
+  <rect x="310" y="190" width="40" height="100" rx="4" fill="#4A90E2" opacity="0.7"/>
+  <rect x="360" y="190" width="40" height="100" rx="4" fill="#4A90E2" opacity="0.7"/>
+  
+  <!-- 屋頂 -->
+  <polygon points="190,180 300,140 410,180" fill="#FFD700" opacity="0.8"/>
+  
+  <!-- 科技元素 -->
+  <rect x="220" y="150" width="20" height="30" rx="2" fill="#4A90E2"/>
+  <rect x="250" y="150" width="20" height="30" rx="2" fill="#4A90E2"/>
+  <rect x="280" y="150" width="20" height="30" rx="2" fill="#4A90E2"/>
+  <rect x="310" y="150" width="20" height="30" rx="2" fill="#4A90E2"/>
+  <rect x="340" y="150" width="20" height="30" rx="2" fill="#4A90E2"/>
+  <rect x="370" y="150" width="20" height="30" rx="2" fill="#4A90E2"/>
+  
+  <!-- 工人1 - 黃色工作服 -->
+  <circle cx="150" cy="200" r="25" fill="#FFD700"/>
+  <rect x="130" y="225" width="40" height="50" rx="8" fill="#FFD700"/>
+  <rect x="120" y="235" width="20" height="15" rx="3" fill="#FFD700"/>
+  <rect x="160" y="235" width="20" height="15" rx="3" fill="#FFD700"/>
+  
+  <!-- 工人1 頭部細節 -->
+  <circle cx="145" cy="195" r="3" fill="#2C3E50"/>
+  <circle cx="155" cy="195" r="3" fill="#2C3E50"/>
+  <path d="M 140 205 Q 150 210 160 205" stroke="#2C3E50" stroke-width="2" fill="none"/>
+  
+  <!-- 工人1 安全帽 -->
+  <ellipse cx="150" cy="185" rx="28" ry="20" fill="#FF6B35" opacity="0.8"/>
+  
+  <!-- 工人1 工具 -->
+  <rect x="170" y="200" width="4" height="40" rx="2" fill="#2C3E50"/>
+  <polygon points="172,200 180,190 172,195" fill="#FFD700"/>
+  
+  <!-- 工人2 - 藍色工作服 -->
+  <circle cx="450" cy="220" r="25" fill="#4A90E2"/>
+  <rect x="430" y="245" width="40" height="50" rx="8" fill="#4A90E2"/>
+  <rect x="420" y="255" width="20" height="15" rx="3" fill="#4A90E2"/>
+  <rect x="460" y="255" width="20" height="15" rx="3" fill="#4A90E2"/>
+  
+  <!-- 工人2 頭部細節 -->
+  <circle cx="445" cy="215" r="3" fill="#2C3E50"/>
+  <circle cx="455" cy="215" r="3" fill="#2C3E50"/>
+  <path d="M 440 225 Q 450 230 460 225" stroke="#2C3E50" stroke-width="2" fill="none"/>
+  
+  <!-- 工人2 安全帽 -->
+  <ellipse cx="450" cy="205" rx="28" ry="20" fill="#FF6B35" opacity="0.8"/>
+  
+  <!-- 工人2 工具 -->
+  <rect x="470" y="220" width="4" height="40" rx="2" fill="#2C3E50"/>
+  <rect x="472" y="200" width="20" height="4" rx="2" fill="#2C3E50"/>
+  
+  <!-- 工人3 - 黃色工作服，在建築物上 -->
+  <circle cx="300" cy="120" r="20" fill="#FFD700"/>
+  <rect x="285" y="140" width="30" height="40" rx="6" fill="#FFD700"/>
+  <rect x="280" y="145" width="15" height="12" rx="2" fill="#FFD700"/>
+  <rect x="305" y="145" width="15" height="12" rx="2" fill="#FFD700"/>
+  
+  <!-- 工人3 頭部細節 -->
+  <circle cx="295" cy="115" r="2" fill="#2C3E50"/>
+  <circle cx="305" cy="115" r="2" fill="#2C3E50"/>
+  <path d="M 290 120 Q 300 125 310 120" stroke="#2C3E50" stroke-width="1.5" fill="none"/>
+  
+  <!-- 工人3 安全帽 -->
+  <ellipse cx="300" cy="105" rx="22" ry="15" fill="#FF6B35" opacity="0.8"/>
+  
+  <!-- 工人3 工具 -->
+  <rect x="320" y="110" width="3" height="30" rx="1.5" fill="#2C3E50"/>
+  <polygon points="321,110 328,105 321,108" fill="#FFD700"/>
+  
+  <!-- 科技元素和線條 -->
+  <line x1="100" y1="100" x2="500" y2="100" stroke="#4A90E2" stroke-width="2" opacity="0.3" stroke-dasharray="5,5"/>
+  <line x1="100" y1="120" x2="500" y2="120" stroke="#FFD700" stroke-width="2" opacity="0.3" stroke-dasharray="5,5"/>
+  
+  <!-- 數據流動效果 -->
+  <circle cx="120" cy="110" r="3" fill="#4A90E2" opacity="0.6">
+    <animate attributeName="cx" values="120;480;120" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="130" cy="110" r="2" fill="#FFD700" opacity="0.6">
+    <animate attributeName="cx" values="130;490;130" dur="3.5s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- 齒輪裝飾 -->
+  <g transform="translate(80, 250)">
+    <circle cx="0" cy="0" r="15" fill="#4A90E2" opacity="0.4"/>
+    <circle cx="0" cy="0" r="8" fill="#FFD700" opacity="0.6"/>
+    <rect x="-2" y="-15" width="4" height="30" fill="#4A90E2" opacity="0.4"/>
+    <rect x="-15" y="-2" width="30" height="4" fill="#4A90E2" opacity="0.4"/>
+  </g>
+  
+  <!-- 另一個齒輪 -->
+  <g transform="translate(520, 200)">
+    <circle cx="0" cy="0" r="12" fill="#FFD700" opacity="0.4"/>
+    <circle cx="0" cy="0" r="6" fill="#4A90E2" opacity="0.6"/>
+    <rect x="-1.5" y="-12" width="3" height="24" fill="#FFD700" opacity="0.4"/>
+    <rect x="-12" y="-1.5" width="24" height="3" fill="#FFD700" opacity="0.4"/>
+  </g>
+  
+  <!-- 星星裝飾 -->
+  <path d="M 50 80 L 55 90 L 65 92 L 57 100 L 59 110 L 50 105 L 41 110 L 43 100 L 35 92 L 45 90 Z" fill="#FFD700" opacity="0.5"/>
+  <path d="M 550 120 L 555 130 L 565 132 L 557 140 L 559 150 L 550 145 L 541 150 L 543 140 L 535 132 L 545 130 Z" fill="#4A90E2" opacity="0.5"/>
+  <path d="M 100 350 L 105 360 L 115 362 L 107 370 L 109 380 L 100 375 L 91 380 L 93 370 L 85 362 L 95 360 Z" fill="#FFD700" opacity="0.5"/>
+</svg>

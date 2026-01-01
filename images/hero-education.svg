@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <!-- 背景裝飾元素 -->
+  <circle cx="80" cy="60" r="4" fill="#667eea" opacity="0.2"/>
+  <circle cx="520" cy="80" r="6" fill="#764ba2" opacity="0.2"/>
+  <circle cx="550" cy="350" r="5" fill="#667eea" opacity="0.2"/>
+  <circle cx="50" cy="320" r="3" fill="#764ba2" opacity="0.2"/>
+  
+  <!-- 黑板背景 -->
+  <rect x="100" y="80" width="400" height="250" rx="12" fill="#2c3e50"/>
+  <rect x="110" y="90" width="380" height="230" rx="8" fill="#34495e"/>
+  
+  <!-- 黑板內容 -->
+  <text x="300" y="130" text-anchor="middle" font-size="24" font-weight="bold" fill="#fff">數學公式</text>
+  <text x="300" y="160" text-anchor="middle" font-size="20" fill="#fff">a² + b² = c²</text>
+  <text x="300" y="190" text-anchor="middle" font-size="18" fill="#fff">y = mx + b</text>
+  
+  <!-- 黑板裝飾 -->
+  <circle cx="450" cy="120" r="8" fill="#FFD700" opacity="0.7"/>
+  <path d="M 150 200 L 155 210 L 165 212 L 157 220 L 159 230 L 150 225 L 141 230 L 143 220 L 135 212 L 145 210 Z" fill="#667eea" opacity="0.6"/>
+  
+  <!-- 老師 -->
+  <circle cx="200" cy="200" r="30" fill="#fff" stroke="#667eea" stroke-width="3"/>
+  
+  <!-- 老師頭髮 -->
+  <path d="M 175 185 Q 200 170 225 185" fill="#2c3e50"/>
+  
+  <!-- 老師眼鏡 -->
+  <circle cx="190" cy="195" r="8" fill="none" stroke="#2c3e50" stroke-width="2"/>
+  <circle cx="210" cy="195" r="8" fill="none" stroke="#2c3e50" stroke-width="2"/>
+  <line x1="198" y1="195" x2="202" y2="195" stroke="#2c3e50" stroke-width="2"/>
+  
+  <!-- 老師眼睛 -->
+  <circle cx="190" cy="195" r="3" fill="#2c3e50"/>
+  <circle cx="210" cy="195" r="3" fill="#2c3e50"/>
+  
+  <!-- 老師微笑 -->
+  <path d="M 185 210 Q 200 220 215 210" stroke="#2c3e50" stroke-width="2" fill="none"/>
+  
+  <!-- 老師身體 -->
+  <rect x="180" y="230" width="40" height="60" rx="8" fill="#667eea"/>
+  
+  <!-- 老師手臂 -->
+  <rect x="160" y="240" width="20" height="40" rx="10" fill="#fff"/>
+  <rect x="220" y="240" width="20" height="40" rx="10" fill="#fff"/>
+  
+  <!-- 老師指向黑板 -->
+  <line x1="180" y1="250" x2="120" y2="180" stroke="#667eea" stroke-width="3" stroke-dasharray="5,5" opacity="0.5"/>
+  
+  <!-- 學生1 -->
+  <circle cx="350" cy="220" r="25" fill="#fff" stroke="#764ba2" stroke-width="2"/>
+  
+  <!-- 學生1頭髮 -->
+  <path d="M 330 205 Q 350 195 370 205" fill="#8B4513"/>
+  
+  <!-- 學生1眼睛 -->
+  <circle cx="345" cy="215" r="3" fill="#2c3e50"/>
+  <circle cx="355" cy="215" r="3" fill="#2c3e50"/>
+  
+  <!-- 學生1微笑 -->
+  <path d="M 340 225 Q 350 230 360 225" stroke="#2c3e50" stroke-width="2" fill="none"/>
+  
+  <!-- 學生1身體 -->
+  <rect x="335" y="245" width="30" height="50" rx="6" fill="#764ba2"/>
+  
+  <!-- 學生1手臂 -->
+  <rect x="320" y="250" width="15" height="30" rx="7" fill="#fff"/>
+  <rect x="365" y="250" width="15" height="30" rx="7" fill="#fff"/>
+  
+  <!-- 學生1舉手 -->
+  <line x1="327" y1="250" x2="320" y2="200" stroke="#764ba2" stroke-width="3"/>
+  <circle cx="320" cy="200" r="4" fill="#764ba2"/>
+  
+  <!-- 學生2 -->
+  <circle cx="450" cy="240" r="22" fill="#fff" stroke="#FFD700" stroke-width="2"/>
+  
+  <!-- 學生2頭髮 -->
+  <path d="M 433 228 Q 450 220 467 228" fill="#FFD700"/>
+  
+  <!-- 學生2眼睛 -->
+  <circle cx="445" cy="235" r="2" fill="#2c3e50"/>
+  <circle cx="455" cy="235" r="2" fill="#2c3e50"/>
+  
+  <!-- 學生2微笑 -->
+  <path d="M 440 245 Q 450 248 460 245" stroke="#2c3e50" stroke-width="1.5" fill="none"/>
+  
+  <!-- 學生2身體 -->
+  <rect x="438" y="262" width="24" height="40" rx="5" fill="#FFD700"/>
+  
+  <!-- 學生2手臂 -->
+  <rect x="428" y="267" width="12" height="25" rx="6" fill="#fff"/>
+  <rect x="460" y="267" width="12" height="25" rx="6" fill="#fff"/>
+  
+  <!-- 學生2拿筆記本 -->
+  <rect x="470" y="260" width="25" height="35" rx="3" fill="#fff" stroke="#FFD700" stroke-width="2"/>
+  <line x1="475" y1="270" x2="490" y2="270" stroke="#FFD700" stroke-width="1"/>
+  <line x1="475" y1="275" x2="490" y2="275" stroke="#FFD700" stroke-width="1"/>
+  <line x1="475" y1="280" x2="490" y2="280" stroke="#FFD700" stroke-width="1"/>
+  
+  <!-- 書本堆疊 -->
+  <rect x="80" y="280" width="60" height="80" rx="4" fill="#667eea" opacity="0.8"/>
+  <rect x="85" y="275" width="50" height="75" rx="3" fill="#764ba2" opacity="0.8"/>
+  <rect x="90" y="270" width="40" height="70" rx="3" fill="#FFD700" opacity="0.8"/>
+  
+  <!-- 書本標籤 -->
+  <text x="110" y="310" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">數學</text>
+  <text x="110" y="340" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">英文</text>
+  <text x="110" y="370" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">國文</text>
+  
+  <!-- 筆記本 -->
+  <rect x="480" y="200" width="40" height="50" rx="4" fill="#fff" stroke="#667eea" stroke-width="2"/>
+  <line x1="485" y1="210" x2="515" y2="210" stroke="#667eea" stroke-width="1.5" opacity="0.6"/>
+  <line x1="485" y1="220" x2="510" y2="220" stroke="#667eea" stroke-width="1.5" opacity="0.6"/>
+  <line x1="485" y1="230" x2="515" y2="230" stroke="#667eea" stroke-width="1.5" opacity="0.6"/>
+  
+  <!-- 筆 -->
+  <rect x="500" y="195" width="3" height="25" rx="1.5" fill="#667eea"/>
+  <polygon points="501,195 505,190 499,190" fill="#FFD700"/>
+  
+  <!-- 裝飾星星 -->
+  <path d="M 120 60 L 125 70 L 135 72 L 127 80 L 129 90 L 120 85 L 111 90 L 113 80 L 105 72 L 115 70 Z" fill="#FFD700" opacity="0.6"/>
+  <path d="M 480 60 L 485 70 L 495 72 L 487 80 L 489 90 L 480 85 L 471 90 L 473 80 L 465 72 L 475 70 Z" fill="#667eea" opacity="0.6"/>
+  <path d="M 300 50 L 305 60 L 315 62 L 307 70 L 309 80 L 300 75 L 291 80 L 293 70 L 285 62 L 295 60 Z" fill="#764ba2" opacity="0.6"/>
+  
+  <!-- 知識流動效果 -->
+  <circle cx="250" cy="150" r="3" fill="#667eea" opacity="0.6">
+    <animate attributeName="cy" values="150;200;150" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="280" cy="160" r="2" fill="#FFD700" opacity="0.6">
+    <animate attributeName="cy" values="160;210;160" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="320" cy="155" r="2.5" fill="#764ba2" opacity="0.6">
+    <animate attributeName="cy" values="155;205;155" dur="2.2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- 學習進度條 -->
+  <rect x="150" y="350" width="300" height="8" rx="4" fill="#E0E0E0"/>
+  <rect x="150" y="350" width="240" height="8" rx="4" fill="#667eea"/>
+  <text x="300" y="375" text-anchor="middle" font-size="14" font-weight="bold" fill="#667eea">學習進度 80%</text>
+</svg>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>關於老師 | 鈺倫の教室</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Zhi+Mang+Xing&family=Ma+Shan+Zheng&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- 導航欄 -->
+    <header class="site-header">
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="site-branding">
+                <a href="index.html" class="logo-link">
+                    <img src="Ellennoback.png" alt="鈺倫の教室 Logo" class="logo-image">
+                    <div class="logo-text">
+                        <span class="site-title">鈺倫の教室</span>
+                        <span class="site-tagline">Ellen's class</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Header 倒數顯示 -->
+            <div class="header-countdown" aria-live="polite">
+                <i class="fas fa-hourglass-half"></i>
+                <span id="headerCountdown">會考倒數 0 天</span>
+            </div>
+
+            <!-- 主導航菜單 -->
+            <nav class="main-navigation">
+                <ul class="nav-menu">
+                    <li class="menu-item">
+                        <a href="index.html" class="menu-link">
+                            <i class="fas fa-home"></i>
+                            <span>首頁</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="aboutme.html" class="menu-link active">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>關於老師</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- 右側按鈕 -->
+            <div class="header-actions">
+                <button class="btn btn-outline" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                    <span>搜尋</span>
+                </button>
+                <button class="btn btn-outline" id="loginBtn">
+                    <i class="fas fa-user"></i>
+                    <span>會員登入</span>
+                </button>
+            </div>
+
+            <!-- 手機版菜單按鈕 -->
+            <button class="mobile-menu-toggle" aria-label="開啟選單">
+                <span class="hamburger-icon"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 主內容區域 -->
+    <main class="site-main">
+        <!-- 老師介紹 Hero 區 -->
+        <section class="teacher-hero">
+            <div class="content-container">
+                <div class="teacher-hero-content">
+                    <div class="teacher-avatar">
+                        <div class="avatar-circle">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                    </div>
+                    <h1 class="teacher-name">邱鈺倫 老師</h1>
+                    <p class="teacher-tagline">謙虛學習，與人共進</p>
+                    <p class="teacher-subtitle">國中班級導師 | 學習科學與科技研究所</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 教育背景 - 藍色主題 -->
+        <section class="teacher-section teacher-education">
+            <div class="content-container">
+                <div class="section-card">
+                    <div class="section-icon blue-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h2 class="section-title">教育背景</h2>
+                    <div class="education-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-year">2022 - 至今</div>
+                            <div class="timeline-content">
+                                <h3>國立清華大學</h3>
+                                <p>學習科學與科技研究所（在學中）</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">畢業</div>
+                            <div class="timeline-content">
+                                <h3>國立臺灣師範大學</h3>
+                                <p>中文系學士</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 工作經歷 - 綠色主題 -->
+        <section class="teacher-section teacher-experience">
+            <div class="content-container">
+                <div class="section-card">
+                    <div class="section-icon green-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h2 class="section-title">工作經歷</h2>
+                    <div class="experience-grid">
+                        <div class="experience-card">
+                            <div class="exp-icon">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <h3>現職</h3>
+                            <p>彰化縣鹿鳴國中</p>
+                            <span class="exp-role">班級導師</span>
+                        </div>
+                        <div class="experience-card">
+                            <div class="exp-icon">
+                                <i class="fas fa-user-cog"></i>
+                            </div>
+                            <h3>曾任</h3>
+                            <p>彰化縣立成功高中</p>
+                            <span class="exp-role">教學組長</span>
+                        </div>
+                        <div class="experience-card">
+                            <div class="exp-icon">
+                                <i class="fas fa-school"></i>
+                            </div>
+                            <h3>曾任</h3>
+                            <p>國立新竹科學園區實驗中學</p>
+                            <span class="exp-role">代理教師</span>
+                        </div>
+                        <div class="experience-card">
+                            <div class="exp-icon">
+                                <i class="fas fa-book-reader"></i>
+                            </div>
+                            <h3>曾任</h3>
+                            <p>安親班、補教、國中家教</p>
+                            <span class="exp-role">教師</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 教學理念 - 橘黃色主題 -->
+        <section class="teacher-section teacher-philosophy">
+            <div class="content-container">
+                <div class="section-card">
+                    <div class="section-icon orange-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h2 class="section-title">教學理念</h2>
+                    <div class="philosophy-content">
+                        <div class="philosophy-item">
+                            <div class="philosophy-number">01</div>
+                            <div class="philosophy-text">
+                                <h3>課前預習</h3>
+                                <p>幫助學生提前了解課程內容，建立學習基礎</p>
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-number">02</div>
+                            <div class="philosophy-text">
+                                <h3>課後複習</h3>
+                                <p>強化學習記憶，加深對知識點的理解與應用</p>
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-number">03</div>
+                            <div class="philosophy-text">
+                                <h3>平時練習</h3>
+                                <p>持續練習與反饋，培養學習習慣與能力</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="philosophy-quote">
+                        <p>「開發『鈺倫の教室』的初衷在於將目前上課教學的內容以數位的方式呈現在網路上，提供學生彈性學習的機會，同時也希望學生可以在線上即時查到自己的成績、傳遞自己的學習心得給老師，讓老師更能理解學生的情況，去優化未來的課程。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 專業特色 - 紫色主題 -->
+        <section class="teacher-section teacher-features">
+            <div class="content-container">
+                <div class="section-card">
+                    <div class="section-icon purple-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h2 class="section-title">專業特色</h2>
+                    <div class="features-grid-about">
+                        <div class="feature-about-card">
+                            <i class="fas fa-laptop-code"></i>
+                            <h3>數位教學</h3>
+                            <p>整合傳統教學與數位科技，提升學習效率</p>
+                        </div>
+                        <div class="feature-about-card">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>學習追蹤</h3>
+                            <p>即時掌握學生學習狀況，提供個人化指導</p>
+                        </div>
+                        <div class="feature-about-card">
+                            <i class="fas fa-heart"></i>
+                            <h3>用心教學</h3>
+                            <p>重視每位學生的成長，用心陪伴學習歷程</p>
+                        </div>
+                        <div class="feature-about-card">
+                            <i class="fas fa-comments"></i>
+                            <h3>即時互動</h3>
+                            <p>建立師生溝通橋樑，即時回饋學習心得</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>鈺倫の教室</span>
+                    </div>
+                    <p class="footer-description">
+                        專業的學習管理平台<br>
+                        陪伴學生邁向成功
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <h4>快速連結</h4>
+                    <ul>
+                        <li><a href="index.html">首頁</a></li>
+                        <li><a href="aboutme.html">關於老師</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>聯絡資訊</h4>
+                    <p><i class="fas fa-envelope"></i> ellen@example.com</p>
+                    <p><i class="fas fa-phone"></i> (02) 1234-5678</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 鈺倫の教室. All rights reserved. <span style="margin-left: 1rem; color: #5a6c7d;">Version
+                        1.0</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

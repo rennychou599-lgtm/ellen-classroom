@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學習心得 | 鈺倫の教室</title>
+    <link rel="icon" type="image/png" href="Ellennoback.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Zhi+Mang+Xing&family=Ma+Shan+Zheng&family=Caveat:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .reflection-page {
+            min-height: 80vh;
+            padding: 4rem 2rem;
+            background: #ffffff;
+        }
+
+        .reflection-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        /* 初始狀態：如果已登入，隱藏登入表單 */
+        .login-card.checking-login {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .login-card h2 {
+            color: #000000;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #000000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .reflection-display {
+            display: none;
+        }
+
+        .reflection-display.active {
+            display: block;
+        }
+
+        .student-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 12px;
+            border: 2px solid #e1e8ed;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .student-info-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
+        }
+
+        .student-info-text h3 {
+            color: #2c3e50;
+            margin: 0 0 0.25rem 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .student-info-text p {
+            margin: 0;
+            color: #5a6c7d;
+            font-size: 0.9rem;
+        }
+
+        .student-info-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .back-btn,
+        .logout-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn {
+            background: white;
+            color: #3498db;
+            border: 2px solid #3498db;
+        }
+
+        .back-btn:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        .reflection-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .reflection-form-card,
+        .reflection-list-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+        }
+
+        .card-title {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .reflection-title-icon {
+            width: 50px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #34495e;
+            box-shadow: 0 0 0 2px rgba(52, 73, 94, 0.1);
+        }
+
+        .form-group label {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #34495e;
+            box-shadow: 0 0 0 2px rgba(52, 73, 94, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: rgba(102, 126, 234, 0.9);
+            transform: translateY(-2px);
+        }
+
+        /* 儲存與送出心得按鈕特殊樣式（藍色） */
+        button[type="submit"].btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3) !important;
+        }
+
+        button[type="submit"].btn-primary:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #3498db 100%) !important;
+            box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4) !important;
+            transform: translateY(-2px);
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .reflection-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .reflection-item {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 2px solid #e1e8ed;
+            transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .reflection-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: #bdc3c7;
+        }
+
+        .reflection-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .reflection-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .reflection-item-date {
+            color: #5a6c7d;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .reflection-item-subject {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(44, 62, 80, 0.2);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #5a6c7d;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+
+        /* 刪除按鈕樣式 */
+        .delete-btn,
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .delete-btn:hover,
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        /* 心得內容文字 */
+        .reflection-item-content {
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        /* 滾動條樣式 */
+        .reflection-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .reflection-list::-webkit-scrollbar-track {
+            background: #ecf0f1;
+            border-radius: 4px;
+        }
+
+        .reflection-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            border-radius: 4px;
+        }
+
+        .reflection-list::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        @media (max-width: 768px) {
+            .reflection-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 導航欄 -->
+    <header class="site-header">
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="site-branding">
+                <a href="index.html" class="logo-link">
+                    <img src="Ellennoback.png" alt="鈺倫の教室 Logo" class="logo-image">
+                    <div class="logo-text">
+                        <span class="site-title">鈺倫の教室</span>
+                        <span class="site-tagline">Ellen's class</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Header 倒數顯示 -->
+            <div class="header-countdown" aria-live="polite">
+                <i class="fas fa-hourglass-half"></i>
+                <span id="headerCountdown">會考倒數 0 天</span>
+            </div>
+
+            <!-- 主導航菜單 -->
+            <nav class="main-navigation">
+                <ul class="nav-menu">
+                    <li class="menu-item">
+                        <a href="index.html" class="menu-link">
+                            <i class="fas fa-home"></i>
+                            <span>首頁</span>
+                        </a>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>會考須知</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="index.html#exam-time" class="menu-link">考試時間</a></li>
+                            <li><a href="index.html#exam-subjects" class="menu-link">考試科目與範圍</a></li>
+                            <li><a href="index.html#exam-location" class="menu-link">考試地點</a></li>
+                            <li><a href="index.html#exam-important" class="menu-link">重要事項</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-book"></i>
+                            <span>學習地圖</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="grades.html" class="menu-link">成績追蹤</a></li>
+                            <li><a href="reflection.html" class="menu-link">學習心得</a></li>
+                            <li><a href="progress.html" class="menu-link">複習進度</a></li>
+                            <li><a href="feedback.html" class="menu-link">老師回饋</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-book-reader"></i>
+                            <span>班級點滴</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="class-901.html" class="menu-link">九年一班</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="index.html#about" class="menu-link">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>關於本站</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- 右側按鈕 -->
+            <div class="header-actions">
+                <button class="btn btn-outline" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                    <span>搜尋</span>
+                </button>
+                <button class="btn btn-outline" id="loginBtn">
+                    <i class="fas fa-user"></i>
+                    <span>會員登入</span>
+                </button>
+            </div>
+
+            <!-- 行動選單按鈕 -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="選單">
+                <span class="hamburger-icon"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 學習心得頁面 -->
+    <section class="reflection-page">
+        <div class="reflection-container">
+            <!-- 登入表單 -->
+            <div class="login-card checking-login" id="loginCard">
+                <h2><i class="fas fa-lightbulb"></i> 學習心得系統</h2>
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-exclamation-circle"></i> 學號或密碼錯誤，請重新輸入
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="studentId"><i class="fas fa-id-card"></i> 學號</label>
+                        <input type="text" id="studentId" name="studentId" placeholder="請輸入學號" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> 密碼</label>
+                        <input type="password" id="password" name="password" placeholder="請輸入密碼" required>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> 登入
+                    </button>
+                </form>
+            </div>
+
+            <!-- 學習心得功能區 -->
+            <div class="reflection-display" id="reflectionDisplay">
+                <div class="student-info">
+                    <div class="student-info-left">
+                        <div class="student-avatar" id="studentAvatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="student-info-text">
+                            <h3><span id="displayStudentName">學生</span></h3>
+                            <p><i class="fas fa-id-card"></i> 學號：<span id="displayStudentId">-</span></p>
+                        </div>
+                    </div>
+                    <div class="student-info-actions">
+                        <a href="index.html" class="back-btn">
+                            <i class="fas fa-home"></i> 返回首頁
+                        </a>
+                        <button class="logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> 登出
+                        </button>
+                    </div>
+                </div>
+
+                <div class="reflection-grid">
+                    <div class="reflection-form-card">
+                        <h3 class="card-title">
+                            <img src="images/reading.png" alt="閱讀" class="reflection-title-icon">
+                            新增心得
+                        </h3>
+                        <form id="reflectionForm">
+                            <div class="error-message" id="reflectionErrorMessage" style="display: none;">
+                                <i class="fas fa-exclamation-circle"></i> 請填寫所有必填欄位
+                            </div>
+                            <div class="form-group">
+                                <label for="reflectionDate">日期</label>
+                                <div id="reflectionDateDisplay"
+                                    style="color: #e74c3c; font-size: 1rem; font-weight: 500; padding: 0.75rem 0;">
+                                    <span id="reflectionDateText"></span>
+                                </div>
+                                <input type="hidden" id="reflectionDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reflectionSubject">科目</label>
+                                <select id="reflectionSubject" class="form-control" required>
+                                    <option value="">請選擇科目</option>
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="數學">數學</option>
+                                    <option value="自然">自然</option>
+                                    <option value="社會">社會</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="reflectionContent">心得內容 <span
+                                        style="color: #5a6c7d; font-size: 0.9rem; font-weight: normal;">（老師會看您寫的心得，請記得修飾自己的情緒，留言時請三思，不要寫不成熟的文字，謝謝）</span></label>
+                                <textarea id="reflectionContent" class="form-control" rows="5"
+                                    placeholder="今天學到了什麼？有什麼收穫或困難？" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block"
+                                style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; border: none; box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);">
+                                <i class="fas fa-paper-plane"></i> 儲存與送出心得
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="reflection-list-card">
+                        <h3 class="card-title">我的心得記錄</h3>
+                        <div class="reflection-list" id="reflectionList">
+                            <div class="empty-state">
+                                <i class="fas fa-file-alt"></i>
+                                <p>還沒有心得記錄<br>開始記錄你的學習心得吧！</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>鈺倫の教室</span>
+                    </div>
+                    <p class="footer-description">
+                        專業的學習管理平台<br>
+                        陪伴學生邁向成功
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <h4>快速連結</h4>
+                    <ul>
+                        <li><a href="index.html">首頁</a></li>
+                        <li><a href="index.html#exam-time">考試時間</a></li>
+                        <li><a href="index.html#exam-subjects">考試科目與範圍</a></li>
+                        <li><a href="index.html#course">課程內容</a></li>
+                        <li><a href="aboutme.html">關於老師</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>聯絡資訊</h4>
+                    <p><i class="fas fa-envelope"></i> ellen@example.com</p>
+                    <p><i class="fas fa-phone"></i> (02) 1234-5678</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 鈺倫の教室. All rights reserved. <span style="margin-left: 1rem; color: #5a6c7d;">Version
+                        1.0</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 會考倒數計時
+        function updateCountdown() {
+            const examDate = new Date('2026-05-15T09:00:00');
+            const now = new Date();
+            const timeLeft = examDate - now;
+
+            if (timeLeft < 0) {
+                const headerEl = document.getElementById('headerCountdown');
+                if (headerEl) headerEl.textContent = '會考倒數 0 天';
+                return;
+            }
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const headerEl = document.getElementById('headerCountdown');
+            if (headerEl) headerEl.textContent = `會考倒數 ${days} 天`;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // ========================================
+        // API 服務層（方便之後替換為後端API）
+        // ========================================
+        const ApiService = {
+            async login(studentId, password) {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                return this.getStudentData(studentId, password);
+            },
+
+            getStudentData(studentId, password) {
+                const student = studentsDatabase[studentId];
+                if (student && student.password === password) {
+                    return { success: true, data: student };
+                }
+                return { success: false, message: '學號或密碼錯誤' };
+            }
+        };
+
+        // ========================================
+        // 模擬資料庫（之後將由後端API取代）
+        // ========================================
+        const studentsDatabase = {
+            'A100': {
+                password: '999',
+                name: '測試學生'
+            },
+            '1001': {
+                password: '1234', name: '王小明'
+            },
+            '1002': {
+                password: '1234', name: '張三'
+            },
+            '1003': {
+                password: '1234', name: '李四'
+            }
+        };
+
+        // 登入表單處理
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const studentId = document.getElementById('studentId').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // 使用API服務進行登入驗證
+            const result = await ApiService.login(studentId, password);
+
+            if (result.success) {
+                // 登入成功
+                errorMessage.classList.remove('active');
+                // 保存登入狀態
+                const student = result.data;
+                if (typeof AuthManager !== 'undefined') {
+                    AuthManager.saveLogin(studentId, student.name);
+                }
+                showReflection(studentId);
+            } else {
+                // 登入失敗
+                errorMessage.classList.add('active');
+            }
+        });
+
+        // 顯示學習心得功能
+        async function showReflection(studentId) {
+            // 獲取學生資料
+            let student;
+            if (studentsDatabase[studentId]) {
+                student = studentsDatabase[studentId];
+            } else {
+                const studentResult = await ApiService.getStudentData(studentId, '');
+                if (studentResult.success) {
+                    student = studentResult.data;
+                } else {
+                    console.error('無法獲取學生資料');
+                    return;
+                }
+            }
+            const loginCard = document.getElementById('loginCard');
+            const reflectionDisplay = document.getElementById('reflectionDisplay');
+
+            // 隱藏登入表單，顯示功能區
+            loginCard.style.display = 'none';
+            reflectionDisplay.classList.add('active');
+
+            // 顯示學生姓名和學號
+            document.getElementById('displayStudentName').textContent = student.name;
+            document.getElementById('displayStudentId').textContent = studentId;
+
+            // 更新頭像顯示學生姓名首字
+            const avatar = document.getElementById('studentAvatar');
+            avatar.innerHTML = student.name.charAt(0);
+
+            // 載入已儲存的心得（從 localStorage，之後可改為從後端API獲取）
+            loadReflections(studentId);
+
+            // 設置日期為今天且不可修改（顯示為紅色文字）
+            const dateInput = document.getElementById('reflectionDate');
+            const dateDisplay = document.getElementById('reflectionDateText');
+            if (dateInput && dateDisplay) {
+                const today = new Date();
+                const todayStr = today.toISOString().split('T')[0];
+                const todayFormatted = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+                dateInput.value = todayStr;
+                dateDisplay.textContent = todayFormatted;
+            }
+        }
+
+        // 載入心得記錄
+        function loadReflections(studentId) {
+            const reflectionList = document.getElementById('reflectionList');
+
+            // 如果是測試帳號且沒有資料，初始化測試資料
+            if (studentId === 'A100' && !localStorage.getItem(`reflections_${studentId}`)) {
+                const initialData = [
+                    {
+                        date: '2025-12-25',
+                        subject: '數學',
+                        content: '今天學習了二次函數，理解了拋物線的性質。還需要多練習應用題。'
+                    },
+                    {
+                        date: '2025-12-23',
+                        subject: '英文',
+                        content: '背了50個新單字，閱讀理解能力有進步。明天要繼續練習寫作。'
+                    },
+                    {
+                        date: '2025-12-20',
+                        subject: '國文',
+                        content: '複習了文言文，對古文的語法有了更深的理解。'
+                    }
+                ];
+                localStorage.setItem(`reflections_${studentId}`, JSON.stringify(initialData));
+            }
+
+            const reflections = JSON.parse(localStorage.getItem(`reflections_${studentId}`) || '[]');
+
+            if (reflections.length === 0) {
+                reflectionList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-file-alt"></i>
+                        <p>還沒有心得記錄<br>開始記錄你的學習心得吧！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            reflectionList.innerHTML = reflections.map((reflection, index) => `
+                <div class="reflection-item">
+                    <div class="reflection-item-header">
+                        <span class="reflection-item-date">${reflection.date}</span>
+                        <span class="reflection-item-subject">${reflection.subject}</span>
+                    </div>
+                    <p class="reflection-item-content">${reflection.content}</p>
+                    <button onclick="deleteReflection('${studentId}', ${index})" class="delete-btn" style="margin-top: 0.5rem;">
+                        <i class="fas fa-trash"></i> 刪除
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // 刪除心得
+        function deleteReflection(studentId, index) {
+            const reflections = JSON.parse(localStorage.getItem(`reflections_${studentId}`) || '[]');
+            reflections.splice(index, 1);
+            localStorage.setItem(`reflections_${studentId}`, JSON.stringify(reflections));
+            loadReflections(studentId);
+        }
+
+        // 正常用語白名單（這些詞不應該被過濾）
+        const whitelist = [
+            '幹麻', '幹嘛', '幹什麼', '幹嗎',
+            '小學', '小時候', '小朋友', '小學生', '小班', '小考', '小題', '小組',
+            '老師', '老實', '老舊', '老式', '老練',
+            '公開', '公司', '公園', '公車', '公家', '公事',
+            '母親', '母校', '母語', '母系',
+            '開門', '開會', '開學', '開課', '開頭', '開場', '開頭',
+            '上課', '上學', '上班', '上網', '上樓', '上車',
+            '打掃', '打氣', '打擊', '打擊樂', '打字', '打勾', '打叉',
+            '吃飯', '吃藥', '吃飽', '吃虧',
+            '叫醒', '叫好', '叫座',
+            '黃色', '黃昏', '黃花', '黃豆',
+            '色澤', '色彩', '色調', '色盲',
+            '成人', '成語', '成見', '成敗',
+            '影片', '影印', '影響', '影子',
+            '直播', '直線', '直接', '直覺',
+            '網頁', '網站', '網路', '網址',
+            '心情', '情感', '情緒', '情況',
+            '頭痛', '頭暈', '頭腦', '頭髮',
+            '胸部', '胸懷', '胸襟',
+            '乳房', '乳品', '乳牛', '乳糖',
+            '屁話', '屁顛',
+            '龜速', '龜裂',
+            '道理', '道路', '道別', '道歉',
+            '陰天', '陰影', '陰暗', '陰涼',
+            '應付', '應對', '應答', '應變',
+            '陪伴', '陪同', '陪襯',
+            '援手', '援助', '援引',
+            '老實', '老練', '老舊',
+            '公事', '公家', '公車',
+            '母語', '母校', '母親'
+        ];
+
+        // 不雅文字過濾列表（支持通配符 ＊）
+        const inappropriateWords = [
+            // 中文敏感詞（通配符模式，需要更精確匹配）
+            { pattern: '陰[莖道毛]', type: 'regex' },  // 陰莖、陰道、陰毛
+            { pattern: '幹[你娘爆死]', type: 'regex' },  // 幹你娘、幹爆、幹死（排除幹麻、幹嘛）
+            { pattern: '[應伴]召?女', type: 'regex' },  // 應召女、伴遊女
+            { pattern: '應召', type: 'exact' },
+            { pattern: '伴遊', type: 'exact' },
+            { pattern: '陪[酒睡]', type: 'regex' },  // 陪酒、陪睡
+            { pattern: '援交', type: 'exact' },
+            { pattern: '小[姐雞雞]', type: 'regex' },  // 小姐、小雞雞（排除小學、小時候等）
+            { pattern: '老鴇', type: 'exact' },
+            { pattern: '公[車狗]', type: 'regex' },  // 公車（特定語境）、公狗
+            { pattern: '母狗', type: 'exact' },
+            { pattern: '開房', type: 'exact' },
+            { pattern: '上床', type: 'exact' },
+            { pattern: '打炮', type: 'exact' },
+            { pattern: '牛郎', type: 'exact' },
+            { pattern: '吃雞', type: 'exact' },  // 特定語境
+            { pattern: '舔陰', type: 'exact' },
+            { pattern: '走後門', type: 'exact' },
+            { pattern: '叫雞', type: 'exact' },
+            { pattern: 'AV', type: 'exact' },
+            { pattern: '黃片', type: 'exact' },
+            { pattern: '色情', type: 'exact' },
+            { pattern: '成人[影視]', type: 'regex' },  // 成人影、成人視
+            { pattern: '[色A]片', type: 'regex' },  // 色片、A片
+            { pattern: '色[情網]', type: 'regex' },  // 色情、色網
+            { pattern: '乳頭', type: 'exact' },
+            { pattern: '奶子', type: 'exact' },
+            { pattern: '胸部', type: 'exact' },  // 特定語境
+            { pattern: '乳房', type: 'exact' },
+            { pattern: '屁眼', type: 'exact' },
+            { pattern: '龜頭', type: 'exact' },
+            { pattern: '陰道', type: 'exact' },
+            { pattern: '陰莖', type: 'exact' },
+            { pattern: '陰毛', type: 'exact' },
+            // 具體詞彙
+            { pattern: '屌', type: 'exact' },
+            { pattern: '龜頭', type: 'exact' },
+            { pattern: '蛋蛋', type: 'exact' },
+            { pattern: '老二', type: 'exact' },
+            { pattern: '小雞雞', type: 'exact' },
+            { pattern: '屁眼', type: 'exact' },
+            { pattern: '肛門', type: 'exact' },
+            // 英文敏感詞
+            { pattern: '\\bsex\\b', type: 'regex' },
+            { pattern: '\\bporn\\b', type: 'regex' },
+            { pattern: 'xxx', type: 'exact' },
+            { pattern: '\\badult\\b', type: 'regex' },
+            { pattern: '\\bnude\\b', type: 'regex' },
+            { pattern: '\\bnaked\\b', type: 'regex' },
+            { pattern: 'blowjob', type: 'exact' },
+            { pattern: '\\bfuck\\b', type: 'regex' },
+            { pattern: '\\bpussy\\b', type: 'regex' },
+            { pattern: '\\bdick\\b', type: 'regex' },
+            { pattern: '\\bboob', type: 'regex' },
+            { pattern: 'cameltoe', type: 'exact' },
+            // 日文敏感詞
+            { pattern: 'エッチ', type: 'exact' },
+            { pattern: 'AV', type: 'exact' },
+            { pattern: 'オナニー', type: 'exact' },
+            { pattern: 'ロリコン', type: 'exact' },
+            { pattern: '巨乳', type: 'exact' },
+            { pattern: '美乳', type: 'exact' },
+            // 其他
+            { pattern: 'AV片', type: 'exact' },
+            { pattern: '色情網站', type: 'exact' },
+            { pattern: '色情影片', type: 'exact' },
+            { pattern: '色網', type: 'exact' }
+        ];
+
+        // 檢測不雅文字（改進版，支持白名單和精確匹配）
+        function containsInappropriateWords(text) {
+            const lowerText = text.toLowerCase();
+
+            // 先檢查白名單，如果整個詞在白名單中，直接返回null
+            for (let whitelistWord of whitelist) {
+                if (lowerText.includes(whitelistWord.toLowerCase())) {
+                    // 檢查是否只是白名單詞的一部分，還是真正的不雅詞
+                    // 例如："你幹麻" 中的 "幹麻" 應該被允許
+                    const whitelistIndex = lowerText.indexOf(whitelistWord.toLowerCase());
+                    if (whitelistIndex !== -1) {
+                        // 檢查前後字符，確保是完整的詞
+                        const before = whitelistIndex > 0 ? lowerText[whitelistIndex - 1] : '';
+                        const after = whitelistIndex + whitelistWord.length < lowerText.length
+                            ? lowerText[whitelistIndex + whitelistWord.length] : '';
+                        // 如果是完整詞（前後是空白或標點），跳過檢查
+                        if (!/[a-z0-9\u4e00-\u9fa5]/.test(before) && !/[a-z0-9\u4e00-\u9fa5]/.test(after)) {
+                            continue; // 繼續檢查其他詞
+                        }
+                    }
+                }
+            }
+
+            // 檢查不雅詞
+            for (let wordObj of inappropriateWords) {
+                let matched = false;
+
+                if (wordObj.type === 'regex') {
+                    // 使用正則表達式匹配
+                    try {
+                        const regex = new RegExp(wordObj.pattern, 'i');
+                        if (regex.test(lowerText)) {
+                            // 再次檢查是否在白名單中
+                            const match = lowerText.match(regex);
+                            if (match) {
+                                const matchedText = match[0];
+                                let isWhitelisted = false;
+                                for (let whitelistWord of whitelist) {
+                                    if (matchedText.includes(whitelistWord.toLowerCase())) {
+                                        isWhitelisted = true;
+                                        break;
+                                    }
+                                }
+                                if (!isWhitelisted) {
+                                    return wordObj.pattern;
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Regex error:', e);
+                    }
+                } else if (wordObj.type === 'exact') {
+                    // 精確匹配
+                    if (lowerText.includes(wordObj.pattern.toLowerCase())) {
+                        // 檢查是否在白名單中
+                        let isWhitelisted = false;
+                        for (let whitelistWord of whitelist) {
+                            if (lowerText.includes(whitelistWord.toLowerCase()) &&
+                                lowerText.indexOf(wordObj.pattern.toLowerCase()) >=
+                                lowerText.indexOf(whitelistWord.toLowerCase()) - 2 &&
+                                lowerText.indexOf(wordObj.pattern.toLowerCase()) <=
+                                lowerText.indexOf(whitelistWord.toLowerCase()) + whitelistWord.length + 2) {
+                                isWhitelisted = true;
+                                break;
+                            }
+                        }
+                        if (!isWhitelisted) {
+                            return wordObj.pattern;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        // 儲存心得表單處理
+        document.getElementById('reflectionForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const studentId = document.getElementById('displayStudentId').textContent;
+            const date = document.getElementById('reflectionDate').value;
+            const subject = document.getElementById('reflectionSubject').value;
+            const content = document.getElementById('reflectionContent').value.trim();
+            const errorMessage = document.getElementById('reflectionErrorMessage');
+
+            // 驗證必填欄位
+            if (!date || !subject || !content) {
+                errorMessage.textContent = '請填寫所有必填欄位';
+                errorMessage.style.display = 'block';
+                errorMessage.classList.add('active');
+
+                // 3秒後自動隱藏
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                    errorMessage.classList.remove('active');
+                }, 3000);
+                return;
+            }
+
+            // 檢測不雅文字
+            const detectedWord = containsInappropriateWords(content);
+            if (detectedWord) {
+                errorMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> 心得內容包含不適當的文字，請重新修改後再提交';
+                errorMessage.style.display = 'block';
+                errorMessage.classList.add('active');
+
+                // 3秒後自動隱藏
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                    errorMessage.classList.remove('active');
+                }, 5000);
+                return;
+            }
+
+            // 隱藏錯誤提示
+            errorMessage.style.display = 'none';
+            errorMessage.classList.remove('active');
+
+            // 儲存到 localStorage
+            const reflections = JSON.parse(localStorage.getItem(`reflections_${studentId}`) || '[]');
+            reflections.unshift({
+                date: date,
+                subject: subject,
+                content: content
+            });
+            localStorage.setItem(`reflections_${studentId}`, JSON.stringify(reflections));
+
+            // 重新載入列表
+            loadReflections(studentId);
+
+            // 清空表單
+            this.reset();
+
+            // 重置日期為今天（固定不可修改，顯示為紅色文字）
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            const todayFormatted = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+            const dateInput = document.getElementById('reflectionDate');
+            const dateDisplay = document.getElementById('reflectionDateText');
+            if (dateInput && dateDisplay) {
+                dateInput.value = todayStr;
+                dateDisplay.textContent = todayFormatted;
+            }
+        });
+
+        // 登出功能
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            // 使用 AuthManager 統一登出，清除全局登入狀態並跳轉到首頁
+            if (typeof AuthManager !== 'undefined') {
+                AuthManager.logout();
+            } else {
+                // 如果 AuthManager 未加載，手動清除登入狀態
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        });
+
+        // 立即檢查登入狀態（不等待 DOMContentLoaded）
+        (function checkLoginStatusImmediately() {
+            // 同步檢查 localStorage（不依賴 auth.js）
+            try {
+                const currentUserData = localStorage.getItem('currentUser');
+                if (currentUserData) {
+                    const currentUser = JSON.parse(currentUserData);
+                    if (currentUser && currentUser.studentId) {
+                        const studentId = currentUser.studentId;
+                        // 立即隱藏登入表單
+                        const loginCard = document.getElementById('loginCard');
+                        if (loginCard) {
+                            loginCard.classList.remove('checking-login');
+                            loginCard.style.display = 'none';
+                        }
+                        // 等待 DOM 加載完成後顯示內容
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', async function () {
+                                const today = new Date();
+                                const todayStr = today.toISOString().split('T')[0];
+                                const todayFormatted = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+                                const dateInput = document.getElementById('reflectionDate');
+                                const dateDisplay = document.getElementById('reflectionDateText');
+                                if (dateInput && dateDisplay) {
+                                    dateInput.value = todayStr;
+                                    dateDisplay.textContent = todayFormatted;
+                                }
+                                if (studentsDatabase[studentId]) {
+                                    await showReflection(studentId);
+                                }
+                            });
+                        } else {
+                            const today = new Date();
+                            const todayStr = today.toISOString().split('T')[0];
+                            const todayFormatted = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+                            const dateInput = document.getElementById('reflectionDate');
+                            const dateDisplay = document.getElementById('reflectionDateText');
+                            if (dateInput && dateDisplay) {
+                                dateInput.value = todayStr;
+                                dateDisplay.textContent = todayFormatted;
+                            }
+                            if (studentsDatabase[studentId]) {
+                                showReflection(studentId);
+                            }
+                        }
+                        return; // 已登入，不需要繼續
+                    }
+                }
+            } catch (e) {
+                console.error('檢查登入狀態時出錯:', e);
+            }
+
+            // 未登入，顯示登入表單
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function () {
+                    const loginCard = document.getElementById('loginCard');
+                    if (loginCard) {
+                        loginCard.classList.remove('checking-login');
+                        loginCard.style.display = 'block';
+                    }
+                    const today = new Date();
+                    const todayStr = today.toISOString().split('T')[0];
+                    const todayFormatted = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+                    const dateInput = document.getElementById('reflectionDate');
+                    const dateDisplay = document.getElementById('reflectionDateText');
+                    if (dateInput && dateDisplay) {
+                        dateInput.value = todayStr;
+                        dateDisplay.textContent = todayFormatted;
+                    }
+                });
+            } else {
+                const loginCard = document.getElementById('loginCard');
+                if (loginCard) {
+                    loginCard.classList.remove('checking-login');
+                    loginCard.style.display = 'block';
+                }
+                const today = new Date();
+                const todayStr = today.toISOString().split('T')[0];
+                const todayFormatted = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+                const dateInput = document.getElementById('reflectionDate');
+                const dateDisplay = document.getElementById('reflectionDateText');
+                if (dateInput && dateDisplay) {
+                    dateInput.value = todayStr;
+                    dateDisplay.textContent = todayFormatted;
+                }
+            }
+        })();
+    </script>
+    <script src="auth.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>複習進度 | 鈺倫の教室</title>
+    <link rel="icon" type="image/png" href="Ellennoback.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Zhi+Mang+Xing&family=Ma+Shan+Zheng&family=Caveat:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .progress-page {
+            min-height: 80vh;
+            padding: 4rem 2rem;
+            background: #ffffff;
+        }
+
+        .progress-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        /* 初始狀態：如果已登入，隱藏登入表單 */
+        .login-card.checking-login {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .login-card h2 {
+            color: #000000;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #000000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .progress-display {
+            display: none;
+        }
+
+        .progress-display.active {
+            display: block;
+        }
+
+        .student-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 12px;
+            border: 2px solid #e1e8ed;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .student-info-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
+        }
+
+        .student-info-text h3 {
+            color: #2c3e50;
+            margin: 0 0 0.25rem 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .student-info-text p {
+            margin: 0;
+            color: #5a6c7d;
+            font-size: 0.9rem;
+        }
+
+        .student-info-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .back-btn,
+        .logout-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn {
+            background: white;
+            color: #3498db;
+            border: 2px solid #3498db;
+        }
+
+        .back-btn:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        .progress-controls {
+            margin-bottom: 2rem;
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .stat-badge {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 184, 148, 0.35);
+            transition: all 0.3s ease;
+        }
+
+        .stat-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 184, 148, 0.4);
+        }
+
+        .progress-table-wrapper {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+            overflow-x: auto;
+        }
+
+        .progress-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .progress-table th,
+        .progress-table td {
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #e1e8ed;
+        }
+
+        .progress-table th {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .progress-cell {
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .progress-cell:hover {
+            background: #ecf0f1 !important;
+            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-cell.not-started {
+            background: #ecf0f1;
+            color: #5a6c7d;
+        }
+
+        .progress-cell.in-progress {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            color: #856404;
+        }
+
+        .progress-cell.completed {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+        }
+
+        .progress-cell.reviewed {
+            background: linear-gradient(135deg, #cce5ff 0%, #b3d9ff 100%);
+            color: #004085;
+        }
+
+
+        /* 表格行交替顏色 */
+        .progress-table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .progress-table tbody tr:nth-child(odd) {
+            background: #ffffff;
+        }
+
+        /* 老師提醒響應式 */
+        @media (max-width: 768px) {
+            .progress-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            /* 移動設備上老師提醒改為垂直排列 */
+            .teacher-reminder {
+                flex-direction: column !important;
+                align-items: center !important;
+                text-align: center !important;
+            }
+
+            .teacher-reminder img {
+                width: 100px !important;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 導航欄 -->
+    <header class="site-header">
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="site-branding">
+                <a href="index.html" class="logo-link">
+                    <img src="Ellennoback.png" alt="鈺倫の教室 Logo" class="logo-image">
+                    <div class="logo-text">
+                        <span class="site-title">鈺倫の教室</span>
+                        <span class="site-tagline">Ellen's class</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Header 倒數顯示 -->
+            <div class="header-countdown" aria-live="polite">
+                <i class="fas fa-hourglass-half"></i>
+                <span id="headerCountdown">會考倒數 0 天</span>
+            </div>
+
+            <!-- 主導航菜單 -->
+            <nav class="main-navigation">
+                <ul class="nav-menu">
+                    <li class="menu-item">
+                        <a href="index.html" class="menu-link">
+                            <i class="fas fa-home"></i>
+                            <span>首頁</span>
+                        </a>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>會考須知</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="index.html#exam-time" class="menu-link">考試時間</a></li>
+                            <li><a href="index.html#exam-subjects" class="menu-link">考試科目與範圍</a></li>
+                            <li><a href="index.html#exam-location" class="menu-link">考試地點</a></li>
+                            <li><a href="index.html#exam-important" class="menu-link">重要事項</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-book"></i>
+                            <span>學習地圖</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="grades.html" class="menu-link">成績追蹤</a></li>
+                            <li><a href="reflection.html" class="menu-link">學習心得</a></li>
+                            <li><a href="progress.html" class="menu-link">複習進度</a></li>
+                            <li><a href="feedback.html" class="menu-link">老師回饋</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-item-has-children">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-book-reader"></i>
+                            <span>班級點滴</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="class-901.html" class="menu-link">九年一班</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="index.html#about" class="menu-link">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>關於本站</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- 右側按鈕 -->
+            <div class="header-actions">
+                <button class="btn btn-outline" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                    <span>搜尋</span>
+                </button>
+                <button class="btn btn-outline" id="loginBtn">
+                    <i class="fas fa-user"></i>
+                    <span>會員登入</span>
+                </button>
+            </div>
+
+            <!-- 行動選單按鈕 -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="選單">
+                <span class="hamburger-icon"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 複習進度頁面 -->
+    <section class="progress-page">
+        <div class="progress-container">
+            <!-- 登入表單 -->
+            <div class="login-card checking-login" id="loginCard">
+                <h2><i class="fas fa-clipboard-check"></i> 複習進度系統</h2>
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-exclamation-circle"></i> 學號或密碼錯誤，請重新輸入
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="studentId"><i class="fas fa-id-card"></i> 學號</label>
+                        <input type="text" id="studentId" name="studentId" placeholder="請輸入學號" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> 密碼</label>
+                        <input type="password" id="password" name="password" placeholder="請輸入密碼" required>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> 登入
+                    </button>
+                </form>
+            </div>
+
+            <!-- 複習進度功能區 -->
+            <div class="progress-display" id="progressDisplay">
+                <div class="student-info">
+                    <div class="student-info-left">
+                        <div class="student-avatar" id="studentAvatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="student-info-text">
+                            <h3><span id="displayStudentName">學生</span></h3>
+                            <p><i class="fas fa-id-card"></i> 學號：<span id="displayStudentId">-</span></p>
+                        </div>
+                    </div>
+                    <div class="student-info-actions">
+                        <a href="index.html" class="back-btn">
+                            <i class="fas fa-home"></i> 返回首頁
+                        </a>
+                        <button class="logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> 登出
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 老師提醒、統計資訊與圖例說明 -->
+                <div class="progress-legend"
+                    style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); border: 1px solid #e1e8ed;">
+                    <!-- 老師提醒 -->
+                    <div class="teacher-reminder"
+                        style="margin-bottom: 0.75rem; display: flex; align-items: center; gap: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e1e8ed;">
+                        <img src="images/writing.png" alt="學習"
+                            style="width: 120px; height: auto; flex-shrink: 0; object-fit: contain;">
+                        <p
+                            style="color: #2c3e50; font-size: 1.1rem; font-weight: 500; margin: 0; line-height: 1.8; flex: 1;">
+                            鈺倫老師：請學生務必抓緊時間自己先多預習、多複習，如果有問題就找老師討論！
+                        </p>
+                    </div>
+
+                    <!-- 統計資訊 -->
+                    <div class="progress-stats"
+                        style="margin-top: 0.25rem; margin-bottom: 1.5rem; display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center;">
+                        <div class="stat-badge">
+                            <i class="fas fa-calendar-week"></i>
+                            <span>總週數：20週</span>
+                        </div>
+                        <div class="stat-badge">
+                            <i class="fas fa-book"></i>
+                            <span>總科目：5科</span>
+                        </div>
+                        <div class="stat-badge">
+                            <i class="fas fa-check-circle"></i>
+                            <span>完成數：<strong id="completionRate">0</strong></span>
+                        </div>
+                        <div class="stat-badge">
+                            <i class="fas fa-clock"></i>
+                            <span>尚未完成數：<strong id="pendingCount">100</strong></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="progress-table-wrapper">
+                    <!-- 圖例說明 -->
+                    <div
+                        style="margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; border: 1px solid #e1e8ed;">
+                        <div
+                            style="display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; height: 40px;">
+                                <span
+                                    style="display: inline-block; width: 30px; height: 30px; background: #ecf0f1; border-radius: 4px; border: 1px solid #bdc3c7; flex-shrink: 0;"></span>
+                                <span style="color: #2c3e50; line-height: 1.5;">未開始</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; height: 40px;">
+                                <span
+                                    style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); border-radius: 4px; border: 1px solid #ffc107; flex-shrink: 0;"></span>
+                                <span style="color: #2c3e50; line-height: 1.5;">進行中</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; height: 40px;">
+                                <span
+                                    style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-radius: 4px; border: 1px solid #28a745; flex-shrink: 0;"></span>
+                                <span style="color: #2c3e50; line-height: 1.5;">已完成</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; height: 40px;">
+                                <span
+                                    style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #cce5ff 0%, #b3d9ff 100%); border-radius: 4px; border: 1px solid #007bff; flex-shrink: 0;"></span>
+                                <span style="color: #2c3e50; line-height: 1.5;">已複習</span>
+                            </div>
+                        </div>
+                        <p style="margin: 0; color: #5a6c7d; font-size: 0.9rem;">
+                            <i class="fas fa-info-circle"></i> 點擊表格中的格子可以切換進度狀態
+                        </p>
+                    </div>
+                    <table class="progress-table" id="progressTable">
+                        <thead>
+                            <tr>
+                                <th>週次</th>
+                                <th>國文</th>
+                                <th>英文</th>
+                                <th>數學</th>
+                                <th>自然</th>
+                                <th>社會</th>
+                            </tr>
+                        </thead>
+                        <tbody id="progressTableBody">
+                            <!-- 表格內容由 JavaScript 生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>鈺倫の教室</span>
+                    </div>
+                    <p class="footer-description">
+                        專業的學習管理平台<br>
+                        陪伴學生邁向成功
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <h4>快速連結</h4>
+                    <ul>
+                        <li><a href="index.html">首頁</a></li>
+                        <li><a href="index.html#exam-time">考試時間</a></li>
+                        <li><a href="index.html#exam-subjects">考試科目與範圍</a></li>
+                        <li><a href="index.html#course">課程內容</a></li>
+                        <li><a href="aboutme.html">關於老師</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>聯絡資訊</h4>
+                    <p><i class="fas fa-envelope"></i> ellen@example.com</p>
+                    <p><i class="fas fa-phone"></i> (02) 1234-5678</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 鈺倫の教室. All rights reserved. <span style="margin-left: 1rem; color: #5a6c7d;">Version
+                        1.0</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 會考倒數計時
+        function updateCountdown() {
+            const examDate = new Date('2026-05-15T09:00:00');
+            const now = new Date();
+            const timeLeft = examDate - now;
+
+            if (timeLeft < 0) {
+                const headerEl = document.getElementById('headerCountdown');
+                if (headerEl) headerEl.textContent = '會考倒數 0 天';
+                return;
+            }
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const headerEl = document.getElementById('headerCountdown');
+            if (headerEl) headerEl.textContent = `會考倒數 ${days} 天`;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // ========================================
+        // API 服務層（方便之後替換為後端API）
+        // ========================================
+        const ApiService = {
+            async login(studentId, password) {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                return this.getStudentData(studentId, password);
+            },
+
+            getStudentData(studentId, password) {
+                const student = studentsDatabase[studentId];
+                if (student && student.password === password) {
+                    return { success: true, data: student };
+                }
+                return { success: false, message: '學號或密碼錯誤' };
+            }
+        };
+
+        // ========================================
+        // 模擬資料庫（之後將由後端API取代）
+        // ========================================
+        const studentsDatabase = {
+            'A100': {
+                password: '999',
+                name: '測試學生'
+            },
+            '1001': {
+                password: '1234', name: '王小明'
+            },
+            '1002': {
+                password: '1234', name: '張三'
+            },
+            '1003': {
+                password: '1234', name: '李四'
+            }
+        };
+
+        const subjects = ['國文', '英文', '數學', '自然', '社會'];
+        const totalWeeks = 20;
+        const progressStates = ['not-started', 'in-progress', 'completed', 'reviewed'];
+        const stateLabels = ['未開始', '進行中', '已完成', '已複習'];
+
+        // 登入表單處理
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const studentId = document.getElementById('studentId').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // 使用API服務進行登入驗證
+            const result = await ApiService.login(studentId, password);
+
+            if (result.success) {
+                // 登入成功
+                errorMessage.classList.remove('active');
+                // 保存登入狀態
+                const student = result.data;
+                if (typeof AuthManager !== 'undefined') {
+                    AuthManager.saveLogin(studentId, student.name);
+                }
+                showProgress(studentId);
+            } else {
+                // 登入失敗
+                errorMessage.classList.add('active');
+            }
+        });
+
+        // 顯示複習進度功能
+        async function showProgress(studentId) {
+            // 獲取學生資料
+            let student;
+            if (studentsDatabase[studentId]) {
+                student = studentsDatabase[studentId];
+            } else {
+                const studentResult = await ApiService.getStudentData(studentId, '');
+                if (studentResult.success) {
+                    student = studentResult.data;
+                } else {
+                    console.error('無法獲取學生資料');
+                    return;
+                }
+            }
+            const loginCard = document.getElementById('loginCard');
+            const progressDisplay = document.getElementById('progressDisplay');
+
+            // 隱藏登入表單，顯示功能區
+            loginCard.style.display = 'none';
+            progressDisplay.classList.add('active');
+
+            // 顯示學生姓名和學號
+            document.getElementById('displayStudentName').textContent = student.name;
+            document.getElementById('displayStudentId').textContent = studentId;
+
+            // 更新頭像顯示學生姓名首字
+            const avatar = document.getElementById('studentAvatar');
+            avatar.innerHTML = student.name.charAt(0);
+
+            // 載入進度表格（從 localStorage，之後可改為從後端API獲取）
+            loadProgressTable(studentId);
+            updateCompletionRate(studentId);
+        }
+
+        // 載入進度表格
+        function loadProgressTable(studentId) {
+            const tableBody = document.getElementById('progressTableBody');
+
+            // 如果是測試帳號且沒有資料，初始化一些測試進度
+            if (studentId === 'A100' && !localStorage.getItem(`progress_${studentId}`)) {
+                const initialProgress = {
+                    '1_國文': 'completed',
+                    '1_英文': 'completed',
+                    '2_數學': 'in-progress',
+                    '2_自然': 'completed',
+                    '3_社會': 'completed'
+                };
+                localStorage.setItem(`progress_${studentId}`, JSON.stringify(initialProgress));
+            }
+
+            const progressData = JSON.parse(localStorage.getItem(`progress_${studentId}`) || '{}');
+
+            // 12月日期範圍（每週大約7天）
+            const decemberDates = [
+                { start: '12/1', end: '12/7' },    // 第1週
+                { start: '12/8', end: '12/14' },    // 第2週
+                { start: '12/15', end: '12/21' },   // 第3週
+                { start: '12/22', end: '12/28' },   // 第4週
+                { start: '12/29', end: '1/4' },     // 第5週（跨月）
+                { start: '1/5', end: '1/11' },      // 第6週
+                { start: '1/12', end: '1/18' },     // 第7週
+                { start: '1/19', end: '1/25' },     // 第8週
+                { start: '1/26', end: '2/1' },     // 第9週
+                { start: '2/2', end: '2/8' },      // 第10週
+                { start: '2/9', end: '2/15' },     // 第11週
+                { start: '2/16', end: '2/22' },    // 第12週
+                { start: '2/23', end: '3/1' },     // 第13週
+                { start: '3/2', end: '3/8' },     // 第14週
+                { start: '3/9', end: '3/15' },    // 第15週
+                { start: '3/16', end: '3/22' },    // 第16週
+                { start: '3/23', end: '3/29' },    // 第17週
+                { start: '3/30', end: '4/5' },     // 第18週
+                { start: '4/6', end: '4/12' },     // 第19週
+                { start: '4/13', end: '4/19' }     // 第20週
+            ];
+
+            tableBody.innerHTML = '';
+            for (let week = 1; week <= totalWeeks; week++) {
+                const row = document.createElement('tr');
+                const weekCell = document.createElement('td');
+                const dateRange = decemberDates[week - 1] || { start: '', end: '' };
+                weekCell.innerHTML = `<div style="font-weight: 600; margin-bottom: 0.25rem;">第${week}週</div><div style="font-size: 0.85rem; color: #5a6c7d;">${dateRange.start} - ${dateRange.end}</div>`;
+                weekCell.style.fontWeight = '600';
+                row.appendChild(weekCell);
+
+                subjects.forEach(subject => {
+                    const cell = document.createElement('td');
+                    cell.className = 'progress-cell';
+                    const key = `${week}_${subject}`;
+                    const state = progressData[key] || 'not-started';
+                    cell.className = `progress-cell ${state}`;
+                    cell.textContent = stateLabels[progressStates.indexOf(state)];
+                    cell.dataset.week = week;
+                    cell.dataset.subject = subject;
+                    cell.addEventListener('click', () => toggleProgress(studentId, week, subject));
+                    row.appendChild(cell);
+                });
+
+                tableBody.appendChild(row);
+            }
+        }
+
+        // 切換進度狀態
+        function toggleProgress(studentId, week, subject) {
+            const progressData = JSON.parse(localStorage.getItem(`progress_${studentId}`) || '{}');
+            const key = `${week}_${subject}`;
+            const currentState = progressData[key] || 'not-started';
+            const currentIndex = progressStates.indexOf(currentState);
+            const nextIndex = (currentIndex + 1) % progressStates.length;
+            const nextState = progressStates[nextIndex];
+
+            progressData[key] = nextState;
+            localStorage.setItem(`progress_${studentId}`, JSON.stringify(progressData));
+
+            loadProgressTable(studentId);
+            updateCompletionRate(studentId);
+        }
+
+        // 更新完成度
+        function updateCompletionRate(studentId) {
+            const progressData = JSON.parse(localStorage.getItem(`progress_${studentId}`) || '{}');
+            let completed = 0;
+            let total = totalWeeks * subjects.length;
+
+            for (let week = 1; week <= totalWeeks; week++) {
+                subjects.forEach(subject => {
+                    const key = `${week}_${subject}`;
+                    const state = progressData[key] || 'not-started';
+                    if (state === 'completed' || state === 'reviewed') {
+                        completed++;
+                    }
+                });
+            }
+
+            const pending = total - completed;
+
+            document.getElementById('completionRate').textContent = completed;
+            document.getElementById('pendingCount').textContent = pending;
+        }
+
+        // 重置進度功能已移除（學生無法重置進度）
+
+        // 登出功能
+        document.getElementById('logoutBtn')?.addEventListener('click', function () {
+            // 使用 AuthManager 統一登出，清除全局登入狀態並跳轉到首頁
+            if (typeof AuthManager !== 'undefined') {
+                AuthManager.logout();
+            } else {
+                // 如果 AuthManager 未加載，手動清除登入狀態
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        });
+
+        // 立即檢查登入狀態（不等待 DOMContentLoaded）
+        (function checkLoginStatusImmediately() {
+            // 同步檢查 localStorage（不依賴 auth.js）
+            try {
+                const currentUserData = localStorage.getItem('currentUser');
+                if (currentUserData) {
+                    const currentUser = JSON.parse(currentUserData);
+                    if (currentUser && currentUser.studentId) {
+                        const studentId = currentUser.studentId;
+                        // 立即隱藏登入表單
+                        const loginCard = document.getElementById('loginCard');
+                        if (loginCard) {
+                            loginCard.classList.remove('checking-login');
+                            loginCard.style.display = 'none';
+                        }
+                        // 等待 DOM 加載完成後顯示內容
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', async function () {
+                                if (studentsDatabase[studentId]) {
+                                    await showProgress(studentId);
+                                }
+                            });
+                        } else {
+                            if (studentsDatabase[studentId]) {
+                                showProgress(studentId);
+                            }
+                        }
+                        return; // 已登入，不需要繼續
+                    }
+                }
+            } catch (e) {
+                console.error('檢查登入狀態時出錯:', e);
+            }
+
+            // 未登入，顯示登入表單
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function () {
+                    const loginCard = document.getElementById('loginCard');
+                    if (loginCard) {
+                        loginCard.classList.remove('checking-login');
+                        loginCard.style.display = 'block';
+                    }
+                });
+            } else {
+                const loginCard = document.getElementById('loginCard');
+                if (loginCard) {
+                    loginCard.classList.remove('checking-login');
+                    loginCard.style.display = 'block';
+                }
+            }
+        })();
+    </script>
+    <script src="auth.js"></script>
+</body>
+
+</html>
