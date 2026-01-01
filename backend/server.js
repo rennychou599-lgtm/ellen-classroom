@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const compression = require('compression');
 require('dotenv').config();
 
 const { testConnection } = require('./config/database');
@@ -22,6 +23,18 @@ if (isNaN(PORT) || PORT < 0 || PORT > 65535) {
 }
 
 // 中间件
+// 启用 gzip 压缩（减小传输大小，提升加载速度）
+app.use(compression({
+  level: 6, // 压缩级别 1-9，6 是平衡性能和压缩率的好选择
+  filter: (req, res) => {
+    // 只压缩文本类型的响应
+    if (req.headers['x-no-compression']) {
+      return false;
+    }
+    return compression.filter(req, res);
+  }
+}));
+
 app.use(cors({
   origin: process.env.FRONTEND_URL || '*',
   credentials: true
@@ -34,7 +47,23 @@ app.use(express.urlencoded({ extended: true }));
 const staticPath = path.join(__dirname, '../');
 console.log('📁 静态文件路径:', staticPath);
 console.log('📁 __dirname:', __dirname);
-app.use(express.static(staticPath));
+
+// 配置静态文件服务，启用缓存
+app.use(express.static(staticPath, {
+  maxAge: process.env.NODE_ENV === 'production' ? '1y' : '0', // 生产环境缓存 1 年
+  etag: true, // 启用 ETag
+  lastModified: true, // 启用 Last-Modified
+  setHeaders: (res, path) => {
+    // 为图片设置更长的缓存时间
+    if (path.match(/\.(jpg|jpeg|png|gif|webp|svg|ico)$/)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+    // 为 CSS/JS 设置缓存
+    if (path.match(/\.(css|js)$/)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+  }
+}));
 
 // 健康检查
 app.get('/health', (req, res) => {
