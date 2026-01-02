@@ -293,22 +293,22 @@ ul {
     transition: color 0.2s ease;
 }
 
-/* 下拉菜单项悬停效果 - 提高优先级 */
+/* 下拉菜单项悬停效果 - 使用温暖的橙色系（与 logo 呼应） */
 .sub-menu li .menu-link:hover {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.15) 100%) !important;
-    color: var(--primary-color) !important;
+    background: linear-gradient(135deg, rgba(255, 146, 43, 0.15) 0%, rgba(252, 196, 25, 0.12) 100%) !important;
+    color: #ff922b !important;
     transform: translateX(4px);
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
-    border-left: 3px solid var(--primary-color);
+    box-shadow: 0 2px 8px rgba(255, 146, 43, 0.25);
+    border-left: 3px solid #ff922b;
 }
 
 .sub-menu li .menu-link:hover i {
-    color: var(--primary-dark) !important;
+    color: #e67e22 !important;
     transform: scale(1.15);
 }
 
 .sub-menu li .menu-link:hover span {
-    color: var(--primary-color) !important;
+    color: #ff922b !important;
     font-weight: 600;
 }
 
