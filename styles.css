@@ -277,6 +277,7 @@ ul {
     border-radius: var(--radius-sm);
     transition: all 0.2s ease;
     color: var(--text-primary);
+    border-left: 3px solid transparent;
 }
 
 .sub-menu .menu-link i {
@@ -292,22 +293,23 @@ ul {
     transition: color 0.2s ease;
 }
 
-/* 下拉菜单项悬停效果 */
-.sub-menu .menu-link:hover {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.08) 100%);
-    color: var(--primary-color);
+/* 下拉菜单项悬停效果 - 提高优先级 */
+.sub-menu li .menu-link:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.15) 100%) !important;
+    color: var(--primary-color) !important;
     transform: translateX(4px);
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+    border-left: 3px solid var(--primary-color);
 }
 
-.sub-menu .menu-link:hover i {
-    color: var(--primary-dark);
-    transform: scale(1.1);
+.sub-menu li .menu-link:hover i {
+    color: var(--primary-dark) !important;
+    transform: scale(1.15);
 }
 
-.sub-menu .menu-link:hover span {
-    color: var(--primary-color);
-    font-weight: 500;
+.sub-menu li .menu-link:hover span {
+    color: var(--primary-color) !important;
+    font-weight: 600;
 }
 
 /* 右側按鈕 */
