@@ -281,7 +281,7 @@ ul {
     gap: 0.5rem;
     border-radius: var(--radius-sm);
     transition: all 0.2s ease;
-    color: var(--text-primary);
+    color: var(--text-primary) !important;
     border-left: 3px solid transparent;
 }
 
@@ -289,7 +289,7 @@ ul {
     font-size: 0.85rem;
     width: 18px;
     text-align: center;
-    color: #ff922b;
+    color: #ff922b !important;
     transition: all 0.2s ease;
 }
 
