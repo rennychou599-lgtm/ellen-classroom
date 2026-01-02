@@ -214,11 +214,16 @@ ul {
 
 .menu-link i {
     font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.menu-link:hover i {
+    color: #ff922b;
 }
 
 .menu-link:hover {
-    background: rgba(102, 126, 234, 0.08);
-    color: var(--primary-color);
+    background: rgba(255, 146, 43, 0.12);
+    color: #ff922b;
 }
 
 .menu-link.active {
@@ -228,8 +233,8 @@ ul {
 }
 
 .menu-link.active:hover {
-    background: rgba(102, 126, 234, 0.08);
-    color: var(--primary-color);
+    background: rgba(255, 146, 43, 0.12);
+    color: #ff922b;
 }
 
 /* 下拉菜單 */
