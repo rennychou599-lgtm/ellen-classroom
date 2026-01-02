@@ -296,6 +296,7 @@ ul {
 .sub-menu .menu-link span {
     flex: 1;
     transition: color 0.2s ease;
+    color: var(--text-primary) !important;
 }
 
 /* 下拉菜单项悬停效果 - 使用温暖的橙色系（与 logo 呼应） */
