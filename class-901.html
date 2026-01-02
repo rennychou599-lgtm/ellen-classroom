@@ -302,12 +302,6 @@
     <!-- 九年一班介紹頁面 -->
     <section class="class-page">
         <div class="class-container">
-            <!-- 學校圖片區 -->
-            <div style="text-align: center; margin-bottom: 4rem; padding: 2rem; background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); border-radius: 16px; border: 2px solid #e1e8ed; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
-                <img src="images2/school.png" alt="學校照片"
-                    style="width: 100%; max-width: 1000px; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); display: block; margin: 0 auto;"
-                    loading="eager">
-            </div>
             <!-- 班級標題區 -->
             <div class="class-hero">
                 <h1>九年一班</h1>
@@ -323,34 +317,45 @@
                     <i class="fas fa-info-circle"></i>
                     班級資訊
                 </h2>
-                <div class="class-info-grid">
-                    <div class="info-card">
-                        <div class="info-card-icon">
-                            <i class="fas fa-users"></i>
+                <div style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <div class="class-info-grid">
+                            <div class="info-card">
+                                <div class="info-card-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h3>班級人數</h3>
+                                <p>共 30 位學生</p>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-card-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <h3>學年度</h3>
+                                <p>2025學年度</p>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-card-icon">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <h3>班級特色</h3>
+                                <p>體育班</p>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-card-icon">
+                                    <i class="fas fa-school"></i>
+                                </div>
+                                <h3>學校</h3>
+                                <p>彰化縣鹿鳴國中</p>
+                            </div>
                         </div>
-                        <h3>班級人數</h3>
-                        <p>共 30 位學生</p>
                     </div>
-                    <div class="info-card">
-                        <div class="info-card-icon">
-                            <i class="fas fa-calendar-alt"></i>
+                    <div style="flex: 0 0 300px; text-align: center;">
+                        <div style="padding: 1.5rem; background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); border-radius: 16px; border: 2px solid #e1e8ed; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
+                            <img src="images2/school.png" alt="學校照片"
+                                style="width: 100%; max-width: 300px; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); display: block; margin: 0 auto;"
+                                loading="lazy">
                         </div>
-                        <h3>學年度</h3>
-                        <p>2025學年度</p>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-card-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <h3>班級特色</h3>
-                        <p>體育班</p>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-card-icon">
-                            <i class="fas fa-school"></i>
-                        </div>
-                        <h3>學校</h3>
-                        <p>彰化縣鹿鳴國中</p>
                     </div>
                 </div>
             </div>
