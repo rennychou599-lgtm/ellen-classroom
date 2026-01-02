@@ -1,0 +1,45 @@
+# Git 相关
+.git
+.gitignore
+
+# 备份文件夹
+images_backup_*
+
+# 根目录的大图片文件（已压缩到 images2）
+ellenbook.png
+ellenlife.png
+EllenANN.png
+Ellennoback.png
+ellenbull.png
+ellenlogo.png
+
+# Node modules（会在容器中重新安装）
+node_modules
+backend/node_modules
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+
+# 日志文件
+*.log
+npm-debug.log*
+
+# 文档文件（不需要在容器中）
+*.md
+!README.md
+
+# 临时文件
+.DS_Store
+*.swp
+*.swo
+*~
+
+# 压缩脚本（不需要在容器中）
+compress-images.sh
+*.sh
+
+# IDE 配置
+.vscode
+.idea

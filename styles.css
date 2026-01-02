@@ -272,6 +272,19 @@ ul {
 .sub-menu .menu-link {
     width: 100%;
     justify-content: flex-start;
+    padding: 0.6rem 1rem;
+    gap: 0.5rem;
+}
+
+.sub-menu .menu-link i {
+    font-size: 0.85rem;
+    width: 18px;
+    text-align: center;
+    color: var(--primary-color);
+}
+
+.sub-menu .menu-link span {
+    flex: 1;
 }
 
 /* 右側按鈕 */
