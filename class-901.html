@@ -401,36 +401,45 @@
                     9年1班
                 </h2>
                 <div style="display: flex; flex-direction: column; gap: 2rem;">
-                    <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                    <div style="display: flex; gap: 2rem; align-items: flex-start; padding: 1.5rem; background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); border-radius: 16px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);">
                         <!-- 大照片 -->
-                        <div style="flex: 1; min-width: 0;">
+                        <div style="flex: 1; min-width: 0; max-width: 70%;">
                             <img id="mainPhoto" src="images2/bull1.png" alt="九年一班班級照片"
-                                style="width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); display: block; cursor: pointer; transition: transform 0.3s ease;"
-                                loading="lazy">
+                                style="width: 100%; max-width: 600px; height: auto; border-radius: 14px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); display: block; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;"
+                                loading="lazy"
+                                onmouseenter="this.style.transform='scale(1.02)'; this.style.boxShadow='0 8px 24px rgba(0, 0, 0, 0.15)';"
+                                onmouseleave="this.style.transform='scale(1)'; this.style.boxShadow='0 6px 20px rgba(0, 0, 0, 0.12)';">
                         </div>
                         <!-- 小照片預覽區 -->
-                        <div style="display: flex; flex-direction: column; gap: 1rem; width: 120px; flex-shrink: 0;">
-                            <div class="thumbnail-photo" data-src="images2/bull1.png" 
-                                style="width: 120px; height: 120px; border-radius: 8px; border: 3px solid #3498db; cursor: pointer; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
-                                <img src="images2/bull1.png" alt="照片1" 
-                                    style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                        <div style="display: flex; flex-direction: column; gap: 1.2rem; width: 110px; flex-shrink: 0;">
+                            <div class="thumbnail-photo" data-src="images2/bull1.png"
+                                style="width: 110px; height: 110px; border-radius: 10px; border: 3px solid #3498db; cursor: pointer; overflow: hidden; box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25); transition: all 0.3s ease; position: relative;">
+                                <img src="images2/bull1.png" alt="照片1"
+                                    style="width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease;">
+                                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.3), transparent); height: 30px; pointer-events: none;"></div>
                             </div>
-                            <div class="thumbnail-photo" data-src="images2/bull1.png" 
-                                style="width: 120px; height: 120px; border-radius: 8px; border: 3px solid #e1e8ed; cursor: pointer; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; opacity: 0.6;">
-                                <div style="width: 100%; height: 100%; background: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #5a6c7d; font-size: 0.85rem; text-align: center; padding: 0.5rem;">
-                                    照片2<br>(預留)
+                            <div class="thumbnail-photo" data-src="images2/bull1.png"
+                                style="width: 110px; height: 110px; border-radius: 10px; border: 2px solid #e1e8ed; cursor: pointer; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; opacity: 0.65; background: #f8f9fa;">
+                                <div
+                                    style="width: 100%; height: 100%; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #6c757d; font-size: 0.75rem; text-align: center; padding: 0.5rem; font-weight: 500;">
+                                    <i class="fas fa-image" style="font-size: 1.2rem; margin-bottom: 0.3rem; opacity: 0.5;"></i>
+                                    <span>照片2</span>
                                 </div>
                             </div>
-                            <div class="thumbnail-photo" data-src="images2/bull1.png" 
-                                style="width: 120px; height: 120px; border-radius: 8px; border: 3px solid #e1e8ed; cursor: pointer; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; opacity: 0.6;">
-                                <div style="width: 100%; height: 100%; background: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #5a6c7d; font-size: 0.85rem; text-align: center; padding: 0.5rem;">
-                                    照片3<br>(預留)
+                            <div class="thumbnail-photo" data-src="images2/bull1.png"
+                                style="width: 110px; height: 110px; border-radius: 10px; border: 2px solid #e1e8ed; cursor: pointer; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; opacity: 0.65; background: #f8f9fa;">
+                                <div
+                                    style="width: 100%; height: 100%; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #6c757d; font-size: 0.75rem; text-align: center; padding: 0.5rem; font-weight: 500;">
+                                    <i class="fas fa-image" style="font-size: 1.2rem; margin-bottom: 0.3rem; opacity: 0.5;"></i>
+                                    <span>照片3</span>
                                 </div>
                             </div>
-                            <div class="thumbnail-photo" data-src="images2/bull1.png" 
-                                style="width: 120px; height: 120px; border-radius: 8px; border: 3px solid #e1e8ed; cursor: pointer; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; opacity: 0.6;">
-                                <div style="width: 100%; height: 100%; background: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #5a6c7d; font-size: 0.85rem; text-align: center; padding: 0.5rem;">
-                                    照片4<br>(預留)
+                            <div class="thumbnail-photo" data-src="images2/bull1.png"
+                                style="width: 110px; height: 110px; border-radius: 10px; border: 2px solid #e1e8ed; cursor: pointer; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; opacity: 0.65; background: #f8f9fa;">
+                                <div
+                                    style="width: 100%; height: 100%; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #6c757d; font-size: 0.75rem; text-align: center; padding: 0.5rem; font-weight: 500;">
+                                    <i class="fas fa-image" style="font-size: 1.2rem; margin-bottom: 0.3rem; opacity: 0.5;"></i>
+                                    <span>照片4</span>
                                 </div>
                             </div>
                         </div>
@@ -558,39 +567,59 @@
         setInterval(updateCountdown, 1000);
 
         // 照片切換功能
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const mainPhoto = document.getElementById('mainPhoto');
             const thumbnails = document.querySelectorAll('.thumbnail-photo');
-            
+
             thumbnails.forEach((thumbnail, index) => {
-                thumbnail.addEventListener('click', function() {
+                thumbnail.addEventListener('click', function () {
                     const photoSrc = this.getAttribute('data-src');
                     if (photoSrc && photoSrc !== '') {
                         // 切換大照片
                         mainPhoto.src = photoSrc;
-                        
+
                         // 更新小照片的邊框樣式
                         thumbnails.forEach((thumb, i) => {
                             if (i === index) {
                                 thumb.style.borderColor = '#3498db';
+                                thumb.style.borderWidth = '3px';
                                 thumb.style.opacity = '1';
+                                thumb.style.boxShadow = '0 4px 12px rgba(52, 152, 219, 0.25)';
                             } else {
                                 thumb.style.borderColor = '#e1e8ed';
-                                thumb.style.opacity = '0.6';
+                                thumb.style.borderWidth = '2px';
+                                thumb.style.opacity = '0.65';
+                                thumb.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
                             }
                         });
                     }
                 });
-                
+
                 // 懸停效果
-                thumbnail.addEventListener('mouseenter', function() {
+                thumbnail.addEventListener('mouseenter', function () {
                     if (this.style.opacity !== '1') {
-                        this.style.transform = 'scale(1.05)';
+                        this.style.transform = 'scale(1.08)';
+                        this.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                        this.style.opacity = '0.85';
+                    }
+                    // 如果是圖片，添加放大效果
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1.1)';
                     }
                 });
-                
-                thumbnail.addEventListener('mouseleave', function() {
+
+                thumbnail.addEventListener('mouseleave', function () {
                     this.style.transform = 'scale(1)';
+                    if (this.style.opacity !== '1') {
+                        this.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+                        this.style.opacity = '0.65';
+                    }
+                    // 恢復圖片
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1)';
+                    }
                 });
             });
         });
