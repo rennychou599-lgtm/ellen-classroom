@@ -469,7 +469,7 @@
         <div class="header-container">
             <div class="site-branding">
                 <a href="index.html" class="logo-link">
-                    <i class="fas fa-graduation-cap"></i>
+                    <img src="images2/Ellennoback.png" alt="鈺倫の教室 Logo" class="logo-image" loading="eager">
                     <span class="logo-text">鈺倫の教室</span>
                 </a>
             </div>
@@ -617,7 +617,7 @@
         function checkAuth() {
             const token = localStorage.getItem('adminToken');
             const teacherInfo = localStorage.getItem('adminTeacher');
-            
+
             if (token && teacherInfo) {
                 authToken = token;
                 document.getElementById('loginModal').classList.remove('active');
@@ -660,7 +660,7 @@
                     localStorage.setItem('adminToken', data.token);
                     localStorage.setItem('adminTeacher', JSON.stringify(data.teacher));
                     authToken = data.token;
-                    
+
                     // 關閉登入模态框，顯示後台內容
                     closeLoginModal();
                     document.getElementById('adminContent').style.display = 'block';
@@ -722,7 +722,7 @@
         // 顯示學生列表
         function displayStudents(students) {
             const container = document.getElementById('studentsContainer');
-            
+
             if (students.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
@@ -782,11 +782,11 @@
             const total = students.length;
             const active = students.filter(s => s.status === 'active').length;
             const pending = students.filter(s => s.status === 'pending').length;
-            
+
             // 計算平均成績
             const grades = students.filter(s => s.average_grade && !isNaN(s.average_grade))
                 .map(s => parseFloat(s.average_grade));
-            const avgGrade = grades.length > 0 
+            const avgGrade = grades.length > 0
                 ? (grades.reduce((a, b) => a + b, 0) / grades.length).toFixed(1)
                 : '-';
 
@@ -843,12 +843,12 @@
             const statusFilter = document.getElementById('statusFilter').value;
 
             let filtered = allStudents.filter(student => {
-                const matchSearch = !searchTerm || 
+                const matchSearch = !searchTerm ||
                     (student.student_name && student.student_name.toLowerCase().includes(searchTerm)) ||
                     (student.student_id && student.student_id.toLowerCase().includes(searchTerm));
-                
+
                 const matchStatus = statusFilter === 'all' || student.status === statusFilter;
-                
+
                 return matchSearch && matchStatus;
             });
 
