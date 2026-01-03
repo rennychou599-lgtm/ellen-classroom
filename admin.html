@@ -123,6 +123,34 @@
             display: block;
         }
 
+        /* Header 登出按钮样式 */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-actions .btn-secondary {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            color: #2c3e50;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-actions .btn-secondary:hover {
+            background: #f5f7fa;
+            border-color: #667eea;
+            color: #667eea;
+        }
+
         .admin-page {
             min-height: 100vh;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -468,10 +496,16 @@
     <header class="site-header">
         <div class="header-container">
             <div class="site-branding">
-                <a href="index.html" class="logo-link">
+                <div class="logo-link" style="cursor: default;">
                     <img src="images2/Ellennoback.png" alt="鈺倫の教室 Logo" class="logo-image" loading="eager">
                     <span class="logo-text">鈺倫の教室</span>
-                </a>
+                </div>
+            </div>
+            <div class="header-actions" id="adminHeaderActions" style="display: none;">
+                <button class="btn-secondary" onclick="logout()" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>登出</span>
+                </button>
             </div>
             <nav class="main-navigation">
                 <ul class="nav-menu">
@@ -538,16 +572,10 @@
                     <i class="fas fa-chalkboard-teacher"></i>
                     老師管理後台
                 </h1>
-                <div style="display: flex; gap: 1rem;">
-                    <button class="btn-secondary" onclick="logout()">
-                        <i class="fas fa-sign-out-alt"></i>
-                        登出
-                    </button>
-                    <button class="btn-secondary" onclick="window.location.href='index.html'">
-                        <i class="fas fa-arrow-left"></i>
-                        返回首頁
-                    </button>
-                </div>
+                <button class="btn-secondary" onclick="window.location.href='index.html'">
+                    <i class="fas fa-arrow-left"></i>
+                    返回首頁
+                </button>
             </div>
 
             <!-- 統計卡片 -->
@@ -622,10 +650,12 @@
                 authToken = token;
                 document.getElementById('loginModal').classList.remove('active');
                 document.getElementById('adminContent').style.display = 'block';
+                document.getElementById('adminHeaderActions').style.display = 'flex';
                 loadStudents();
             } else {
                 document.getElementById('loginModal').classList.add('active');
                 document.getElementById('adminContent').style.display = 'none';
+                document.getElementById('adminHeaderActions').style.display = 'none';
             }
         }
 
@@ -664,6 +694,7 @@
                     // 關閉登入模态框，顯示後台內容
                     closeLoginModal();
                     document.getElementById('adminContent').style.display = 'block';
+                    document.getElementById('adminHeaderActions').style.display = 'flex';
                     loadStudents();
                 } else {
                     errorDiv.textContent = data.error || '登入失敗';
@@ -681,6 +712,7 @@
             localStorage.removeItem('adminToken');
             localStorage.removeItem('adminTeacher');
             authToken = null;
+            document.getElementById('adminHeaderActions').style.display = 'none';
             checkAuth();
         }
 
