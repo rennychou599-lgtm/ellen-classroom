@@ -16,7 +16,7 @@ curl -X POST https://your-railway-url.railway.app/api/admin/init-teacher
 
 这个 API 会自动：
 1. 创建 teachers 表（如果不存在）
-2. 创建老师账号 BMN-5680，密码为 BMN-5680!@（已加密）
+2. 创建老师账号 A100，密码为 999（已加密）
 
 ## 方法 2: 在 Railway 数据库管理界面执行 SQL
 
@@ -39,8 +39,8 @@ node scripts/create-teacher.js
 
 ## 账号信息
 
-- **账号**: BMN-5680
-- **密码**: BMN-5680!@
+- **账号**: A100
+- **密码**: 999
 - **姓名**: 鈺倫老師
 
 ## 验证

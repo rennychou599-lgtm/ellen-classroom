@@ -148,10 +148,10 @@ router.post('/login', async (req, res) => {
           `);
           
           // 创建默认老师账号
-          const hashedPassword = await bcrypt.hash('BMN-5680!@', 10);
+          const hashedPassword = await bcrypt.hash('999', 10);
           await pool.query(
             'INSERT INTO teachers (teacher_id, teacher_name, password) VALUES (?, ?, ?)',
-            ['BMN-5680', '鈺倫老師', hashedPassword]
+            ['A100', '鈺倫老師', hashedPassword]
           );
           
           console.log('✅ teachers 表和默认账号创建成功');
@@ -261,11 +261,11 @@ router.post('/init-teacher', async (req, res) => {
     // 检查老师是否已存在
     const [existing] = await pool.query(
       'SELECT * FROM teachers WHERE teacher_id = ?',
-      ['BMN-5680']
+      ['A100']
     );
 
     // 加密密码
-    const hashedPassword = await bcrypt.hash('BMN-5680!@', 10);
+    const hashedPassword = await bcrypt.hash('999', 10);
 
     if (existing.length > 0) {
       // 更新密码

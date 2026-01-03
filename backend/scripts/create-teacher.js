@@ -29,33 +29,33 @@ async function createTeacher() {
     // 检查老师是否已存在
     const [existing] = await pool.query(
       'SELECT * FROM teachers WHERE teacher_id = ?',
-      ['BMN-5680']
+      ['A100']
     );
 
     // 加密密码
-    const hashedPassword = await bcrypt.hash('BMN-5680!@', 10);
+    const hashedPassword = await bcrypt.hash('999', 10);
     console.log('✅ 密码已加密');
 
     if (existing.length > 0) {
       console.log('📝 老师账号已存在，更新密码...');
       await pool.query(
         'UPDATE teachers SET password = ?, teacher_name = ? WHERE teacher_id = ?',
-        [hashedPassword, '鈺倫老師', 'BMN-5680']
+        [hashedPassword, '鈺倫老師', 'A100']
       );
       console.log('✅ 密码已更新');
     } else {
       console.log('📝 创建新老师账号...');
       await pool.query(
         'INSERT INTO teachers (teacher_id, teacher_name, password) VALUES (?, ?, ?)',
-        ['BMN-5680', '鈺倫老師', hashedPassword]
+        ['A100', '鈺倫老師', hashedPassword]
       );
       console.log('✅ 老师账号创建成功');
     }
 
     console.log('\n✅ 完成！');
     console.log('📋 老师账号信息:');
-    console.log('   账号: BMN-5680');
-    console.log('   密码: BMN-5680!@');
+    console.log('   账号: A100');
+    console.log('   密码: 999');
     console.log('   姓名: 鈺倫老師\n');
     
     process.exit(0);

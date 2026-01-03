@@ -139,8 +139,8 @@ curl -X POST http://localhost:3000/api/admin/init-teacher
 在 MySQL 中执行 `backend/scripts/create-teacher.sql`
 
 **账号信息**（创建后可使用）：
-- 账号：`BMN-5680`
-- 密码：`BMN-5680!@`
+- 账号：`A100`
+- 密码：`999`
 
 ### 6. 启动服务器
 
