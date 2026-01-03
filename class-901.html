@@ -132,7 +132,14 @@
 
         .class-section {
             margin-bottom: 3rem;
+        }
+        
+        .class-section:first-of-type {
             margin-top: -1.5cm;
+        }
+        
+        .class-section:not(:first-of-type) {
+            margin-top: 2.5rem;
         }
 
         .section-title {
@@ -309,6 +316,9 @@
             color: #5a6c7d;
             line-height: 1.6;
             margin: 0;
+            flex: 1;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         @media (max-width: 768px) {
