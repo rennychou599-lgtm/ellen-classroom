@@ -121,16 +121,26 @@ npm run init-db
 
 ### 5. 创建老师账号
 
-有两种方法：
+有三种方法：
 
-**方法 A: 使用 API（推荐）**
+**方法 A: 使用本地脚本（最简单，推荐）**
 ```bash
-# 启动服务器后
+cd backend
+npm run create-teacher
+```
+
+**方法 B: 使用 API（需要先启动服务器）**
+```bash
+# 启动服务器后，在另一个终端执行
 curl -X POST http://localhost:3000/api/admin/init-teacher
 ```
 
-**方法 B: 手动执行 SQL**
+**方法 C: 手动执行 SQL**
 在 MySQL 中执行 `backend/scripts/create-teacher.sql`
+
+**账号信息**（创建后可使用）：
+- 账号：`BMN-5680`
+- 密码：`BMN-5680!@`
 
 ### 6. 启动服务器
 
