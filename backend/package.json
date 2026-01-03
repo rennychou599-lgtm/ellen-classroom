@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node scripts/create-teacher-local.js"
+    "dev": "nodemon server.js",
+    "init-db": "node scripts/init-database.js",
+    "create-teacher": "node scripts/create-teacher-local.js"
   },
   "keywords": [
     "education",
