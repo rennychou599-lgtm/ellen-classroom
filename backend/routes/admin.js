@@ -109,6 +109,60 @@ router.get('/check-auth', authenticateTeacher, async (req, res) => {
   });
 });
 
+// 初始化老师账号（仅用于首次设置，需要特殊密钥或仅允许一次）
+router.post('/init-teacher', async (req, res) => {
+  try {
+    // 创建 teachers 表（如果不存在）
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS teachers (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        teacher_id VARCHAR(50) UNIQUE NOT NULL,
+        teacher_name VARCHAR(100) NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    `);
+
+    // 检查老师是否已存在
+    const [existing] = await pool.query(
+      'SELECT * FROM teachers WHERE teacher_id = ?',
+      ['BMN-5680']
+    );
+
+    // 加密密码
+    const hashedPassword = await bcrypt.hash('BMN-5680!@', 10);
+
+    if (existing.length > 0) {
+      // 更新密码
+      await pool.query(
+        'UPDATE teachers SET password = ?, teacher_name = ? WHERE teacher_id = ?',
+        [hashedPassword, '鈺倫老師', 'BMN-5680']
+      );
+      res.json({
+        success: true,
+        message: '老师账号密码已更新'
+      });
+    } else {
+      // 创建新账号
+      await pool.query(
+        'INSERT INTO teachers (teacher_id, teacher_name, password) VALUES (?, ?, ?)',
+        ['BMN-5680', '鈺倫老師', hashedPassword]
+      );
+      res.json({
+        success: true,
+        message: '老师账号创建成功'
+      });
+    }
+  } catch (error) {
+    console.error('初始化老师账号错误:', error);
+    res.status(500).json({
+      success: false,
+      error: '初始化失败'
+    });
+  }
+});
+
 // 獲取所有學生資料（需要认证）
 router.get('/students', authenticateTeacher, async (req, res) => {
   try {

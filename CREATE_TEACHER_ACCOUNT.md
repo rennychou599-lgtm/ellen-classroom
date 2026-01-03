@@ -1,42 +1,39 @@
 # 创建老师账号说明
 
-## 方法 1: 在 Railway 数据库管理界面执行 SQL（推荐）
+## 方法 1: 使用 API 初始化（最简单，推荐）
+
+部署到 Railway 后，访问以下 API 端点来创建老师账号：
+
+```
+POST /api/admin/init-teacher
+```
+
+或者使用 curl 命令：
+
+```bash
+curl -X POST https://your-railway-url.railway.app/api/admin/init-teacher
+```
+
+这个 API 会自动：
+1. 创建 teachers 表（如果不存在）
+2. 创建老师账号 BMN-5680，密码为 BMN-5680!@（已加密）
+
+## 方法 2: 在 Railway 数据库管理界面执行 SQL
 
 1. 在 Railway 项目页面，点击 **MySQL 服务**
 2. 进入 **"Data"** 或 **"Query"** 标签
 3. 点击 **"SQL Editor"** 或 **"Query"** 按钮
-4. 复制并执行以下 SQL：
+4. 复制并执行 `backend/scripts/create-teacher.sql` 文件中的 SQL
 
-```sql
--- 创建老师表
-CREATE TABLE IF NOT EXISTS teachers (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  teacher_id VARCHAR(50) UNIQUE NOT NULL,
-  teacher_name VARCHAR(100) NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+**注意**: SQL 文件中的密码 hash 是占位符，执行后需要通过 API 或脚本更新密码。
 
--- 插入老师账号（密码已加密）
--- 密码: BMN-5680!@ 的 bcrypt hash
-INSERT INTO teachers (teacher_id, teacher_name, password) 
-VALUES (
-  'BMN-5680', 
-  '鈺倫老師', 
-  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'
-) 
-ON DUPLICATE KEY UPDATE 
-  teacher_name = '鈺倫老師',
-  password = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
-```
-
-## 方法 2: 使用 Node.js 脚本（需要本地环境）
+## 方法 3: 使用 Node.js 脚本（需要本地环境）
 
 在项目根目录运行：
 
 ```bash
 cd backend
+npm install
 node scripts/create-teacher.js
 ```
 
@@ -48,8 +45,7 @@ node scripts/create-teacher.js
 
 ## 验证
 
-执行 SQL 后，可以查询验证：
-
-```sql
-SELECT teacher_id, teacher_name FROM teachers WHERE teacher_id = 'BMN-5680';
-```
+创建账号后，可以尝试登录管理后台：
+1. 访问 `/admin.html`
+2. 输入账号和密码
+3. 如果登录成功，说明账号创建成功
