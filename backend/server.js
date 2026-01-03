@@ -10,6 +10,7 @@ const gradesRoutes = require('./routes/grades');
 const reflectionsRoutes = require('./routes/reflections');
 const progressRoutes = require('./routes/progress');
 const feedbackRoutes = require('./routes/feedback');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 // 确保 PORT 是有效的整数
