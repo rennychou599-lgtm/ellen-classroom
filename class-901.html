@@ -402,27 +402,36 @@
                 </h2>
                 <div style="display: flex; flex-direction: column; gap: 2rem;">
                     <!-- 照片輪播區 -->
-                    <div class="photo-carousel-wrapper" style="display: flex; align-items: center; gap: 20px; width: 100%; position: relative; justify-content: center;">
+                    <div class="photo-carousel-wrapper"
+                        style="display: flex; align-items: center; gap: 20px; width: 100%; position: relative; justify-content: center;">
                         <button class="noticeboard-btn noticeboard-btn-prev" id="photoCarouselPrevBtn" aria-label="上一張">
                             <i class="fas fa-hand-point-right"></i>
                         </button>
-                        <div class="photo-carousel-container" style="position: relative; flex: 1; width: 100%; overflow: visible; border-radius: 16px; min-height: 400px; display: flex; align-items: center; justify-content: center; perspective: 1000px; max-width: 700px;">
-                            <div class="photo-carousel-slide active" data-index="0" style="position: absolute; width: 85%; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px);">
-                                <img src="images2/bull1.png" alt="九年一班照片1" 
+                        <div class="photo-carousel-container"
+                            style="position: relative; flex: 1; width: 100%; overflow: visible; border-radius: 16px; min-height: 450px; display: flex; align-items: center; justify-content: center; perspective: 1000px; max-width: 800px;">
+                            <div class="photo-carousel-slide active" data-index="0"
+                                style="position: absolute; width: 90%; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px);">
+                                <img src="images2/bull1.png" alt="九年一班照片1"
                                     style="width: 100%; height: auto; border-radius: 14px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12); display: block;">
                             </div>
-                            <div class="photo-carousel-slide" data-index="1" style="position: absolute; width: 85%; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px);">
-                                <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
+                            <div class="photo-carousel-slide" data-index="1"
+                                style="position: absolute; width: 90%; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px);">
+                                <div
+                                    style="width: 100%; height: 450px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
                                     <div style="text-align: center; color: #6c757d;">
-                                        <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.4;"></i>
+                                        <i class="fas fa-image"
+                                            style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.4;"></i>
                                         <p style="font-size: 1rem; margin: 0;">照片2 (預留)</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="photo-carousel-slide" data-index="2" style="position: absolute; width: 85%; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px);">
-                                <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
+                            <div class="photo-carousel-slide" data-index="2"
+                                style="position: absolute; width: 90%; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px);">
+                                <div
+                                    style="width: 100%; height: 450px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
                                     <div style="text-align: center; color: #6c757d;">
-                                        <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.4;"></i>
+                                        <i class="fas fa-image"
+                                            style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.4;"></i>
                                         <p style="font-size: 1rem; margin: 0;">照片3 (預留)</p>
                                     </div>
                                 </div>
@@ -432,7 +441,8 @@
                             <i class="fas fa-hand-point-left"></i>
                         </button>
                     </div>
-                    <div class="photo-carousel-indicators" id="photoCarouselIndicators" style="display: flex; justify-content: center; gap: 8px; margin-top: 1rem; z-index: 10; width: 100%;">
+                    <div class="photo-carousel-indicators" id="photoCarouselIndicators"
+                        style="display: flex; justify-content: center; gap: 8px; margin-top: 1rem; z-index: 10; width: 100%;">
                         <!-- 指示器將由 JavaScript 動態生成 -->
                     </div>
                     <div class="class-description" style="text-align: left;">
@@ -577,7 +587,7 @@
                     if (i === index) {
                         slide.classList.add('active');
                         slide.style.opacity = '1';
-                        slide.style.transform = 'scale(1.05) translateX(0)';
+                        slide.style.transform = 'scale(1.08) translateX(0)';
                         slide.style.zIndex = '3';
                         slide.style.pointerEvents = 'auto';
                         slide.style.filter = 'blur(0)';
@@ -585,7 +595,7 @@
                     } else if (i === index - 1 || (index === 0 && i === slides.length - 1)) {
                         slide.classList.add('prev');
                         slide.style.opacity = '0.4';
-                        slide.style.transform = 'scale(0.85) translateX(-35%)';
+                        slide.style.transform = 'scale(0.88) translateX(-35%)';
                         slide.style.zIndex = '2';
                         slide.style.pointerEvents = 'auto';
                         slide.style.cursor = 'pointer';
@@ -594,7 +604,7 @@
                     } else if (i === index + 1 || (index === slides.length - 1 && i === 0)) {
                         slide.classList.add('next');
                         slide.style.opacity = '0.4';
-                        slide.style.transform = 'scale(0.85) translateX(35%)';
+                        slide.style.transform = 'scale(0.88) translateX(35%)';
                         slide.style.zIndex = '2';
                         slide.style.pointerEvents = 'auto';
                         slide.style.cursor = 'pointer';
