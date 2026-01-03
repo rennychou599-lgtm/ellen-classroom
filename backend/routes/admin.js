@@ -1,10 +1,30 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const { pool } = require('../config/database');
 
 const router = express.Router();
 
-// 认证中间件
+// 登录尝试限制（内存存储，生产环境建议使用 Redis）
+const loginAttempts = new Map();
+const MAX_LOGIN_ATTEMPTS = 5;
+const LOCKOUT_TIME = 15 * 60 * 1000; // 15 分钟
+
+// 清理过期的登录尝试记录
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, value] of loginAttempts.entries()) {
+    if (now - value.lastAttempt > LOCKOUT_TIME) {
+      loginAttempts.delete(key);
+    }
+  }
+}, 60000); // 每分钟清理一次
+
+// JWT 密钥（从环境变量获取，如果没有则使用默认值）
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+const JWT_EXPIRES_IN = '24h'; // Token 24 小时后过期
+
+// 认证中间件（使用 JWT）
 const authenticateTeacher = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -16,36 +36,50 @@ const authenticateTeacher = async (req, res, next) => {
     }
 
     const token = authHeader.substring(7);
-    // 简单的 token 验证（实际应该使用 JWT）
-    // 这里使用 localStorage 存储的 token
-    const teacherId = token;
     
-    // 检查 teachers 表是否存在
     try {
-      const [teachers] = await pool.query(
-        'SELECT * FROM teachers WHERE teacher_id = ?',
-        [teacherId]
-      );
+      // 验证 JWT token
+      const decoded = jwt.verify(token, JWT_SECRET);
+      
+      // 检查 teachers 表是否存在
+      try {
+        const [teachers] = await pool.query(
+          'SELECT * FROM teachers WHERE teacher_id = ?',
+          [decoded.teacherId]
+        );
 
-      if (teachers.length === 0) {
+        if (teachers.length === 0) {
+          return res.status(401).json({ 
+            success: false,
+            error: '未授权' 
+          });
+        }
+
+        req.teacher = teachers[0];
+        next();
+      } catch (dbError) {
+        // 如果表不存在，返回友好错误
+        if (dbError.code === 'ER_NO_SUCH_TABLE') {
+          console.error('teachers 表不存在，请先初始化数据库');
+          return res.status(500).json({ 
+            success: false,
+            error: '数据库未初始化，请先创建老师账号' 
+          });
+        }
+        throw dbError;
+      }
+    } catch (jwtError) {
+      // JWT 验证失败（过期、无效等）
+      if (jwtError.name === 'TokenExpiredError') {
         return res.status(401).json({ 
           success: false,
-          error: '未授权' 
+          error: '登录已过期，请重新登录' 
         });
       }
-
-      req.teacher = teachers[0];
-      next();
-    } catch (dbError) {
-      // 如果表不存在，返回友好错误
-      if (dbError.code === 'ER_NO_SUCH_TABLE') {
-        console.error('teachers 表不存在，请先初始化数据库');
-        return res.status(500).json({ 
-          success: false,
-          error: '数据库未初始化，请先创建老师账号' 
-        });
-      }
-      throw dbError;
+      return res.status(401).json({ 
+        success: false,
+        error: '无效的登录凭证' 
+      });
     }
   } catch (error) {
     console.error('认证错误:', error);
@@ -66,6 +100,27 @@ router.post('/login', async (req, res) => {
         success: false,
         error: '請提供老師帳號和密碼' 
       });
+    }
+
+    // 检查登录尝试次数限制
+    const clientIp = req.ip || req.connection.remoteAddress;
+    const attemptKey = `${clientIp}:${teacherId}`;
+    const attempts = loginAttempts.get(attemptKey);
+
+    if (attempts) {
+      const timeSinceLastAttempt = Date.now() - attempts.lastAttempt;
+      if (attempts.count >= MAX_LOGIN_ATTEMPTS) {
+        if (timeSinceLastAttempt < LOCKOUT_TIME) {
+          const remainingTime = Math.ceil((LOCKOUT_TIME - timeSinceLastAttempt) / 1000 / 60);
+          return res.status(429).json({ 
+            success: false,
+            error: `登录尝试次数过多，请 ${remainingTime} 分钟后再试` 
+          });
+        } else {
+          // 锁定时间已过，重置计数
+          loginAttempts.delete(attemptKey);
+        }
+      }
     }
 
     // 查询老师
@@ -130,11 +185,33 @@ router.post('/login', async (req, res) => {
     // 验证密码
     const isValidPassword = await bcrypt.compare(password, teacher.password);
     if (!isValidPassword) {
+      // 记录失败的登录尝试
+      const currentAttempts = loginAttempts.get(attemptKey) || { count: 0, lastAttempt: 0 };
+      currentAttempts.count += 1;
+      currentAttempts.lastAttempt = Date.now();
+      loginAttempts.set(attemptKey, currentAttempts);
+
+      const remainingAttempts = MAX_LOGIN_ATTEMPTS - currentAttempts.count;
       return res.status(401).json({ 
         success: false,
-        error: '帳號或密碼錯誤' 
+        error: remainingAttempts > 0 
+          ? `帳號或密碼錯誤，還剩 ${remainingAttempts} 次嘗試機會`
+          : '帳號或密碼錯誤，已達到最大嘗試次數'
       });
     }
+
+    // 登录成功，清除登录尝试记录
+    loginAttempts.delete(attemptKey);
+
+    // 生成 JWT token
+    const token = jwt.sign(
+      { 
+        teacherId: teacher.teacher_id,
+        teacherName: teacher.teacher_name
+      },
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRES_IN }
+    );
 
     // 返回老师信息（不包含密码）
     res.json({
@@ -143,7 +220,7 @@ router.post('/login', async (req, res) => {
         teacherId: teacher.teacher_id,
         teacherName: teacher.teacher_name
       },
-      token: teacher.teacher_id // 简单的 token（实际应该使用 JWT）
+      token: token // 使用 JWT token
     });
 
   } catch (error) {
