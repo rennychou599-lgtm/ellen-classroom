@@ -396,14 +396,10 @@
         <div class="class-container">
             <!-- 班級介紹 -->
             <div class="class-section">
-                <h2 class="section-title">
+                <h2 class="section-title" style="justify-content: center;">
                     <img src="images2/students-2.png" alt="9年1班logo"
-                        style="width: 3.5em; height: 3.5em; object-fit: contain; flex-shrink: 0;" loading="lazy">
-                    <span style="display: inline-flex; align-items: baseline; gap: 0.1em;">
-                        <span
-                            style="font-size: 1.4em; font-weight: 700; color: #ff922b; transform: rotate(-8deg) translateY(-2px); display: inline-block; text-shadow: 2px 2px 4px rgba(255, 146, 43, 0.3), 0 0 8px rgba(255, 146, 43, 0.2);">九</span>
-                        <span>年1班</span>
-                    </span>
+                        style="width: 4em; height: 4em; object-fit: contain; flex-shrink: 0;" loading="lazy">
+                    <span style="font-size: 2.2rem; font-weight: 600;">9年1班</span>
                 </h2>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                     <!-- 照片輪播區 -->
@@ -413,16 +409,16 @@
                             <i class="fas fa-hand-point-right"></i>
                         </button>
                         <div class="photo-carousel-container"
-                            style="position: relative; flex: 1; width: 100%; overflow: visible; border-radius: 16px; min-height: 500px; display: flex; align-items: center; justify-content: center; perspective: 1000px; max-width: 900px; margin: 0 auto;">
+                            style="position: relative; flex: 1; width: 100%; overflow: visible; border-radius: 16px; min-height: 450px; display: flex; align-items: center; justify-content: center; perspective: 1000px; max-width: 800px;">
                             <div class="photo-carousel-slide active" data-index="0"
-                                style="position: absolute; width: 95%; max-width: 850px; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px); left: 50%; margin-left: -47.5%;">
+                                style="position: absolute; width: 90%; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px);">
                                 <img src="images2/bull1.png" alt="九年一班照片1"
-                                    style="width: 100%; height: auto; border-radius: 14px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12); display: block; margin: 0 auto;">
+                                    style="width: 100%; height: auto; border-radius: 14px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12); display: block;">
                             </div>
                             <div class="photo-carousel-slide" data-index="1"
-                                style="position: absolute; width: 95%; max-width: 850px; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px); left: 50%; margin-left: -47.5%;">
+                                style="position: absolute; width: 90%; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px);">
                                 <div
-                                    style="width: 100%; height: 500px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
+                                    style="width: 100%; height: 450px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
                                     <div style="text-align: center; color: #6c757d;">
                                         <i class="fas fa-image"
                                             style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.4;"></i>
@@ -431,9 +427,9 @@
                                 </div>
                             </div>
                             <div class="photo-carousel-slide" data-index="2"
-                                style="position: absolute; width: 95%; max-width: 850px; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px); left: 50%; margin-left: -47.5%;">
+                                style="position: absolute; width: 90%; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px);">
                                 <div
-                                    style="width: 100%; height: 500px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
+                                    style="width: 100%; height: 450px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
                                     <div style="text-align: center; color: #6c757d;">
                                         <i class="fas fa-image"
                                             style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.4;"></i>
@@ -592,35 +588,29 @@
                     if (i === index) {
                         slide.classList.add('active');
                         slide.style.opacity = '1';
-                        slide.style.transform = 'scale(1.1) translateX(0)';
+                        slide.style.transform = 'scale(1.08) translateX(0)';
                         slide.style.zIndex = '3';
                         slide.style.pointerEvents = 'auto';
                         slide.style.filter = 'blur(0)';
-                        slide.style.position = 'absolute';
-                        slide.style.left = '50%';
-                        slide.style.marginLeft = '-47.5%';
+                        slide.style.position = 'relative';
                     } else if (i === index - 1 || (index === 0 && i === slides.length - 1)) {
                         slide.classList.add('prev');
                         slide.style.opacity = '0.4';
-                        slide.style.transform = 'scale(0.9) translateX(-40%)';
+                        slide.style.transform = 'scale(0.88) translateX(-35%)';
                         slide.style.zIndex = '2';
                         slide.style.pointerEvents = 'auto';
                         slide.style.cursor = 'pointer';
                         slide.style.filter = 'blur(1px)';
                         slide.style.position = 'absolute';
-                        slide.style.left = '50%';
-                        slide.style.marginLeft = '-47.5%';
                     } else if (i === index + 1 || (index === slides.length - 1 && i === 0)) {
                         slide.classList.add('next');
                         slide.style.opacity = '0.4';
-                        slide.style.transform = 'scale(0.9) translateX(40%)';
+                        slide.style.transform = 'scale(0.88) translateX(35%)';
                         slide.style.zIndex = '2';
                         slide.style.pointerEvents = 'auto';
                         slide.style.cursor = 'pointer';
                         slide.style.filter = 'blur(1px)';
                         slide.style.position = 'absolute';
-                        slide.style.left = '50%';
-                        slide.style.marginLeft = '-47.5%';
                     } else {
                         slide.style.opacity = '0';
                         slide.style.transform = 'scale(0.85) translateX(0)';
@@ -697,7 +687,8 @@
 
             // 初始化顯示第一張
             showSlide(0);
-            </script>
+        });
+    </script>
     <script src="auth.js"></script>
 </body>
 
