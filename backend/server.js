@@ -65,9 +65,21 @@ app.use(express.static(staticPath, {
     }
   },
   // 确保 HTML 文件也能被正确提供
-  index: false, // 不自动提供 index.html
+  index: ['index.html'], // 允许提供 index.html
   fallthrough: true // 如果文件不存在，继续到下一个中间件
 }));
+
+// 添加调试中间件（仅开发环境）
+if (process.env.NODE_ENV !== 'production') {
+  app.use((req, res, next) => {
+    if (req.path.endsWith('.html')) {
+      const fs = require('fs');
+      const filePath = path.join(staticPath, req.path);
+      console.log('🔍 检查文件:', filePath, '存在:', fs.existsSync(filePath));
+    }
+    next();
+  });
+}
 
 // 健康检查
 app.get('/health', (req, res) => {
