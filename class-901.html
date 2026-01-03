@@ -401,48 +401,39 @@
                     9年1班
                 </h2>
                 <div style="display: flex; flex-direction: column; gap: 2rem;">
-                    <div style="display: flex; gap: 2rem; align-items: flex-start; padding: 1.5rem; background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); border-radius: 16px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);">
-                        <!-- 大照片 -->
-                        <div style="flex: 1; min-width: 0; max-width: 70%;">
-                            <img id="mainPhoto" src="images2/bull1.png" alt="九年一班班級照片"
-                                style="width: 100%; max-width: 600px; height: auto; border-radius: 14px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); display: block; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;"
-                                loading="lazy"
-                                onmouseenter="this.style.transform='scale(1.02)'; this.style.boxShadow='0 8px 24px rgba(0, 0, 0, 0.15)';"
-                                onmouseleave="this.style.transform='scale(1)'; this.style.boxShadow='0 6px 20px rgba(0, 0, 0, 0.12)';">
-                        </div>
-                        <!-- 小照片預覽區 -->
-                        <div style="display: flex; flex-direction: column; gap: 1.2rem; width: 110px; flex-shrink: 0;">
-                            <div class="thumbnail-photo" data-src="images2/bull1.png"
-                                style="width: 110px; height: 110px; border-radius: 10px; border: 3px solid #3498db; cursor: pointer; overflow: hidden; box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25); transition: all 0.3s ease; position: relative;">
-                                <img src="images2/bull1.png" alt="照片1"
-                                    style="width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease;">
-                                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.3), transparent); height: 30px; pointer-events: none;"></div>
+                    <!-- 照片輪播區 -->
+                    <div class="photo-carousel-wrapper" style="display: flex; align-items: center; gap: 20px; width: 100%; position: relative; justify-content: center;">
+                        <button class="noticeboard-btn noticeboard-btn-prev" id="photoCarouselPrevBtn" aria-label="上一張">
+                            <i class="fas fa-hand-point-right"></i>
+                        </button>
+                        <div class="photo-carousel-container" style="position: relative; flex: 1; width: 100%; overflow: visible; border-radius: 16px; min-height: 400px; display: flex; align-items: center; justify-content: center; perspective: 1000px; max-width: 700px;">
+                            <div class="photo-carousel-slide active" data-index="0" style="position: absolute; width: 85%; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px);">
+                                <img src="images2/bull1.png" alt="九年一班照片1" 
+                                    style="width: 100%; height: auto; border-radius: 14px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12); display: block;">
                             </div>
-                            <div class="thumbnail-photo" data-src="images2/bull1.png"
-                                style="width: 110px; height: 110px; border-radius: 10px; border: 2px solid #e1e8ed; cursor: pointer; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; opacity: 0.65; background: #f8f9fa;">
-                                <div
-                                    style="width: 100%; height: 100%; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #6c757d; font-size: 0.75rem; text-align: center; padding: 0.5rem; font-weight: 500;">
-                                    <i class="fas fa-image" style="font-size: 1.2rem; margin-bottom: 0.3rem; opacity: 0.5;"></i>
-                                    <span>照片2</span>
+                            <div class="photo-carousel-slide" data-index="1" style="position: absolute; width: 85%; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px);">
+                                <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
+                                    <div style="text-align: center; color: #6c757d;">
+                                        <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.4;"></i>
+                                        <p style="font-size: 1rem; margin: 0;">照片2 (預留)</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="thumbnail-photo" data-src="images2/bull1.png"
-                                style="width: 110px; height: 110px; border-radius: 10px; border: 2px solid #e1e8ed; cursor: pointer; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; opacity: 0.65; background: #f8f9fa;">
-                                <div
-                                    style="width: 100%; height: 100%; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #6c757d; font-size: 0.75rem; text-align: center; padding: 0.5rem; font-weight: 500;">
-                                    <i class="fas fa-image" style="font-size: 1.2rem; margin-bottom: 0.3rem; opacity: 0.5;"></i>
-                                    <span>照片3</span>
-                                </div>
-                            </div>
-                            <div class="thumbnail-photo" data-src="images2/bull1.png"
-                                style="width: 110px; height: 110px; border-radius: 10px; border: 2px solid #e1e8ed; cursor: pointer; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; opacity: 0.65; background: #f8f9fa;">
-                                <div
-                                    style="width: 100%; height: 100%; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #6c757d; font-size: 0.75rem; text-align: center; padding: 0.5rem; font-weight: 500;">
-                                    <i class="fas fa-image" style="font-size: 1.2rem; margin-bottom: 0.3rem; opacity: 0.5;"></i>
-                                    <span>照片4</span>
+                            <div class="photo-carousel-slide" data-index="2" style="position: absolute; width: 85%; opacity: 0; transform: scale(0.85) translateX(0); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; z-index: 1; filter: blur(2px);">
+                                <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
+                                    <div style="text-align: center; color: #6c757d;">
+                                        <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.4;"></i>
+                                        <p style="font-size: 1rem; margin: 0;">照片3 (預留)</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <button class="noticeboard-btn noticeboard-btn-next" id="photoCarouselNextBtn" aria-label="下一張">
+                            <i class="fas fa-hand-point-left"></i>
+                        </button>
+                    </div>
+                    <div class="photo-carousel-indicators" id="photoCarouselIndicators" style="display: flex; justify-content: center; gap: 8px; margin-top: 1rem; z-index: 10; width: 100%;">
+                        <!-- 指示器將由 JavaScript 動態生成 -->
                     </div>
                     <div class="class-description" style="text-align: left;">
                         <p style="margin-bottom: 1rem;">
@@ -566,62 +557,125 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
-        // 照片切換功能
+        // 照片輪播功能
         document.addEventListener('DOMContentLoaded', function () {
-            const mainPhoto = document.getElementById('mainPhoto');
-            const thumbnails = document.querySelectorAll('.thumbnail-photo');
+            const carouselContainer = document.querySelector('.photo-carousel-container');
+            const prevBtn = document.getElementById('photoCarouselPrevBtn');
+            const nextBtn = document.getElementById('photoCarouselNextBtn');
+            const indicators = document.getElementById('photoCarouselIndicators');
 
-            thumbnails.forEach((thumbnail, index) => {
-                thumbnail.addEventListener('click', function () {
-                    const photoSrc = this.getAttribute('data-src');
-                    if (photoSrc && photoSrc !== '') {
-                        // 切換大照片
-                        mainPhoto.src = photoSrc;
+            if (!carouselContainer) return;
 
-                        // 更新小照片的邊框樣式
-                        thumbnails.forEach((thumb, i) => {
-                            if (i === index) {
-                                thumb.style.borderColor = '#3498db';
-                                thumb.style.borderWidth = '3px';
-                                thumb.style.opacity = '1';
-                                thumb.style.boxShadow = '0 4px 12px rgba(52, 152, 219, 0.25)';
-                            } else {
-                                thumb.style.borderColor = '#e1e8ed';
-                                thumb.style.borderWidth = '2px';
-                                thumb.style.opacity = '0.65';
-                                thumb.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
-                            }
-                        });
+            const slides = carouselContainer.querySelectorAll('.photo-carousel-slide');
+            let currentIndex = 0;
+
+            // 顯示指定索引的照片
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active', 'prev', 'next');
+
+                    if (i === index) {
+                        slide.classList.add('active');
+                        slide.style.opacity = '1';
+                        slide.style.transform = 'scale(1.05) translateX(0)';
+                        slide.style.zIndex = '3';
+                        slide.style.pointerEvents = 'auto';
+                        slide.style.filter = 'blur(0)';
+                        slide.style.position = 'relative';
+                    } else if (i === index - 1 || (index === 0 && i === slides.length - 1)) {
+                        slide.classList.add('prev');
+                        slide.style.opacity = '0.4';
+                        slide.style.transform = 'scale(0.85) translateX(-35%)';
+                        slide.style.zIndex = '2';
+                        slide.style.pointerEvents = 'auto';
+                        slide.style.cursor = 'pointer';
+                        slide.style.filter = 'blur(1px)';
+                        slide.style.position = 'absolute';
+                    } else if (i === index + 1 || (index === slides.length - 1 && i === 0)) {
+                        slide.classList.add('next');
+                        slide.style.opacity = '0.4';
+                        slide.style.transform = 'scale(0.85) translateX(35%)';
+                        slide.style.zIndex = '2';
+                        slide.style.pointerEvents = 'auto';
+                        slide.style.cursor = 'pointer';
+                        slide.style.filter = 'blur(1px)';
+                        slide.style.position = 'absolute';
+                    } else {
+                        slide.style.opacity = '0';
+                        slide.style.transform = 'scale(0.85) translateX(0)';
+                        slide.style.zIndex = '1';
+                        slide.style.pointerEvents = 'none';
+                        slide.style.filter = 'blur(2px)';
+                        slide.style.position = 'absolute';
                     }
                 });
 
-                // 懸停效果
-                thumbnail.addEventListener('mouseenter', function () {
-                    if (this.style.opacity !== '1') {
-                        this.style.transform = 'scale(1.08)';
-                        this.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-                        this.style.opacity = '0.85';
-                    }
-                    // 如果是圖片，添加放大效果
-                    const img = this.querySelector('img');
-                    if (img) {
-                        img.style.transform = 'scale(1.1)';
-                    }
-                });
+                // 更新指示器
+                if (indicators) {
+                    const indicatorItems = indicators.querySelectorAll('.indicator');
+                    indicatorItems.forEach((indicator, i) => {
+                        if (i === index) {
+                            indicator.classList.add('active');
+                        } else {
+                            indicator.classList.remove('active');
+                        }
+                    });
+                }
 
-                thumbnail.addEventListener('mouseleave', function () {
-                    this.style.transform = 'scale(1)';
-                    if (this.style.opacity !== '1') {
-                        this.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
-                        this.style.opacity = '0.65';
-                    }
-                    // 恢復圖片
-                    const img = this.querySelector('img');
-                    if (img) {
-                        img.style.transform = 'scale(1)';
+                currentIndex = index;
+            }
+
+            // 切換到指定照片
+            function goToSlide(index) {
+                if (slides.length <= 1) return;
+                if (index < 0) {
+                    index = slides.length - 1;
+                } else if (index >= slides.length) {
+                    index = 0;
+                }
+                showSlide(index);
+            }
+
+            // 創建指示器
+            if (indicators && slides.length > 1) {
+                slides.forEach((_, index) => {
+                    const indicator = document.createElement('span');
+                    indicator.className = 'indicator';
+                    if (index === 0) indicator.classList.add('active');
+                    indicator.addEventListener('click', () => goToSlide(index));
+                    indicators.appendChild(indicator);
+                });
+            } else if (indicators) {
+                indicators.style.display = 'none';
+            }
+
+            // 上一張
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    goToSlide(currentIndex - 1);
+                });
+            }
+
+            // 下一張
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    goToSlide(currentIndex + 1);
+                });
+            }
+
+            // 點擊左右側照片也可以切換
+            slides.forEach((slide, index) => {
+                slide.addEventListener('click', (e) => {
+                    if (slide.classList.contains('prev')) {
+                        goToSlide(currentIndex - 1);
+                    } else if (slide.classList.contains('next')) {
+                        goToSlide(currentIndex + 1);
                     }
                 });
             });
+
+            // 初始化顯示第一張
+            showSlide(0);
         });
     </script>
     <script src="auth.js"></script>
