@@ -179,6 +179,53 @@
             margin-bottom: 0.5rem;
         }
 
+        /* 標籤頁樣式 */
+        .admin-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            background: transparent;
+            color: #5a6c7d;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn:hover {
+            background: #f5f7fa;
+            color: #2c3e50;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         .admin-content {
             background: white;
             border-radius: 16px;
@@ -415,7 +462,270 @@
             margin-bottom: 1rem;
         }
 
+        /* 成績管理樣式 */
+        .grades-management {
+            margin-top: 1.5rem;
+        }
+
+        .student-selector {
+            margin-bottom: 1.5rem;
+        }
+
+        .student-selector label {
+            display: block;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .grades-list {
+            margin-top: 1.5rem;
+        }
+
+        .grade-item {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .grade-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .grade-info {
+            flex: 1;
+        }
+
+        .grade-info h4 {
+            color: #2c3e50;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .grade-info p {
+            color: #5a6c7d;
+            font-size: 0.9rem;
+            margin: 0.25rem 0;
+        }
+
+        .grade-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-right: 1rem;
+        }
+
+        .grade-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* 訊息管理樣式 */
+        .message-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .message-tab-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e1e8ed;
+            background: white;
+            color: #5a6c7d;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .message-tab-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .message-tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .message-content {
+            display: none;
+            margin-top: 1.5rem;
+        }
+
+        .message-content.active {
+            display: block;
+        }
+
+        .messages-list {
+            margin-top: 1.5rem;
+        }
+
+        .message-item {
+            background: #f8f9fa;
+            border-left: 4px solid #14b8a6;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .message-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .message-student {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+
+        .message-date {
+            color: #5a6c7d;
+            font-size: 0.85rem;
+        }
+
+        .message-subject {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-content-text {
+            color: #2c3e50;
+            line-height: 1.6;
+            margin-top: 0.5rem;
+        }
+
+        /* 模态框樣式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #5a6c7d;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: #f0f0f0;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
         @media (max-width: 768px) {
+            .admin-tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+
             .students-table {
                 font-size: 0.9rem;
             }
@@ -427,6 +737,14 @@
 
             .action-buttons {
                 flex-direction: column;
+            }
+
+            .message-tabs {
+                flex-direction: column;
+            }
+
+            .message-tab-btn {
+                width: 100%;
             }
         }
     </style>
@@ -534,40 +852,212 @@
                 </div>
             </div>
 
-            <!-- 學生列表 -->
-            <div class="admin-content">
-                <div class="content-header">
-                    <h2>
-                        <i class="fas fa-list"></i>
-                        學生列表
-                    </h2>
-                    <div class="search-filter">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="searchInput" placeholder="搜尋學生姓名或學號..." onkeyup="filterStudents()">
+            <!-- 標籤頁導航 -->
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="switchTab('students')" data-tab="students">
+                    <i class="fas fa-users"></i>
+                    <span>學生列表</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('grades')" data-tab="grades">
+                    <i class="fas fa-chart-line"></i>
+                    <span>成績管理</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('messages')" data-tab="messages">
+                    <i class="fas fa-comments"></i>
+                    <span>學生訊息</span>
+                </button>
+            </div>
+
+            <!-- 學生列表標籤頁 -->
+            <div class="tab-content active" id="tab-students">
+                <div class="admin-content">
+                    <div class="content-header">
+                        <h2>
+                            <i class="fas fa-list"></i>
+                            學生列表
+                        </h2>
+                        <div class="search-filter">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchInput" placeholder="搜尋學生姓名或學號..." onkeyup="filterStudents()">
+                            </div>
+                            <select class="filter-select" id="statusFilter" onchange="filterStudents()">
+                                <option value="all">全部狀態</option>
+                                <option value="active">在線</option>
+                                <option value="inactive">離線</option>
+                                <option value="pending">待處理</option>
+                            </select>
+                            <button class="btn-primary" onclick="refreshStudents()">
+                                <i class="fas fa-sync-alt"></i>
+                                重新整理
+                            </button>
                         </div>
-                        <select class="filter-select" id="statusFilter" onchange="filterStudents()">
-                            <option value="all">全部狀態</option>
-                            <option value="active">在線</option>
-                            <option value="inactive">離線</option>
-                            <option value="pending">待處理</option>
-                        </select>
-                        <button class="btn-primary" onclick="refreshStudents()">
-                            <i class="fas fa-sync-alt"></i>
-                            重新整理
-                        </button>
+                    </div>
+
+                    <div id="studentsContainer">
+                        <div class="loading">
+                            <i class="fas fa-spinner"></i>
+                            <p>載入中...</p>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div id="studentsContainer">
-                    <div class="loading">
-                        <i class="fas fa-spinner"></i>
-                        <p>載入中...</p>
+            <!-- 成績管理標籤頁 -->
+            <div class="tab-content" id="tab-grades">
+                <div class="admin-content">
+                    <div class="content-header">
+                        <h2>
+                            <i class="fas fa-chart-line"></i>
+                            成績管理
+                        </h2>
+                        <button class="btn-primary" onclick="openAddGradeModal()">
+                            <i class="fas fa-plus"></i>
+                            新增成績
+                        </button>
+                    </div>
+
+                    <div class="grades-management">
+                        <div class="student-selector">
+                            <label for="gradeStudentSelect">
+                                <i class="fas fa-user"></i>
+                                選擇學生
+                            </label>
+                            <select id="gradeStudentSelect" class="filter-select" onchange="loadStudentGrades()" style="width: 100%;">
+                                <option value="">請選擇學生</option>
+                            </select>
+                        </div>
+
+                        <div id="gradesContainer" class="grades-list">
+                            <div class="empty-state">
+                                <i class="fas fa-chart-line"></i>
+                                <p>請先選擇學生查看成績</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 學生訊息標籤頁 -->
+            <div class="tab-content" id="tab-messages">
+                <div class="admin-content">
+                    <div class="content-header">
+                        <h2>
+                            <i class="fas fa-comments"></i>
+                            學生訊息
+                        </h2>
+                        <div class="message-tabs">
+                            <button class="message-tab-btn active" onclick="switchMessageTab('reflections')" data-message-tab="reflections">
+                                <i class="fas fa-lightbulb"></i>
+                                學習心得
+                            </button>
+                            <button class="message-tab-btn" onclick="switchMessageTab('feedback')" data-message-tab="feedback">
+                                <i class="fas fa-envelope"></i>
+                                待回覆
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 學習心得 -->
+                    <div class="message-content active" id="message-reflections">
+                        <div class="student-selector">
+                            <label for="reflectionStudentSelect">
+                                <i class="fas fa-user"></i>
+                                選擇學生
+                            </label>
+                            <select id="reflectionStudentSelect" class="filter-select" onchange="loadStudentReflections()" style="width: 100%;">
+                                <option value="">全部學生</option>
+                            </select>
+                        </div>
+                        <div id="reflectionsContainer" class="messages-list">
+                            <div class="loading">
+                                <i class="fas fa-spinner"></i>
+                                <p>載入中...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 待回覆訊息 -->
+                    <div class="message-content" id="message-feedback">
+                        <div id="feedbackContainer" class="messages-list">
+                            <div class="loading">
+                                <i class="fas fa-spinner"></i>
+                                <p>載入中...</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- 新增成績模态框 -->
+    <div class="modal" id="addGradeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-chart-line"></i>
+                    新增成績
+                </h3>
+                <button class="modal-close" onclick="closeAddGradeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="addGradeForm" onsubmit="handleAddGrade(event)">
+                <div class="form-group">
+                    <label for="gradeStudentId">
+                        <i class="fas fa-user"></i>
+                        學生
+                    </label>
+                    <select id="gradeStudentId" class="form-control" required>
+                        <option value="">請選擇學生</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="gradeSubject">
+                        <i class="fas fa-book"></i>
+                        科目
+                    </label>
+                    <select id="gradeSubject" class="form-control" required>
+                        <option value="">請選擇科目</option>
+                        <option value="國文">國文</option>
+                        <option value="英文">英文</option>
+                        <option value="數學">數學</option>
+                        <option value="自然">自然</option>
+                        <option value="社會">社會</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="gradeScore">
+                        <i class="fas fa-star"></i>
+                        分數
+                    </label>
+                    <input type="number" id="gradeScore" class="form-control" min="0" max="100" required placeholder="請輸入分數 (0-100)">
+                </div>
+                <div class="form-group">
+                    <label for="gradeComment">
+                        <i class="fas fa-comment"></i>
+                        評語
+                    </label>
+                    <textarea id="gradeComment" class="form-control" rows="3" placeholder="請輸入評語（選填）"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="gradeExamDate">
+                        <i class="fas fa-calendar"></i>
+                        考試日期
+                    </label>
+                    <input type="date" id="gradeExamDate" class="form-control">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeAddGradeModal()">取消</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i>
+                        儲存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
         let allStudents = [];
@@ -838,6 +1328,373 @@
         // 編輯學生
         function editStudent(studentId) {
             alert(`編輯學生 ${studentId}（功能開發中）`);
+        }
+
+        // 標籤頁切換
+        function switchTab(tabName) {
+            // 隱藏所有標籤頁內容
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // 移除所有按鈕的 active 狀態
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // 顯示選中的標籤頁
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+            // 根據標籤頁載入對應資料
+            if (tabName === 'grades') {
+                loadStudentsForGrades();
+            } else if (tabName === 'messages') {
+                loadStudentsForMessages();
+                loadStudentReflections();
+            }
+        }
+
+        // 訊息標籤頁切換
+        function switchMessageTab(tabName) {
+            document.querySelectorAll('.message-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            document.querySelectorAll('.message-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(`message-${tabName}`).classList.add('active');
+            document.querySelector(`[data-message-tab="${tabName}"]`).classList.add('active');
+
+            if (tabName === 'reflections') {
+                loadStudentReflections();
+            } else if (tabName === 'feedback') {
+                loadAllFeedback();
+            }
+        }
+
+        // 載入學生列表（用於成績管理）
+        function loadStudentsForGrades() {
+            const select = document.getElementById('gradeStudentSelect');
+            select.innerHTML = '<option value="">請選擇學生</option>';
+            
+            allStudents.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.student_id;
+                option.textContent = `${student.student_id} - ${student.student_name}`;
+                select.appendChild(option);
+            });
+        }
+
+        // 載入學生列表（用於訊息管理）
+        function loadStudentsForMessages() {
+            const select = document.getElementById('reflectionStudentSelect');
+            select.innerHTML = '<option value="">全部學生</option>';
+            
+            allStudents.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.student_id;
+                option.textContent = `${student.student_id} - ${student.student_name}`;
+                select.appendChild(option);
+            });
+        }
+
+        // 載入學生成績
+        async function loadStudentGrades() {
+            const studentId = document.getElementById('gradeStudentSelect').value;
+            const container = document.getElementById('gradesContainer');
+
+            if (!studentId) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-chart-line"></i>
+                        <p>請先選擇學生查看成績</p>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                container.innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-spinner"></i>
+                        <p>載入中...</p>
+                    </div>
+                `;
+
+                const response = await fetch(`/api/grades?studentId=${studentId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('無法載入成績');
+
+                const data = await response.json();
+                const grades = data.grades || [];
+
+                if (grades.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-chart-line"></i>
+                            <p>該學生尚無成績記錄</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = grades.map(grade => `
+                    <div class="grade-item">
+                        <div class="grade-info">
+                            <h4>${grade.subject}</h4>
+                            <p>${grade.comment || '無評語'}</p>
+                            <p style="font-size: 0.85rem; color: #8899a6;">
+                                <i class="fas fa-calendar"></i>
+                                ${grade.exam_date ? new Date(grade.exam_date).toLocaleDateString('zh-TW') : '未設定日期'}
+                            </p>
+                        </div>
+                        <div class="grade-score">${grade.score}</div>
+                        <div class="grade-actions">
+                            <button class="btn-icon" onclick="editGrade('${grade.id || ''}', '${studentId}')" title="編輯">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('載入成績錯誤:', error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>無法載入成績，請稍後再試</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 載入學生學習心得
+        async function loadStudentReflections() {
+            const studentId = document.getElementById('reflectionStudentSelect')?.value || '';
+            const container = document.getElementById('reflectionsContainer');
+
+            try {
+                container.innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-spinner"></i>
+                        <p>載入中...</p>
+                    </div>
+                `;
+
+                let url = '/api/reflections';
+                if (studentId) {
+                    url += `?studentId=${studentId}`;
+                } else {
+                    // 載入所有學生的心得（需要後端支援）
+                    url += '?all=true';
+                }
+
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('無法載入學習心得');
+
+                const data = await response.json();
+                const reflections = data.reflections || [];
+
+                if (reflections.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-lightbulb"></i>
+                            <p>尚無學習心得記錄</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // 獲取學生名稱映射
+                const studentMap = {};
+                allStudents.forEach(s => {
+                    studentMap[s.student_id] = s.student_name;
+                });
+
+                container.innerHTML = reflections.map(reflection => `
+                    <div class="message-item">
+                        <div class="message-header">
+                            <span class="message-student">
+                                ${studentMap[reflection.student_id] || reflection.student_id}
+                            </span>
+                            <span class="message-date">
+                                ${new Date(reflection.date).toLocaleDateString('zh-TW')}
+                            </span>
+                        </div>
+                        <span class="message-subject">${reflection.subject}</span>
+                        <div class="message-content-text">${reflection.content}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('載入學習心得錯誤:', error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>無法載入學習心得，請稍後再試</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 載入所有待回覆訊息
+        async function loadAllFeedback() {
+            const container = document.getElementById('feedbackContainer');
+
+            try {
+                container.innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-spinner"></i>
+                        <p>載入中...</p>
+                    </div>
+                `;
+
+                // 這裡需要後端 API 支援獲取所有學生的 feedback
+                // 暫時使用學生列表來獲取
+                const feedbacks = [];
+                for (const student of allStudents) {
+                    try {
+                        const response = await fetch(`/api/feedback?studentId=${student.student_id}`, {
+                            headers: {
+                                'Authorization': `Bearer ${authToken}`
+                            }
+                        });
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.feedback && data.feedback.length > 0) {
+                                data.feedback.forEach(fb => {
+                                    feedbacks.push({
+                                        ...fb,
+                                        student_id: student.student_id,
+                                        student_name: student.student_name
+                                    });
+                                });
+                            }
+                        }
+                    } catch (err) {
+                        console.error(`載入 ${student.student_id} 的 feedback 失敗:`, err);
+                    }
+                }
+
+                if (feedbacks.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-envelope"></i>
+                            <p>尚無待回覆訊息</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = feedbacks.map(fb => `
+                    <div class="message-item">
+                        <div class="message-header">
+                            <span class="message-student">${fb.student_name || fb.student_id}</span>
+                            <span class="message-date">
+                                ${new Date(fb.created_at).toLocaleDateString('zh-TW')}
+                            </span>
+                        </div>
+                        <h4 style="color: #2c3e50; margin-bottom: 0.5rem;">${fb.title}</h4>
+                        <div class="message-content-text">${fb.content}</div>
+                        ${!fb.is_read ? '<span style="display: inline-block; background: #ff6b6b; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-top: 0.5rem;">未讀</span>' : ''}
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('載入待回覆訊息錯誤:', error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>無法載入訊息，請稍後再試</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 打開新增成績模态框
+        function openAddGradeModal() {
+            const modal = document.getElementById('addGradeModal');
+            const select = document.getElementById('gradeStudentId');
+            
+            // 載入學生列表
+            select.innerHTML = '<option value="">請選擇學生</option>';
+            allStudents.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.student_id;
+                option.textContent = `${student.student_id} - ${student.student_name}`;
+                select.appendChild(option);
+            });
+
+            // 設定今天為預設日期
+            document.getElementById('gradeExamDate').value = new Date().toISOString().split('T')[0];
+            
+            modal.classList.add('active');
+        }
+
+        // 關閉新增成績模态框
+        function closeAddGradeModal() {
+            document.getElementById('addGradeModal').classList.remove('active');
+            document.getElementById('addGradeForm').reset();
+        }
+
+        // 處理新增成績
+        async function handleAddGrade(event) {
+            event.preventDefault();
+
+            const studentId = document.getElementById('gradeStudentId').value;
+            const subject = document.getElementById('gradeSubject').value;
+            const score = parseInt(document.getElementById('gradeScore').value);
+            const comment = document.getElementById('gradeComment').value;
+            const examDate = document.getElementById('gradeExamDate').value;
+
+            try {
+                const response = await fetch('/api/grades', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        studentId,
+                        subject,
+                        score,
+                        comment: comment || null,
+                        examDate: examDate || null
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success || response.ok) {
+                    alert('成績已成功新增！');
+                    closeAddGradeModal();
+                    // 如果當前在成績管理頁面，重新載入成績
+                    if (document.getElementById('tab-grades').classList.contains('active')) {
+                        loadStudentGrades();
+                    }
+                    // 重新載入學生列表以更新統計
+                    loadStudents();
+                } else {
+                    alert(data.error || '新增成績失敗');
+                }
+            } catch (error) {
+                console.error('新增成績錯誤:', error);
+                alert('新增成績失敗，請稍後再試');
+            }
+        }
+
+        // 編輯成績（佔位）
+        function editGrade(gradeId, studentId) {
+            alert(`編輯成績功能開發中 (成績ID: ${gradeId})`);
         }
 
         // 頁面載入時執行
