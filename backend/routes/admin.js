@@ -69,10 +69,54 @@ router.post('/login', async (req, res) => {
     }
 
     // 查询老师
-    const [teachers] = await pool.query(
-      'SELECT * FROM teachers WHERE teacher_id = ?',
-      [teacherId]
-    );
+    let teachers;
+    try {
+      [teachers] = await pool.query(
+        'SELECT * FROM teachers WHERE teacher_id = ?',
+        [teacherId]
+      );
+    } catch (dbError) {
+      // 如果表不存在，自动创建表并初始化
+      if (dbError.code === 'ER_NO_SUCH_TABLE') {
+        console.log('📝 teachers 表不存在，正在自动创建...');
+        try {
+          // 创建 teachers 表
+          await pool.query(`
+            CREATE TABLE IF NOT EXISTS teachers (
+              id INT AUTO_INCREMENT PRIMARY KEY,
+              teacher_id VARCHAR(50) UNIQUE NOT NULL,
+              teacher_name VARCHAR(100) NOT NULL,
+              password VARCHAR(255) NOT NULL,
+              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+              updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+          `);
+          
+          // 创建默认老师账号
+          const hashedPassword = await bcrypt.hash('BMN-5680!@', 10);
+          await pool.query(
+            'INSERT INTO teachers (teacher_id, teacher_name, password) VALUES (?, ?, ?)',
+            ['BMN-5680', '鈺倫老師', hashedPassword]
+          );
+          
+          console.log('✅ teachers 表和默认账号创建成功');
+          
+          // 重新查询
+          [teachers] = await pool.query(
+            'SELECT * FROM teachers WHERE teacher_id = ?',
+            [teacherId]
+          );
+        } catch (createError) {
+          console.error('创建 teachers 表失败:', createError);
+          return res.status(500).json({ 
+            success: false,
+            error: '数据库初始化失败，请稍后重试' 
+          });
+        }
+      } else {
+        throw dbError;
+      }
+    }
 
     if (teachers.length === 0) {
       return res.status(401).json({ 
