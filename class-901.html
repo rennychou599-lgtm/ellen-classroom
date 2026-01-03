@@ -248,6 +248,8 @@
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
             border: 1px solid #e1e8ed;
             margin-bottom: 2rem;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .class-description p {
@@ -255,6 +257,8 @@
             line-height: 1.8;
             font-size: 1.05rem;
             margin-bottom: 1rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .class-description p:last-child {
@@ -265,6 +269,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
+            align-items: stretch;
         }
 
         .activity-card {
@@ -275,6 +280,9 @@
             border: 1px solid #e1e8ed;
             border-left: 4px solid #3498db;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .activity-card:hover {
