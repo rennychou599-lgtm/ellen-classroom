@@ -123,33 +123,6 @@
             display: block;
         }
 
-        /* Header 登出按钮样式 */
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .header-actions .btn-secondary {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: white;
-            border: 2px solid #e1e8ed;
-            border-radius: 8px;
-            color: #2c3e50;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .header-actions .btn-secondary:hover {
-            background: #f5f7fa;
-            border-color: #667eea;
-            color: #667eea;
-        }
 
         .admin-page {
             min-height: 100vh;
@@ -501,12 +474,6 @@
                     <span class="logo-text">鈺倫の教室</span>
                 </div>
             </div>
-            <div class="header-actions" id="adminHeaderActions" style="display: none;">
-                <button class="btn-secondary" onclick="logout()" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>登出</span>
-                </button>
-            </div>
             <nav class="main-navigation">
                 <ul class="nav-menu">
                     <li class="menu-item">
@@ -523,6 +490,13 @@
                     </li>
                 </ul>
             </nav>
+            <!-- 右側按鈕 -->
+            <div class="header-actions" id="adminHeaderActions" style="display: none;">
+                <button class="btn btn-outline" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>登出</span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -572,10 +546,6 @@
                     <i class="fas fa-chalkboard-teacher"></i>
                     老師管理後台
                 </h1>
-                <button class="btn-secondary" onclick="window.location.href='index.html'">
-                    <i class="fas fa-arrow-left"></i>
-                    返回首頁
-                </button>
             </div>
 
             <!-- 統計卡片 -->
