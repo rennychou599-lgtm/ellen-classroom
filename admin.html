@@ -11,6 +11,118 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* 登入模态框样式 */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .login-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .login-modal-content {
+            position: relative;
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .login-modal.active .login-modal-content {
+            transform: scale(1);
+        }
+
+        .login-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #5a6c7d;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .login-modal-close:hover {
+            background: #f0f0f0;
+            color: #2c3e50;
+        }
+
+        .login-form h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .login-form p {
+            color: #5a6c7d;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .login-error {
+            background: #fee;
+            color: #c33;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
         .admin-page {
             min-height: 100vh;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -380,8 +492,45 @@
         </div>
     </header>
 
+    <!-- 登入模态框 -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-modal-content">
+            <button class="login-modal-close" onclick="closeLoginModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="login-form">
+                <h2>
+                    <i class="fas fa-user-shield"></i>
+                    老師登入
+                </h2>
+                <p>請輸入您的帳號和密碼</p>
+                <div class="login-error" id="loginError"></div>
+                <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+                    <div class="form-group">
+                        <label for="teacherId">
+                            <i class="fas fa-user"></i>
+                            老師帳號
+                        </label>
+                        <input type="text" id="teacherId" name="teacherId" required placeholder="請輸入老師帳號">
+                    </div>
+                    <div class="form-group">
+                        <label for="teacherPassword">
+                            <i class="fas fa-lock"></i>
+                            密碼
+                        </label>
+                        <input type="password" id="teacherPassword" name="password" required placeholder="請輸入密碼">
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">
+                        <i class="fas fa-sign-in-alt"></i>
+                        登入
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- 管理後台內容 -->
-    <section class="admin-page">
+    <section class="admin-page" id="adminContent" style="display: none;">
         <div class="admin-container">
             <!-- 標題區域 -->
             <div class="admin-header">
@@ -389,10 +538,16 @@
                     <i class="fas fa-chalkboard-teacher"></i>
                     老師管理後台
                 </h1>
-                <button class="btn-secondary" onclick="window.location.href='index.html'">
-                    <i class="fas fa-arrow-left"></i>
-                    返回首頁
-                </button>
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn-secondary" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        登出
+                    </button>
+                    <button class="btn-secondary" onclick="window.location.href='index.html'">
+                        <i class="fas fa-arrow-left"></i>
+                        返回首頁
+                    </button>
+                </div>
             </div>
 
             <!-- 統計卡片 -->
@@ -456,12 +611,93 @@
 
     <script>
         let allStudents = [];
+        let authToken = null;
+
+        // 檢查登入狀態
+        function checkAuth() {
+            const token = localStorage.getItem('adminToken');
+            const teacherInfo = localStorage.getItem('adminTeacher');
+            
+            if (token && teacherInfo) {
+                authToken = token;
+                document.getElementById('loginModal').classList.remove('active');
+                document.getElementById('adminContent').style.display = 'block';
+                loadStudents();
+            } else {
+                document.getElementById('loginModal').classList.add('active');
+                document.getElementById('adminContent').style.display = 'none';
+            }
+        }
+
+        // 關閉登入模态框
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        // 處理老師登入
+        async function handleAdminLogin(event) {
+            event.preventDefault();
+            const errorDiv = document.getElementById('loginError');
+            errorDiv.classList.remove('show');
+            errorDiv.textContent = '';
+
+            const teacherId = document.getElementById('teacherId').value;
+            const password = document.getElementById('teacherPassword').value;
+
+            try {
+                const response = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ teacherId, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // 保存登入信息
+                    localStorage.setItem('adminToken', data.token);
+                    localStorage.setItem('adminTeacher', JSON.stringify(data.teacher));
+                    authToken = data.token;
+                    
+                    // 關閉登入模态框，顯示後台內容
+                    closeLoginModal();
+                    document.getElementById('adminContent').style.display = 'block';
+                    loadStudents();
+                } else {
+                    errorDiv.textContent = data.error || '登入失敗';
+                    errorDiv.classList.add('show');
+                }
+            } catch (error) {
+                console.error('登入錯誤:', error);
+                errorDiv.textContent = '登入失敗，請稍後再試';
+                errorDiv.classList.add('show');
+            }
+        }
+
+        // 登出
+        function logout() {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminTeacher');
+            authToken = null;
+            checkAuth();
+        }
 
         // 載入學生資料
         async function loadStudents() {
             try {
-                const response = await fetch('/api/admin/students');
+                const response = await fetch('/api/admin/students', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
                 if (!response.ok) {
+                    if (response.status === 401) {
+                        // 未授权，重新登录
+                        logout();
+                        return;
+                    }
                     throw new Error('無法載入學生資料');
                 }
                 const data = await response.json();
@@ -642,7 +878,7 @@
 
         // 頁面載入時執行
         document.addEventListener('DOMContentLoaded', () => {
-            loadStudents();
+            checkAuth();
         });
     </script>
     <script src="auth.js"></script>

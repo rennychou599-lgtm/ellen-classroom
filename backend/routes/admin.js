@@ -1,10 +1,116 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const { pool } = require('../config/database');
 
 const router = express.Router();
 
-// 獲取所有學生資料
-router.get('/students', async (req, res) => {
+// 认证中间件
+const authenticateTeacher = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ 
+        success: false,
+        error: '未授权，请先登录' 
+      });
+    }
+
+    const token = authHeader.substring(7);
+    // 简单的 token 验证（实际应该使用 JWT）
+    // 这里使用 localStorage 存储的 token
+    const teacherId = token;
+    
+    const [teachers] = await pool.query(
+      'SELECT * FROM teachers WHERE teacher_id = ?',
+      [teacherId]
+    );
+
+    if (teachers.length === 0) {
+      return res.status(401).json({ 
+        success: false,
+        error: '未授权' 
+      });
+    }
+
+    req.teacher = teachers[0];
+    next();
+  } catch (error) {
+    console.error('认证错误:', error);
+    res.status(500).json({ 
+      success: false,
+      error: '认证失败' 
+    });
+  }
+};
+
+// 老师登录
+router.post('/login', async (req, res) => {
+  try {
+    const { teacherId, password } = req.body;
+
+    if (!teacherId || !password) {
+      return res.status(400).json({ 
+        success: false,
+        error: '請提供老師帳號和密碼' 
+      });
+    }
+
+    // 查询老师
+    const [teachers] = await pool.query(
+      'SELECT * FROM teachers WHERE teacher_id = ?',
+      [teacherId]
+    );
+
+    if (teachers.length === 0) {
+      return res.status(401).json({ 
+        success: false,
+        error: '帳號或密碼錯誤' 
+      });
+    }
+
+    const teacher = teachers[0];
+
+    // 验证密码
+    const isValidPassword = await bcrypt.compare(password, teacher.password);
+    if (!isValidPassword) {
+      return res.status(401).json({ 
+        success: false,
+        error: '帳號或密碼錯誤' 
+      });
+    }
+
+    // 返回老师信息（不包含密码）
+    res.json({
+      success: true,
+      teacher: {
+        teacherId: teacher.teacher_id,
+        teacherName: teacher.teacher_name
+      },
+      token: teacher.teacher_id // 简单的 token（实际应该使用 JWT）
+    });
+
+  } catch (error) {
+    console.error('登录错误:', error);
+    res.status(500).json({ 
+      success: false,
+      error: '伺服器錯誤' 
+    });
+  }
+});
+
+// 检查登录状态
+router.get('/check-auth', authenticateTeacher, async (req, res) => {
+  res.json({
+    success: true,
+    teacher: {
+      teacherId: req.teacher.teacher_id,
+      teacherName: req.teacher.teacher_name
+    }
+  });
+});
+
+// 獲取所有學生資料（需要认证）
+router.get('/students', authenticateTeacher, async (req, res) => {
   try {
     // 獲取所有學生基本資料
     const [students] = await pool.query(
@@ -74,8 +180,8 @@ router.get('/students', async (req, res) => {
   }
 });
 
-// 獲取單個學生詳情
-router.get('/students/:studentId', async (req, res) => {
+// 獲取單個學生詳情（需要认证）
+router.get('/students/:studentId', authenticateTeacher, async (req, res) => {
   try {
     const { studentId } = req.params;
 
