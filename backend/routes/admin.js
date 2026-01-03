@@ -20,20 +20,33 @@ const authenticateTeacher = async (req, res, next) => {
     // 这里使用 localStorage 存储的 token
     const teacherId = token;
     
-    const [teachers] = await pool.query(
-      'SELECT * FROM teachers WHERE teacher_id = ?',
-      [teacherId]
-    );
+    // 检查 teachers 表是否存在
+    try {
+      const [teachers] = await pool.query(
+        'SELECT * FROM teachers WHERE teacher_id = ?',
+        [teacherId]
+      );
 
-    if (teachers.length === 0) {
-      return res.status(401).json({ 
-        success: false,
-        error: '未授权' 
-      });
+      if (teachers.length === 0) {
+        return res.status(401).json({ 
+          success: false,
+          error: '未授权' 
+        });
+      }
+
+      req.teacher = teachers[0];
+      next();
+    } catch (dbError) {
+      // 如果表不存在，返回友好错误
+      if (dbError.code === 'ER_NO_SUCH_TABLE') {
+        console.error('teachers 表不存在，请先初始化数据库');
+        return res.status(500).json({ 
+          success: false,
+          error: '数据库未初始化，请先创建老师账号' 
+        });
+      }
+      throw dbError;
     }
-
-    req.teacher = teachers[0];
-    next();
   } catch (error) {
     console.error('认证错误:', error);
     res.status(500).json({ 

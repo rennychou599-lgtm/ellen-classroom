@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const compression = require('compression');
 require('dotenv').config();
 
@@ -73,7 +74,6 @@ app.use(express.static(staticPath, {
 if (process.env.NODE_ENV !== 'production') {
   app.use((req, res, next) => {
     if (req.path.endsWith('.html')) {
-      const fs = require('fs');
       const filePath = path.join(staticPath, req.path);
       console.log('🔍 检查文件:', filePath, '存在:', fs.existsSync(filePath));
     }
@@ -94,16 +94,11 @@ app.use('/api/progress', progressRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/admin', adminRoutes);
 
-// 404 处理（API 路由）
-app.use('/api/*', (req, res) => {
-  res.status(404).json({ error: 'API 路由不存在' });
-});
-
 // SPA 路由回退（所有非 API 路由返回 index.html）
 // 注意：静态文件中间件已经处理了所有存在的静态文件
 // 这个中间件只处理不存在的路径（用于 SPA 路由）
 app.get('*', (req, res, next) => {
-  // 如果是 API 请求，不应该到这里（应该在上面被处理）
+  // 如果是 API 请求，返回 404
   if (req.path.startsWith('/api')) {
     return res.status(404).json({ error: 'API 路由不存在' });
   }
