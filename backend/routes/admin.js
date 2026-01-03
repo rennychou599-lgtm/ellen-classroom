@@ -29,18 +29,18 @@ const authenticateTeacher = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ 
+      return res.status(401).json({
         success: false,
-        error: '未授权，请先登录' 
+        error: '未授权，请先登录'
       });
     }
 
     const token = authHeader.substring(7);
-    
+
     try {
       // 验证 JWT token
       const decoded = jwt.verify(token, JWT_SECRET);
-      
+
       // 检查 teachers 表是否存在
       try {
         const [teachers] = await pool.query(
@@ -49,9 +49,9 @@ const authenticateTeacher = async (req, res, next) => {
         );
 
         if (teachers.length === 0) {
-          return res.status(401).json({ 
+          return res.status(401).json({
             success: false,
-            error: '未授权' 
+            error: '未授权'
           });
         }
 
@@ -61,9 +61,9 @@ const authenticateTeacher = async (req, res, next) => {
         // 如果表不存在，返回友好错误
         if (dbError.code === 'ER_NO_SUCH_TABLE') {
           console.error('teachers 表不存在，请先初始化数据库');
-          return res.status(500).json({ 
+          return res.status(500).json({
             success: false,
-            error: '数据库未初始化，请先创建老师账号' 
+            error: '数据库未初始化，请先创建老师账号'
           });
         }
         throw dbError;
@@ -71,21 +71,21 @@ const authenticateTeacher = async (req, res, next) => {
     } catch (jwtError) {
       // JWT 验证失败（过期、无效等）
       if (jwtError.name === 'TokenExpiredError') {
-        return res.status(401).json({ 
+        return res.status(401).json({
           success: false,
-          error: '登录已过期，请重新登录' 
+          error: '登录已过期，请重新登录'
         });
       }
-      return res.status(401).json({ 
+      return res.status(401).json({
         success: false,
-        error: '无效的登录凭证' 
+        error: '无效的登录凭证'
       });
     }
   } catch (error) {
     console.error('认证错误:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      error: '认证失败' 
+      error: '认证失败'
     });
   }
 };
@@ -96,9 +96,9 @@ router.post('/login', async (req, res) => {
     const { teacherId, password } = req.body;
 
     if (!teacherId || !password) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        error: '請提供老師帳號和密碼' 
+        error: '請提供老師帳號和密碼'
       });
     }
 
@@ -112,9 +112,9 @@ router.post('/login', async (req, res) => {
       if (attempts.count >= MAX_LOGIN_ATTEMPTS) {
         if (timeSinceLastAttempt < LOCKOUT_TIME) {
           const remainingTime = Math.ceil((LOCKOUT_TIME - timeSinceLastAttempt) / 1000 / 60);
-          return res.status(429).json({ 
+          return res.status(429).json({
             success: false,
-            error: `登录尝试次数过多，请 ${remainingTime} 分钟后再试` 
+            error: `登录尝试次数过多，请 ${remainingTime} 分钟后再试`
           });
         } else {
           // 锁定时间已过，重置计数
@@ -124,59 +124,15 @@ router.post('/login', async (req, res) => {
     }
 
     // 查询老师
-    let teachers;
-    try {
-      [teachers] = await pool.query(
-        'SELECT * FROM teachers WHERE teacher_id = ?',
-        [teacherId]
-      );
-    } catch (dbError) {
-      // 如果表不存在，自动创建表并初始化
-      if (dbError.code === 'ER_NO_SUCH_TABLE') {
-        console.log('📝 teachers 表不存在，正在自动创建...');
-        try {
-          // 创建 teachers 表
-          await pool.query(`
-            CREATE TABLE IF NOT EXISTS teachers (
-              id INT AUTO_INCREMENT PRIMARY KEY,
-              teacher_id VARCHAR(50) UNIQUE NOT NULL,
-              teacher_name VARCHAR(100) NOT NULL,
-              password VARCHAR(255) NOT NULL,
-              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-              updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-          `);
-          
-          // 创建默认老师账号
-          const hashedPassword = await bcrypt.hash('999', 10);
-          await pool.query(
-            'INSERT INTO teachers (teacher_id, teacher_name, password) VALUES (?, ?, ?)',
-            ['A100', '鈺倫老師', hashedPassword]
-          );
-          
-          console.log('✅ teachers 表和默认账号创建成功');
-          
-          // 重新查询
-          [teachers] = await pool.query(
-            'SELECT * FROM teachers WHERE teacher_id = ?',
-            [teacherId]
-          );
-        } catch (createError) {
-          console.error('创建 teachers 表失败:', createError);
-          return res.status(500).json({ 
-            success: false,
-            error: '数据库初始化失败，请稍后重试' 
-          });
-        }
-      } else {
-        throw dbError;
-      }
-    }
+    const [teachers] = await pool.query(
+      'SELECT * FROM teachers WHERE teacher_id = ?',
+      [teacherId]
+    );
 
     if (teachers.length === 0) {
-      return res.status(401).json({ 
+      return res.status(401).json({
         success: false,
-        error: '帳號或密碼錯誤' 
+        error: '帳號或密碼錯誤'
       });
     }
 
@@ -192,9 +148,9 @@ router.post('/login', async (req, res) => {
       loginAttempts.set(attemptKey, currentAttempts);
 
       const remainingAttempts = MAX_LOGIN_ATTEMPTS - currentAttempts.count;
-      return res.status(401).json({ 
+      return res.status(401).json({
         success: false,
-        error: remainingAttempts > 0 
+        error: remainingAttempts > 0
           ? `帳號或密碼錯誤，還剩 ${remainingAttempts} 次嘗試機會`
           : '帳號或密碼錯誤，已達到最大嘗試次數'
       });
@@ -205,7 +161,7 @@ router.post('/login', async (req, res) => {
 
     // 生成 JWT token
     const token = jwt.sign(
-      { 
+      {
         teacherId: teacher.teacher_id,
         teacherName: teacher.teacher_name
       },
@@ -225,9 +181,9 @@ router.post('/login', async (req, res) => {
 
   } catch (error) {
     console.error('登录错误:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      error: '伺服器錯誤' 
+      error: '伺服器錯誤'
     });
   }
 });
@@ -243,10 +199,10 @@ router.get('/check-auth', authenticateTeacher, async (req, res) => {
   });
 });
 
-// 初始化老师账号（仅用于首次设置，需要特殊密钥或仅允许一次）
+// 初始化老师账号（仅创建表，不创建默认账号）
 router.post('/init-teacher', async (req, res) => {
   try {
-    // 创建 teachers 表（如果不存在）
+    // 只创建 teachers 表（如果不存在），不创建默认账号
     await pool.query(`
       CREATE TABLE IF NOT EXISTS teachers (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -258,38 +214,12 @@ router.post('/init-teacher', async (req, res) => {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     `);
 
-    // 检查老师是否已存在
-    const [existing] = await pool.query(
-      'SELECT * FROM teachers WHERE teacher_id = ?',
-      ['A100']
-    );
-
-    // 加密密码
-    const hashedPassword = await bcrypt.hash('999', 10);
-
-    if (existing.length > 0) {
-      // 更新密码
-      await pool.query(
-        'UPDATE teachers SET password = ?, teacher_name = ? WHERE teacher_id = ?',
-        [hashedPassword, '鈺倫老師', 'BMN-5680']
-      );
-      res.json({
-        success: true,
-        message: '老师账号密码已更新'
-      });
-    } else {
-      // 创建新账号
-      await pool.query(
-        'INSERT INTO teachers (teacher_id, teacher_name, password) VALUES (?, ?, ?)',
-        ['BMN-5680', '鈺倫老師', hashedPassword]
-      );
-      res.json({
-        success: true,
-        message: '老师账号创建成功'
-      });
-    }
+    res.json({
+      success: true,
+      message: 'teachers 表已创建，请手动添加老师账号'
+    });
   } catch (error) {
-    console.error('初始化老师账号错误:', error);
+    console.error('初始化 teachers 表错误:', error);
     res.status(500).json({
       success: false,
       error: '初始化失败'
@@ -342,7 +272,7 @@ router.get('/students', authenticateTeacher, async (req, res) => {
           [student.student_id]
         ).catch(() => [[{ avg_score: null }]]);
 
-        const averageGrade = gradeData[0]?.avg_score 
+        const averageGrade = gradeData[0]?.avg_score
           ? parseFloat(gradeData[0].avg_score).toFixed(1)
           : null;
 
@@ -361,9 +291,9 @@ router.get('/students', authenticateTeacher, async (req, res) => {
 
   } catch (error) {
     console.error('獲取學生資料錯誤:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      error: '伺服器錯誤' 
+      error: '伺服器錯誤'
     });
   }
 });
@@ -379,9 +309,9 @@ router.get('/students/:studentId', authenticateTeacher, async (req, res) => {
     );
 
     if (students.length === 0) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        error: '學生不存在' 
+        error: '學生不存在'
       });
     }
 
@@ -410,9 +340,9 @@ router.get('/students/:studentId', authenticateTeacher, async (req, res) => {
 
   } catch (error) {
     console.error('獲取學生詳情錯誤:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      error: '伺服器錯誤' 
+      error: '伺服器錯誤'
     });
   }
 });

@@ -7,10 +7,10 @@ require('dotenv').config();
 
 async function createTeacherLocal() {
   let connection;
-  
+
   try {
     console.log('📝 开始创建本地老师账号...');
-    
+
     // 创建数据库连接
     connection = await mysql.createConnection({
       host: process.env.MYSQLHOST || process.env.MYSQL_HOST || process.env.DB_HOST || 'localhost',
@@ -34,43 +34,14 @@ async function createTeacherLocal() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     `);
     console.log('✅ teachers 表已创建或已存在');
-
-    // 检查老师是否已存在
-    const [existing] = await connection.query(
-      'SELECT * FROM teachers WHERE teacher_id = ?',
-      ['A100']
-    );
-
-    // 加密密码
-    const hashedPassword = await bcrypt.hash('999', 10);
-    console.log('✅ 密码已加密');
-
-    if (existing.length > 0) {
-      console.log('📝 老师账号已存在，更新密码...');
-      await connection.query(
-        'UPDATE teachers SET password = ?, teacher_name = ? WHERE teacher_id = ?',
-        [hashedPassword, '鈺倫老師', 'A100']
-      );
-      console.log('✅ 密码已更新');
-    } else {
-      console.log('📝 创建新老师账号...');
-      await connection.query(
-        'INSERT INTO teachers (teacher_id, teacher_name, password) VALUES (?, ?, ?)',
-        ['A100', '鈺倫老師', hashedPassword]
-      );
-      console.log('✅ 老师账号创建成功');
-    }
-
     console.log('\n✅ 完成！');
-    console.log('📋 老师账号信息:');
-    console.log('   账号: A100');
-    console.log('   密码: 999');
-    console.log('   姓名: 鈺倫老師\n');
+    console.log('📝 请手动在数据库中创建老师账号');
+    console.log('   可以使用 SQL 或通过管理界面添加\n');
     console.log('🌐 现在可以访问: http://localhost:3000/admin.html\n');
 
   } catch (error) {
     console.error('❌ 创建老师账号失败:', error.message);
-    
+
     if (error.code === 'ECONNREFUSED') {
       console.error('\n💡 提示: 数据库连接失败');
       console.error('   请确认:');
@@ -81,7 +52,7 @@ async function createTeacherLocal() {
       console.error('\n💡 提示: 数据库不存在');
       console.error('   请先创建数据库: CREATE DATABASE ellen_classroom;');
     }
-    
+
     process.exit(1);
   } finally {
     if (connection) {

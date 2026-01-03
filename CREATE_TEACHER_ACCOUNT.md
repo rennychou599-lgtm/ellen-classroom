@@ -14,9 +14,9 @@ POST /api/admin/init-teacher
 curl -X POST https://your-railway-url.railway.app/api/admin/init-teacher
 ```
 
-这个 API 会自动：
+这个 API 会：
 1. 创建 teachers 表（如果不存在）
-2. 创建老师账号 A100，密码为 999（已加密）
+2. **不会**创建默认账号，需要手动添加老师账号
 
 ## 方法 2: 在 Railway 数据库管理界面执行 SQL
 
@@ -37,11 +37,14 @@ npm install
 node scripts/create-teacher.js
 ```
 
-## 账号信息
+## 创建老师账号
 
-- **账号**: A100
-- **密码**: 999
-- **姓名**: 鈺倫老師
+系统不会自动创建默认账号。创建 `teachers` 表后，需要手动添加老师账号。
+
+可以使用以下方法添加账号：
+1. 在数据库管理界面执行 SQL（密码需要使用 bcrypt 加密）
+2. 使用后端脚本（需要修改脚本中的账号和密码）
+3. 通过管理界面（如果已实现）
 
 ## 验证
 

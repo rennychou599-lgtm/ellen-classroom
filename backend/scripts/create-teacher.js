@@ -12,7 +12,7 @@ const { pool } = require('../config/database');
 async function createTeacher() {
   try {
     console.log('📝 开始创建老师账号...');
-    
+
     // 创建 teachers 表（如果不存在）
     await pool.query(`
       CREATE TABLE IF NOT EXISTS teachers (
@@ -25,39 +25,10 @@ async function createTeacher() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     `);
     console.log('✅ 老师表已创建或已存在');
-
-    // 检查老师是否已存在
-    const [existing] = await pool.query(
-      'SELECT * FROM teachers WHERE teacher_id = ?',
-      ['A100']
-    );
-
-    // 加密密码
-    const hashedPassword = await bcrypt.hash('999', 10);
-    console.log('✅ 密码已加密');
-
-    if (existing.length > 0) {
-      console.log('📝 老师账号已存在，更新密码...');
-      await pool.query(
-        'UPDATE teachers SET password = ?, teacher_name = ? WHERE teacher_id = ?',
-        [hashedPassword, '鈺倫老師', 'A100']
-      );
-      console.log('✅ 密码已更新');
-    } else {
-      console.log('📝 创建新老师账号...');
-      await pool.query(
-        'INSERT INTO teachers (teacher_id, teacher_name, password) VALUES (?, ?, ?)',
-        ['A100', '鈺倫老師', hashedPassword]
-      );
-      console.log('✅ 老师账号创建成功');
-    }
-
     console.log('\n✅ 完成！');
-    console.log('📋 老师账号信息:');
-    console.log('   账号: A100');
-    console.log('   密码: 999');
-    console.log('   姓名: 鈺倫老師\n');
-    
+    console.log('📝 请手动在数据库中创建老师账号');
+    console.log('   可以使用 SQL 或通过管理界面添加\n');
+
     process.exit(0);
   } catch (error) {
     console.error('❌ 创建老师账号失败:', error);

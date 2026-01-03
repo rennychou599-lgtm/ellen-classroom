@@ -121,26 +121,39 @@ npm run init-db
 
 ### 5. 创建老师账号
 
-有三种方法：
+**注意**：系统不会自动创建默认账号，需要手动创建。
 
-**方法 A: 使用本地脚本（最简单，推荐）**
-```bash
-cd backend
-npm run create-teacher
+**方法 A: 使用 SQL（推荐）**
+在 MySQL 中执行以下 SQL（需要先使用 bcrypt 加密密码）：
+
+```sql
+-- 创建 teachers 表（如果不存在）
+CREATE TABLE IF NOT EXISTS teachers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  teacher_id VARCHAR(50) UNIQUE NOT NULL,
+  teacher_name VARCHAR(100) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 插入老师账号（密码需要先使用 bcrypt 加密）
+-- 可以使用 API 或脚本生成加密后的密码
 ```
 
-**方法 B: 使用 API（需要先启动服务器）**
+**方法 B: 使用 API 创建表（不创建账号）**
 ```bash
 # 启动服务器后，在另一个终端执行
 curl -X POST http://localhost:3000/api/admin/init-teacher
 ```
+这会创建 `teachers` 表，但不会创建默认账号，需要手动添加。
 
-**方法 C: 手动执行 SQL**
-在 MySQL 中执行 `backend/scripts/create-teacher.sql`
-
-**账号信息**（创建后可使用）：
-- 账号：`A100`
-- 密码：`999`
+**方法 C: 使用本地脚本创建表**
+```bash
+cd backend
+npm run create-teacher
+```
+这会创建 `teachers` 表，但不会创建默认账号。
 
 ### 6. 启动服务器
 
