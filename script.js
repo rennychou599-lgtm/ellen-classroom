@@ -223,10 +223,33 @@ function startTypewriterLoop() {
         clearInterval(typewriterInterval);
     }
 
-    // 設置每30秒（30000毫秒）重複一次
-    typewriterInterval = setInterval(() => {
-        startTypewriter();
-    }, 30000); // 30000毫秒 = 30秒
+    // 页面可见性检测：只在页面可见时执行
+    function handleVisibilityChange() {
+        if (document.hidden) {
+            // 页面不可见时暂停
+            if (typewriterInterval) {
+                clearInterval(typewriterInterval);
+                typewriterInterval = null;
+            }
+        } else {
+            // 页面可见时恢复（如果还没有启动）
+            if (!typewriterInterval) {
+                typewriterInterval = setInterval(() => {
+                    startTypewriter();
+                }, 30000); // 30000毫秒 = 30秒
+            }
+        }
+    }
+
+    // 监听页面可见性变化
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // 設置每30秒（30000毫秒）重複一次（仅在页面可见时）
+    if (!document.hidden) {
+        typewriterInterval = setInterval(() => {
+            startTypewriter();
+        }, 30000); // 30000毫秒 = 30秒
+    }
 }
 
 function startTypewriter() {
