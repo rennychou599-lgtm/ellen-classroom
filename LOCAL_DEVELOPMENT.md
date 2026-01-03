@@ -146,9 +146,9 @@ npm start
 http://localhost:3000/admin.html
 ```
 
-使用以下账号登录：
-- **账号**: `BMN-5680`
-- **密码**: `BMN-5680!@`
+**登录信息**：
+- 账号和密码请参考 `CREATE_TEACHER_ACCOUNT.md` 文件
+- 或使用 `curl -X POST http://localhost:3000/api/admin/init-teacher` 创建默认账号后，查看该 API 的说明
 
 ---
 
