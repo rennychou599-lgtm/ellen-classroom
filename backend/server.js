@@ -54,16 +54,19 @@ app.use(express.static(staticPath, {
   maxAge: process.env.NODE_ENV === 'production' ? '1y' : '0', // 生产环境缓存 1 年
   etag: true, // 启用 ETag
   lastModified: true, // 启用 Last-Modified
-  setHeaders: (res, path) => {
+  setHeaders: (res, filePath) => {
     // 为图片设置更长的缓存时间
-    if (path.match(/\.(jpg|jpeg|png|gif|webp|svg|ico)$/)) {
+    if (filePath.match(/\.(jpg|jpeg|png|gif|webp|svg|ico)$/)) {
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     }
     // 为 CSS/JS 设置缓存
-    if (path.match(/\.(css|js)$/)) {
+    if (filePath.match(/\.(css|js)$/)) {
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     }
-  }
+  },
+  // 确保 HTML 文件也能被正确提供
+  index: false, // 不自动提供 index.html
+  fallthrough: true // 如果文件不存在，继续到下一个中间件
 }));
 
 // 健康检查
@@ -77,14 +80,18 @@ app.use('/api/grades', gradesRoutes);
 app.use('/api/reflections', reflectionsRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/feedback', feedbackRoutes);
+app.use('/api/admin', adminRoutes);
 
 // SPA 路由回退（所有非 API 路由返回 index.html）
+// 注意：这个中间件只在静态文件服务找不到文件时才会执行
 app.get('*', (req, res, next) => {
   // 如果是 API 请求，继续到 404 处理
   if (req.path.startsWith('/api')) {
     return next();
   }
-  // 如果是静态资源请求（有扩展名），继续
+  // 如果是静态资源请求（有扩展名），继续到 404 处理
+  // 因为如果静态文件存在，静态文件中间件已经处理了
+  // 如果到这里说明文件不存在
   if (path.extname(req.path)) {
     return next();
   }
