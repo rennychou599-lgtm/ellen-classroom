@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     }
 
     const [grades] = await pool.query(
-      `SELECT subject, score, comment, exam_date 
+      `SELECT id, subject, score, comment, exam_date 
        FROM grades 
        WHERE student_id = ? 
        ORDER BY exam_date DESC, subject ASC`,

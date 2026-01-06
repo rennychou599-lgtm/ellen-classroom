@@ -42,6 +42,27 @@ app.use(cors({
   origin: process.env.FRONTEND_URL || '*',
   credentials: true
 }));
+
+// Rate limiting - 防止 DDoS 和暴力破解
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 分钟
+  max: 100, // 限制每个 IP 15 分钟内最多 100 个请求
+  message: '请求过于频繁，请稍后再试',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// 登录接口更严格的限制
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 分钟
+  max: 5, // 限制每个 IP 15 分钟内最多 5 次登录尝试
+  message: '登录尝试次数过多，请稍后再试',
+  skipSuccessfulRequests: true, // 成功登录不计入限制
+});
+
+app.use('/api/', apiLimiter); // 应用到所有 API 路由
+app.use('/api/admin/login', loginLimiter); // 登录接口额外限制
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -103,12 +124,12 @@ app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api')) {
     return res.status(404).json({ error: 'API 路由不存在' });
   }
-  
+
   // 如果请求的是静态文件（有扩展名），说明文件不存在，返回 404
   if (path.extname(req.path)) {
     return res.status(404).json({ error: '文件不存在' });
   }
-  
+
   // 否则返回 index.html（用于 SPA 路由）
   const indexPath = path.join(__dirname, '../index.html');
   console.log('📄 返回 index.html，路径:', indexPath);

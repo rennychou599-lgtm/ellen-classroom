@@ -4,136 +4,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>老師管理介面 | 鈺倫の教室</title>
+    <title>九年一班管理介面 (UI/UX 測試) | 鈺倫の教室</title>
     <link rel="icon" type="image/png" href="images2/Ellennoback.png">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* 登入模态框样式 */
+        /* 登入模态框样式 - 已隱藏，僅保留樣式以防需要 */
         .login-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 10000;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            display: none !important;
         }
 
-        .login-modal.active {
+        /* 移除 Logo 區域的懸停效果 */
+        .site-branding .logo-link:hover {
+            opacity: 1 !important;
+            cursor: default !important;
+        }
+
+        .site-branding .logo-link {
+            pointer-events: none;
+        }
+
+        .site-branding .logo-link * {
+            pointer-events: none;
+        }
+
+        /* Header Actions 樣式 */
+        .header-actions {
             display: flex;
-            opacity: 1;
+            align-items: center;
+            gap: 0.75rem;
+            flex-shrink: 0;
+            margin-left: auto;
         }
 
-        .login-modal-content {
-            position: relative;
-            background: white;
-            border-radius: 16px;
-            padding: 3rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            max-width: 450px;
-            width: 90%;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
+        /* 登出按鈕樣式 - 紅色明顯 */
+        .btn-logout {
+            background: #dc3545 !important;
+            color: white !important;
+            border: 2px solid #dc3545 !important;
+            font-weight: 600 !important;
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3) !important;
+            padding: 0.65rem 1.25rem !important;
+            border-radius: 8px !important;
+            font-size: 0.9rem !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.4rem !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            white-space: nowrap !important;
         }
 
-        .login-modal.active .login-modal-content {
-            transform: scale(1);
+        .btn-logout:hover {
+            background: #c82333 !important;
+            border-color: #c82333 !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4) !important;
         }
 
-        .login-modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #5a6c7d;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 50%;
-            transition: all 0.2s ease;
+        .btn-logout:active {
+            transform: translateY(0) !important;
+            box-shadow: 0 2px 6px rgba(220, 53, 69, 0.3) !important;
         }
 
-        .login-modal-close:hover {
-            background: #f0f0f0;
-            color: #2c3e50;
+        .btn-logout i {
+            color: white !important;
+            font-size: 0.85rem !important;
         }
 
-        .login-form h2 {
-            color: #2c3e50;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            text-align: center;
+        /* 班級選擇器樣式 */
+        .class-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-left: 1.5rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            box-shadow:
+                0 2px 12px rgba(0, 0, 0, 0.06),
+                0 1px 3px rgba(0, 0, 0, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
-        .login-form p {
-            color: #5a6c7d;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            color: #2c3e50;
+        .class-selector-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64748b;
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
+            white-space: nowrap;
         }
 
-        .form-group input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 8px;
+        .class-selector-label i {
+            color: #6366f1;
             font-size: 1rem;
-            transition: all 0.3s ease;
         }
 
-        .form-group input:focus {
+        .class-select {
+            padding: 0.5rem 1rem;
+            border: 1.5px solid rgba(226, 232, 240, 0.8);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #1e293b;
+            min-width: 140px;
+        }
+
+        .class-select:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #6366f1;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow:
+                0 0 0 4px rgba(99, 102, 241, 0.1),
+                0 4px 12px rgba(99, 102, 241, 0.15);
         }
 
-        .login-error {
-            background: #fee;
-            color: #c33;
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            display: none;
-            text-align: center;
-            font-size: 0.9rem;
+        .class-select:hover {
+            border-color: #6366f1;
+            transform: translateY(-1px);
         }
 
-        .login-error.show {
-            display: block;
+        .class-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.875rem;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+            margin-left: 0.5rem;
         }
 
+        .class-badge i {
+            font-size: 0.75rem;
+        }
 
         .admin-page {
             min-height: 100vh;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #f8f9fb 0%, #e8ecf1 50%, #f0f4f8 100%);
             padding: 2rem;
+            position: relative;
+        }
+
+        .admin-page::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         .admin-container {
-            max-width: 1400px;
-            margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
+
 
 
         .admin-stats {
@@ -144,78 +188,142 @@
         }
 
         .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-            border-left: 4px solid #667eea;
-            transition: all 0.3s ease;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow:
+                0 4px 20px rgba(0, 0, 0, 0.06),
+                0 1px 3px rgba(0, 0, 0, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-left: 4px solid;
+            border-image: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) 1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+            box-shadow:
+                0 12px 32px rgba(99, 102, 241, 0.15),
+                0 4px 12px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
         }
 
         .stat-card h3 {
-            color: #5a6c7d;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
+            color: #64748b;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .stat-card .stat-value {
-            color: #2c3e50;
-            font-size: 2rem;
+            color: #1e293b;
+            font-size: 2.25rem;
             font-weight: 700;
             margin: 0;
+            background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .stat-card .stat-icon {
-            color: #667eea;
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.25rem;
+            margin-bottom: 0.75rem;
+            filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.2));
         }
 
         /* 標籤頁樣式 */
         .admin-tabs {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            background: white;
-            padding: 0.5rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem;
+            border-radius: 16px;
+            box-shadow:
+                0 4px 20px rgba(0, 0, 0, 0.06),
+                0 1px 3px rgba(0, 0, 0, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         .tab-btn {
             flex: 1;
-            padding: 1rem 1.5rem;
+            padding: 1rem 1.75rem;
             border: none;
             background: transparent;
-            color: #5a6c7d;
+            color: #64748b;
             font-size: 1rem;
-            font-weight: 500;
-            border-radius: 8px;
+            font-weight: 600;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
+            gap: 0.625rem;
+            position: relative;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .tab-btn:hover {
-            background: #f5f7fa;
-            color: #2c3e50;
+            color: #475569;
+            transform: translateY(-1px);
+        }
+
+        .tab-btn:hover::before {
+            opacity: 1;
         }
 
         .tab-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
             color: white;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            box-shadow:
+                0 4px 16px rgba(99, 102, 241, 0.35),
+                0 2px 8px rgba(139, 92, 246, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .tab-btn.active::before {
+            opacity: 0;
         }
 
         .tab-content {
@@ -227,10 +335,15 @@
         }
 
         .admin-content {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         .content-header {
@@ -243,10 +356,15 @@
         }
 
         .content-header h2 {
-            color: #2c3e50;
-            font-size: 1.5rem;
-            font-weight: 600;
+            color: #1e293b;
+            font-size: 1.75rem;
+            font-weight: 700;
             margin: 0;
+            background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
         }
 
         .search-filter {
@@ -263,41 +381,59 @@
 
         .search-box input {
             width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 8px;
+            padding: 0.875rem 1.125rem 0.875rem 2.75rem;
+            border: 1.5px solid rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
             font-size: 1rem;
-            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #1e293b;
         }
 
         .search-box input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #6366f1;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow:
+                0 0 0 4px rgba(99, 102, 241, 0.1),
+                0 4px 12px rgba(99, 102, 241, 0.15);
+            transform: translateY(-1px);
         }
 
         .search-box i {
             position: absolute;
-            left: 0.75rem;
+            left: 1rem;
             top: 50%;
             transform: translateY(-50%);
-            color: #5a6c7d;
+            color: #64748b;
+            transition: color 0.3s ease;
+        }
+
+        .search-box input:focus+i {
+            color: #6366f1;
         }
 
         .filter-select {
-            padding: 0.75rem 1rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 8px;
+            padding: 0.875rem 1.25rem;
+            border: 1.5px solid rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
             font-size: 1rem;
-            background: white;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #1e293b;
         }
 
         .filter-select:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #6366f1;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow:
+                0 0 0 4px rgba(99, 102, 241, 0.1),
+                0 4px 12px rgba(99, 102, 241, 0.15);
+            transform: translateY(-1px);
         }
 
         .students-table {
@@ -307,8 +443,9 @@
         }
 
         .students-table thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
             color: white;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
         }
 
         .students-table th {
@@ -330,7 +467,9 @@
         }
 
         .students-table tbody tr:hover {
-            background: #f8f9fa;
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.04) 0%, rgba(139, 92, 246, 0.04) 100%);
+            transform: scale(1.01);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
         }
 
         .students-table tbody tr:last-child td {
@@ -378,38 +517,51 @@
         }
 
         .btn-icon {
-            padding: 0.5rem;
+            padding: 0.625rem;
             border: none;
-            background: transparent;
-            color: #667eea;
+            background: rgba(99, 102, 241, 0.08);
+            color: #6366f1;
             cursor: pointer;
-            border-radius: 6px;
-            transition: all 0.2s ease;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 1rem;
         }
 
         .btn-icon:hover {
-            background: #f0f4ff;
-            color: #5568d3;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+            color: #4f46e5;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
+            padding: 0.875rem 1.75rem;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.625rem;
+            box-shadow:
+                0 4px 16px rgba(99, 102, 241, 0.3),
+                0 2px 8px rgba(139, 92, 246, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow:
+                0 8px 24px rgba(99, 102, 241, 0.4),
+                0 4px 12px rgba(139, 92, 246, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
         }
 
         .btn-secondary {
@@ -484,20 +636,30 @@
         }
 
         .grade-item {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            border-radius: 8px;
-            padding: 1.25rem;
+            background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.9) 100%);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid;
+            border-image: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) 1;
+            border-radius: 12px;
+            padding: 1.5rem;
             margin-bottom: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(226, 232, 240, 0.5);
         }
 
         .grade-item:hover {
-            transform: translateX(4px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transform: translateX(6px) translateY(-2px);
+            box-shadow:
+                0 8px 20px rgba(99, 102, 241, 0.15),
+                0 4px 12px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border-color: rgba(99, 102, 241, 0.3);
         }
 
         .grade-info {
@@ -518,10 +680,14 @@
         }
 
         .grade-score {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             font-weight: 700;
-            color: #667eea;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-right: 1rem;
+            filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.2));
         }
 
         .grade-actions {
@@ -575,17 +741,27 @@
         }
 
         .message-item {
-            background: #f8f9fa;
-            border-left: 4px solid #14b8a6;
-            border-radius: 8px;
-            padding: 1.25rem;
+            background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.9) 100%);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid;
+            border-image: linear-gradient(135deg, #10b981 0%, #14b8a6 100%) 1;
+            border-radius: 12px;
+            padding: 1.5rem;
             margin-bottom: 1rem;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(226, 232, 240, 0.5);
         }
 
         .message-item:hover {
-            transform: translateX(4px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transform: translateX(6px) translateY(-2px);
+            box-shadow:
+                0 8px 20px rgba(16, 185, 129, 0.15),
+                0 4px 12px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border-color: rgba(16, 185, 129, 0.3);
         }
 
         .message-header {
@@ -608,13 +784,14 @@
 
         .message-subject {
             display: inline-block;
-            background: #667eea;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             color: white;
-            padding: 0.25rem 0.75rem;
+            padding: 0.375rem 0.875rem;
             border-radius: 12px;
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 0.5rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
         }
 
         .message-content-text {
@@ -694,6 +871,18 @@
             color: #2c3e50;
         }
 
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
         .form-control {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -758,9 +947,27 @@
                 <div class="logo-link" style="cursor: default; display: flex; align-items: center; gap: 1rem;">
                     <img src="images2/Ellennoback.png" alt="鈺倫の教室 Logo" class="logo-image" loading="eager">
                     <span class="logo-text">鈺倫の教室</span>
-                    <span
-                        style="color: #2c3e50; font-size: 1.1rem; font-weight: 600; margin-left: 0.5rem;">老師管理介面</span>
+                    <span style="color: #2c3e50; font-size: 1.1rem; font-weight: 600; margin-left: 0.5rem;"
+                        id="pageTitle">九年一班管理介面
+                        (UI/UX 測試)</span>
                 </div>
+            </div>
+            <!-- 班級選擇器 -->
+            <div class="class-selector">
+                <div class="class-selector-label">
+                    <i class="fas fa-users-class"></i>
+                    <span>班級</span>
+                </div>
+                <select class="class-select" id="classSelector" onchange="switchClass()">
+                    <option value="901" selected>九年一班</option>
+                    <option value="902">九年二班</option>
+                    <option value="903">九年三班</option>
+                    <option value="904">九年四班</option>
+                </select>
+                <span class="class-badge" id="classBadge">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span id="classBadgeText">901</span>
+                </span>
             </div>
             <nav class="main-navigation">
                 <ul class="nav-menu">
@@ -771,16 +978,16 @@
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="admin.html" class="menu-link active">
+                        <a href="admin2.html" class="menu-link active">
                             <i class="fas fa-user-shield"></i>
-                            <span>管理介面</span>
+                            <span>管理介面 (測試)</span>
                         </a>
                     </li>
                 </ul>
             </nav>
-            <!-- 右側按鈕 -->
-            <div class="header-actions" id="adminHeaderActions" style="display: none;">
-                <button class="btn btn-outline" onclick="logout()">
+            <!-- 右側登出按鈕 -->
+            <div class="header-actions">
+                <button class="btn btn-logout" id="logoutBtn" onclick="handleLogout()">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>登出</span>
                 </button>
@@ -788,45 +995,8 @@
         </div>
     </header>
 
-    <!-- 登入模态框 -->
-    <div class="login-modal" id="loginModal">
-        <div class="login-modal-content">
-            <button class="login-modal-close" onclick="closeLoginModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="login-form">
-                <h2>
-                    <i class="fas fa-user-shield"></i>
-                    老師登入
-                </h2>
-                <p>請輸入您的帳號和密碼</p>
-                <div class="login-error" id="loginError"></div>
-                <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
-                    <div class="form-group">
-                        <label for="teacherId">
-                            <i class="fas fa-user"></i>
-                            老師帳號
-                        </label>
-                        <input type="text" id="teacherId" name="teacherId" required placeholder="請輸入老師帳號">
-                    </div>
-                    <div class="form-group">
-                        <label for="teacherPassword">
-                            <i class="fas fa-lock"></i>
-                            密碼
-                        </label>
-                        <input type="password" id="teacherPassword" name="password" required placeholder="請輸入密碼">
-                    </div>
-                    <button type="submit" class="btn-primary" style="width: 100%;">
-                        <i class="fas fa-sign-in-alt"></i>
-                        登入
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <!-- 管理後台內容 -->
-    <section class="admin-page" id="adminContent" style="display: none;">
+    <section class="admin-page" id="adminContent">
         <div class="admin-container">
             <!-- 統計卡片 -->
             <div class="admin-stats">
@@ -1067,116 +1237,54 @@
 
     <script>
         let allStudents = [];
-        let authToken = null;
+        // 測試模式：不需要真實的 authToken
+        let authToken = 'test-token-for-ui-ux';
 
-        // 檢查登入狀態
+        // 測試用假資料 - 按班級分類
+        const mockStudentsByClass = {
+            '901': [
+                { student_id: '901001', student_name: '王小明', status: 'active', last_login: '2025-01-15', completion_rate: 85, average_grade: 88 },
+                { student_id: '901002', student_name: '李小華', status: 'active', last_login: '2025-01-14', completion_rate: 92, average_grade: 92 },
+                { student_id: '901003', student_name: '張小美', status: 'inactive', last_login: '2025-01-10', completion_rate: 78, average_grade: 85 },
+                { student_id: '901004', student_name: '陳小強', status: 'pending', last_login: '2025-01-12', completion_rate: 65, average_grade: 75 },
+                { student_id: '901005', student_name: '林小芳', status: 'active', last_login: '2025-01-15', completion_rate: 90, average_grade: 90 }
+            ],
+            '902': [
+                { student_id: '902001', student_name: '黃小華', status: 'active', last_login: '2025-01-15', completion_rate: 88, average_grade: 90 },
+                { student_id: '902002', student_name: '劉小美', status: 'active', last_login: '2025-01-14', completion_rate: 85, average_grade: 87 },
+                { student_id: '902003', student_name: '吳小強', status: 'inactive', last_login: '2025-01-11', completion_rate: 72, average_grade: 80 }
+            ],
+            '903': [
+                { student_id: '903001', student_name: '周小芳', status: 'active', last_login: '2025-01-15', completion_rate: 95, average_grade: 95 },
+                { student_id: '903002', student_name: '鄭小華', status: 'active', last_login: '2025-01-14', completion_rate: 88, average_grade: 89 }
+            ],
+            '904': [
+                { student_id: '904001', student_name: '許小美', status: 'active', last_login: '2025-01-15', completion_rate: 90, average_grade: 91 },
+                { student_id: '904002', student_name: '蔡小強', status: 'pending', last_login: '2025-01-13', completion_rate: 70, average_grade: 78 }
+            ]
+        };
+
+        // 獲取當前班級的學生資料
+        function getCurrentClassStudents() {
+            return mockStudentsByClass[currentClass] || mockStudentsByClass['901'];
+        }
+
+        // 檢查登入狀態 - 測試模式直接顯示內容
         function checkAuth() {
-            const token = localStorage.getItem('adminToken');
-            const teacherInfo = localStorage.getItem('adminTeacher');
-
-            if (token && teacherInfo) {
-                authToken = token;
-                document.getElementById('loginModal').classList.remove('active');
-                document.getElementById('adminContent').style.display = 'block';
-                document.getElementById('adminHeaderActions').style.display = 'flex';
-                loadStudents();
-            } else {
-                document.getElementById('loginModal').classList.add('active');
-                document.getElementById('adminContent').style.display = 'none';
-                document.getElementById('adminHeaderActions').style.display = 'none';
-            }
+            // 直接顯示內容，不需要驗證
+            document.getElementById('adminContent').style.display = 'block';
+            // 載入測試資料（使用當前班級）
+            allStudents = getCurrentClassStudents();
+            displayStudents(allStudents);
+            updateStats(allStudents);
         }
 
-        // 關閉登入模态框
-        function closeLoginModal() {
-            document.getElementById('loginModal').classList.remove('active');
-        }
-
-        // 處理老師登入
-        async function handleAdminLogin(event) {
-            event.preventDefault();
-            const errorDiv = document.getElementById('loginError');
-            errorDiv.classList.remove('show');
-            errorDiv.textContent = '';
-
-            const teacherId = document.getElementById('teacherId').value;
-            const password = document.getElementById('teacherPassword').value;
-
-            try {
-                const response = await fetch('/api/admin/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ teacherId, password })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    // 保存登入信息
-                    localStorage.setItem('adminToken', data.token);
-                    localStorage.setItem('adminTeacher', JSON.stringify(data.teacher));
-                    authToken = data.token;
-
-                    // 關閉登入模态框，顯示後台內容
-                    closeLoginModal();
-                    document.getElementById('adminContent').style.display = 'block';
-                    document.getElementById('adminHeaderActions').style.display = 'flex';
-                    loadStudents();
-                } else {
-                    errorDiv.textContent = data.error || '登入失敗';
-                    errorDiv.classList.add('show');
-                }
-            } catch (error) {
-                console.error('登入錯誤:', error);
-                errorDiv.textContent = '登入失敗，請稍後再試';
-                errorDiv.classList.add('show');
-            }
-        }
-
-        // 登出
-        function logout() {
-            localStorage.removeItem('adminToken');
-            localStorage.removeItem('adminTeacher');
-            authToken = null;
-            document.getElementById('adminHeaderActions').style.display = 'none';
-            checkAuth();
-        }
-
-        // 載入學生資料
+        // 載入學生資料 - 測試模式使用假資料
         async function loadStudents() {
-            try {
-                const response = await fetch('/api/admin/students', {
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`
-                    }
-                });
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        // 未授权，重新登录
-                        logout();
-                        return;
-                    }
-                    throw new Error('無法載入學生資料');
-                }
-                const data = await response.json();
-                allStudents = data.students || [];
-                displayStudents(allStudents);
-                updateStats(allStudents);
-            } catch (error) {
-                console.error('載入學生資料錯誤:', error);
-                document.getElementById('studentsContainer').innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <p>無法載入學生資料，請稍後再試</p>
-                        <button class="btn-primary" onclick="loadStudents()" style="margin-top: 1rem;">
-                            <i class="fas fa-redo"></i>
-                            重新載入
-                        </button>
-                    </div>
-                `;
-            }
+            // 使用當前班級的假資料
+            allStudents = getCurrentClassStudents();
+            displayStudents(allStudents);
+            updateStats(allStudents);
         }
 
         // 顯示學生列表
@@ -1328,12 +1436,12 @@
 
         // 查看學生詳情
         function viewStudent(studentId) {
-            alert(`查看學生 ${studentId} 的詳情（功能開發中）`);
+            alert(`查看學生 ${studentId} 的詳情（UI/UX 測試模式）`);
         }
 
         // 編輯學生
         function editStudent(studentId) {
-            alert(`編輯學生 ${studentId}（功能開發中）`);
+            alert(`編輯學生 ${studentId}（UI/UX 測試模式）`);
         }
 
         // 標籤頁切換
@@ -1407,7 +1515,7 @@
             });
         }
 
-        // 載入學生成績
+        // 載入學生成績 - 測試模式
         async function loadStudentGrades() {
             const studentId = document.getElementById('gradeStudentSelect').value;
             const container = document.getElementById('gradesContainer');
@@ -1422,208 +1530,113 @@
                 return;
             }
 
-            try {
-                container.innerHTML = `
-                    <div class="loading">
-                        <i class="fas fa-spinner"></i>
-                        <p>載入中...</p>
+            // 測試用假成績資料
+            const mockGrades = [
+                { id: 1, subject: '國文', score: 88, comment: '表現良好', exam_date: '2025-01-10' },
+                { id: 2, subject: '英文', score: 92, comment: '進步明顯', exam_date: '2025-01-12' },
+                { id: 3, subject: '數學', score: 85, comment: '需要加強', exam_date: '2025-01-14' }
+            ];
+
+            container.innerHTML = mockGrades.map(grade => `
+                <div class="grade-item">
+                    <div class="grade-info">
+                        <h4>${grade.subject}</h4>
+                        <p>${grade.comment || '無評語'}</p>
+                        <p style="font-size: 0.85rem; color: #8899a6;">
+                            <i class="fas fa-calendar"></i>
+                            ${grade.exam_date ? new Date(grade.exam_date).toLocaleDateString('zh-TW') : '未設定日期'}
+                        </p>
                     </div>
-                `;
-
-                const response = await fetch(`/api/grades?studentId=${studentId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`
-                    }
-                });
-
-                if (!response.ok) throw new Error('無法載入成績');
-
-                const data = await response.json();
-                const grades = data.grades || [];
-
-                if (grades.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-chart-line"></i>
-                            <p>該學生尚無成績記錄</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                container.innerHTML = grades.map(grade => `
-                    <div class="grade-item">
-                        <div class="grade-info">
-                            <h4>${grade.subject}</h4>
-                            <p>${grade.comment || '無評語'}</p>
-                            <p style="font-size: 0.85rem; color: #8899a6;">
-                                <i class="fas fa-calendar"></i>
-                                ${grade.exam_date ? new Date(grade.exam_date).toLocaleDateString('zh-TW') : '未設定日期'}
-                            </p>
-                        </div>
-                        <div class="grade-score">${grade.score}</div>
-                        <div class="grade-actions">
-                            <button class="btn-icon" onclick="editGrade('${grade.id || ''}', '${studentId}')" title="編輯">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </div>
+                    <div class="grade-score">${grade.score}</div>
+                    <div class="grade-actions">
+                        <button class="btn-icon" onclick="editGrade('${grade.id || ''}', '${studentId}')" title="編輯">
+                            <i class="fas fa-edit"></i>
+                        </button>
                     </div>
-                `).join('');
-            } catch (error) {
-                console.error('載入成績錯誤:', error);
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <p>無法載入成績，請稍後再試</p>
-                    </div>
-                `;
-            }
+                </div>
+            `).join('');
         }
 
-        // 載入學生學習心得
+        // 載入學生學習心得 - 測試模式
         async function loadStudentReflections() {
             const studentId = document.getElementById('reflectionStudentSelect')?.value || '';
             const container = document.getElementById('reflectionsContainer');
 
-            try {
-                container.innerHTML = `
-                    <div class="loading">
-                        <i class="fas fa-spinner"></i>
-                        <p>載入中...</p>
-                    </div>
-                `;
+            // 測試用假資料
+            const mockReflections = [
+                { id: 1, student_id: 'S001', date: '2025-01-15', subject: '數學', content: '今天學習了代數，感覺很有收穫！' },
+                { id: 2, student_id: 'S002', date: '2025-01-14', subject: '英文', content: '背了很多單字，希望考試能有好成績。' },
+                { id: 3, student_id: 'S003', date: '2025-01-13', subject: '國文', content: '閱讀理解需要多練習。' }
+            ];
 
-                let url = '/api/reflections';
-                if (studentId) {
-                    url += `?studentId=${studentId}`;
-                } else {
-                    // 載入所有學生的心得（需要後端支援）
-                    url += '?all=true';
-                }
+            const studentMap = {};
+            allStudents.forEach(s => {
+                studentMap[s.student_id] = s.student_name;
+            });
 
-                const response = await fetch(url, {
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`
-                    }
-                });
+            const filtered = studentId
+                ? mockReflections.filter(r => r.student_id === studentId)
+                : mockReflections;
 
-                if (!response.ok) throw new Error('無法載入學習心得');
-
-                const data = await response.json();
-                const reflections = data.reflections || [];
-
-                if (reflections.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-lightbulb"></i>
-                            <p>尚無學習心得記錄</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                // 獲取學生名稱映射
-                const studentMap = {};
-                allStudents.forEach(s => {
-                    studentMap[s.student_id] = s.student_name;
-                });
-
-                container.innerHTML = reflections.map(reflection => `
-                    <div class="message-item">
-                        <div class="message-header">
-                            <span class="message-student">
-                                ${studentMap[reflection.student_id] || reflection.student_id}
-                            </span>
-                            <span class="message-date">
-                                ${new Date(reflection.date).toLocaleDateString('zh-TW')}
-                            </span>
-                        </div>
-                        <span class="message-subject">${reflection.subject}</span>
-                        <div class="message-content-text">${reflection.content}</div>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error('載入學習心得錯誤:', error);
+            if (filtered.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <p>無法載入學習心得，請稍後再試</p>
+                        <i class="fas fa-lightbulb"></i>
+                        <p>尚無學習心得記錄</p>
                     </div>
                 `;
+                return;
             }
+
+            container.innerHTML = filtered.map(reflection => `
+                <div class="message-item">
+                    <div class="message-header">
+                        <span class="message-student">
+                            ${studentMap[reflection.student_id] || reflection.student_id}
+                        </span>
+                        <span class="message-date">
+                            ${new Date(reflection.date).toLocaleDateString('zh-TW')}
+                        </span>
+                    </div>
+                    <span class="message-subject">${reflection.subject}</span>
+                    <div class="message-content-text">${reflection.content}</div>
+                </div>
+            `).join('');
         }
 
-        // 載入所有待回覆訊息
+        // 載入所有待回覆訊息 - 測試模式
         async function loadAllFeedback() {
             const container = document.getElementById('feedbackContainer');
 
-            try {
-                container.innerHTML = `
-                    <div class="loading">
-                        <i class="fas fa-spinner"></i>
-                        <p>載入中...</p>
-                    </div>
-                `;
+            // 測試用假資料
+            const mockFeedbacks = [
+                { id: 1, student_id: 'S001', student_name: '王小明', title: '關於作業問題', content: '老師，我想請問作業的第三題該如何解答？', created_at: '2025-01-15', is_read: false },
+                { id: 2, student_id: 'S002', student_name: '李小華', title: '考試範圍確認', content: '請問這次考試的範圍是什麼？', created_at: '2025-01-14', is_read: true }
+            ];
 
-                // 這裡需要後端 API 支援獲取所有學生的 feedback
-                // 暫時使用學生列表來獲取
-                const feedbacks = [];
-                for (const student of allStudents) {
-                    try {
-                        const response = await fetch(`/api/feedback?studentId=${student.student_id}`, {
-                            headers: {
-                                'Authorization': `Bearer ${authToken}`
-                            }
-                        });
-                        if (response.ok) {
-                            const data = await response.json();
-                            if (data.feedback && data.feedback.length > 0) {
-                                data.feedback.forEach(fb => {
-                                    feedbacks.push({
-                                        ...fb,
-                                        student_id: student.student_id,
-                                        student_name: student.student_name
-                                    });
-                                });
-                            }
-                        }
-                    } catch (err) {
-                        console.error(`載入 ${student.student_id} 的 feedback 失敗:`, err);
-                    }
-                }
-
-                if (feedbacks.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-envelope"></i>
-                            <p>尚無待回覆訊息</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                container.innerHTML = feedbacks.map(fb => `
-                    <div class="message-item">
-                        <div class="message-header">
-                            <span class="message-student">${fb.student_name || fb.student_id}</span>
-                            <span class="message-date">
-                                ${new Date(fb.created_at).toLocaleDateString('zh-TW')}
-                            </span>
-                        </div>
-                        <h4 style="color: #2c3e50; margin-bottom: 0.5rem;">${fb.title}</h4>
-                        <div class="message-content-text">${fb.content}</div>
-                        ${!fb.is_read ? '<span style="display: inline-block; background: #ff6b6b; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-top: 0.5rem;">未讀</span>' : ''}
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error('載入待回覆訊息錯誤:', error);
+            if (mockFeedbacks.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <p>無法載入訊息，請稍後再試</p>
+                        <i class="fas fa-envelope"></i>
+                        <p>尚無待回覆訊息</p>
                     </div>
                 `;
+                return;
             }
+
+            container.innerHTML = mockFeedbacks.map(fb => `
+                <div class="message-item">
+                    <div class="message-header">
+                        <span class="message-student">${fb.student_name || fb.student_id}</span>
+                        <span class="message-date">
+                            ${new Date(fb.created_at).toLocaleDateString('zh-TW')}
+                        </span>
+                    </div>
+                    <h4 style="color: #2c3e50; margin-bottom: 0.5rem;">${fb.title}</h4>
+                    <div class="message-content-text">${fb.content}</div>
+                    ${!fb.is_read ? '<span style="display: inline-block; background: #ff6b6b; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-top: 0.5rem;">未讀</span>' : ''}
+                </div>
+            `).join('');
         }
 
         // 打開新增成績模态框
@@ -1652,63 +1665,184 @@
             document.getElementById('addGradeForm').reset();
         }
 
-        // 處理新增成績
+        // 處理新增成績 - 測試模式
         async function handleAddGrade(event) {
             event.preventDefault();
-
-            const studentId = document.getElementById('gradeStudentId').value;
-            const subject = document.getElementById('gradeSubject').value;
-            const score = parseInt(document.getElementById('gradeScore').value);
-            const comment = document.getElementById('gradeComment').value;
-            const examDate = document.getElementById('gradeExamDate').value;
-
-            try {
-                const response = await fetch('/api/grades', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authToken}`
-                    },
-                    body: JSON.stringify({
-                        studentId,
-                        subject,
-                        score,
-                        comment: comment || null,
-                        examDate: examDate || null
-                    })
-                });
-
-                const data = await response.json();
-
-                if (data.success || response.ok) {
-                    alert('成績已成功新增！');
-                    closeAddGradeModal();
-                    // 如果當前在成績管理頁面，重新載入成績
-                    if (document.getElementById('tab-grades').classList.contains('active')) {
-                        loadStudentGrades();
-                    }
-                    // 重新載入學生列表以更新統計
-                    loadStudents();
-                } else {
-                    alert(data.error || '新增成績失敗');
-                }
-            } catch (error) {
-                console.error('新增成績錯誤:', error);
-                alert('新增成績失敗，請稍後再試');
-            }
+            alert('成績已成功新增！（UI/UX 測試模式 - 不會實際儲存）');
+            closeAddGradeModal();
         }
 
         // 編輯成績（佔位）
         function editGrade(gradeId, studentId) {
-            alert(`編輯成績功能開發中 (成績ID: ${gradeId})`);
+            alert(`編輯成績功能（UI/UX 測試模式） (成績ID: ${gradeId})`);
+        }
+
+        // 當前選中的班級
+        let currentClass = '901';
+
+        // 班級資料（可擴充）
+        const classData = {
+            '901': {
+                name: '九年一班',
+                shortName: '901',
+                studentCount: 28,
+                color: '#6366f1'
+            },
+            '902': {
+                name: '九年二班',
+                shortName: '902',
+                studentCount: 30,
+                color: '#8b5cf6'
+            },
+            '903': {
+                name: '九年三班',
+                shortName: '903',
+                studentCount: 27,
+                color: '#a855f7'
+            },
+            '904': {
+                name: '九年四班',
+                shortName: '904',
+                studentCount: 29,
+                color: '#ec4899'
+            }
+        };
+
+        // 切換班級
+        function switchClass() {
+            const selector = document.getElementById('classSelector');
+            const newClass = selector.value;
+
+            if (newClass === currentClass) return;
+
+            currentClass = newClass;
+            const classInfo = classData[newClass];
+
+            // 更新頁面標題
+            document.getElementById('pageTitle').textContent = `${classInfo.name}管理介面 (UI/UX 測試)`;
+
+            // 更新班級徽章
+            document.getElementById('classBadgeText').textContent = classInfo.shortName;
+
+            // 更新班級徽章顏色
+            const badge = document.getElementById('classBadge');
+            badge.style.background = `linear-gradient(135deg, ${classInfo.color} 0%, ${adjustColor(classInfo.color, -20)} 100%)`;
+
+            // 重新載入該班級的學生資料
+            loadClassStudents(newClass);
+
+            // 顯示切換提示
+            showClassSwitchNotification(classInfo.name);
+        }
+
+        // 調整顏色亮度
+        function adjustColor(color, amount) {
+            const num = parseInt(color.replace("#", ""), 16);
+            const r = Math.max(0, Math.min(255, (num >> 16) + amount));
+            const g = Math.max(0, Math.min(255, ((num >> 8) & 0x00FF) + amount));
+            const b = Math.max(0, Math.min(255, (num & 0x0000FF) + amount));
+            return "#" + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+        }
+
+        // 載入班級學生資料
+        function loadClassStudents(classId) {
+            // 這裡可以根據班級載入不同的學生資料
+            // 目前使用假資料，但可以擴展為從 API 載入
+            console.log(`載入 ${classData[classId].name} 的學生資料`);
+
+            // 更新統計卡片中的學生數
+            const classInfo = classData[classId];
+            document.getElementById('totalStudents').textContent = classInfo.studentCount;
+
+            // 重新載入學生列表
+            loadStudents();
+        }
+
+        // 顯示班級切換通知
+        function showClassSwitchNotification(className) {
+            // 創建通知元素
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 2rem;
+                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+                z-index: 10001;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                font-weight: 600;
+                animation: slideInRight 0.4s ease;
+            `;
+            notification.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <span>已切換至 ${className}</span>
+            `;
+
+            document.body.appendChild(notification);
+
+            // 3秒後移除
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.4s ease';
+                setTimeout(() => {
+                    notification.remove();
+                }, 400);
+            }, 3000);
+        }
+
+        // 添加動畫樣式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 處理登出
+        function handleLogout() {
+            if (confirm('確定要登出嗎？')) {
+                // 清除所有本地存儲
+                localStorage.clear();
+                // 重新載入頁面
+                window.location.reload();
+            }
         }
 
         // 頁面載入時執行
         document.addEventListener('DOMContentLoaded', () => {
             checkAuth();
+            // 初始化班級選擇器
+            const classInfo = classData[currentClass];
+            const badge = document.getElementById('classBadge');
+            if (badge) {
+                badge.style.background = `linear-gradient(135deg, ${classInfo.color} 0%, ${adjustColor(classInfo.color, -20)} 100%)`;
+            }
+            // 更新統計資料
+            document.getElementById('totalStudents').textContent = classInfo.studentCount;
         });
     </script>
-    <script src="auth.js"></script>
 </body>
 
 </html>
