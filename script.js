@@ -61,7 +61,7 @@ function initHeroButtons() {
         });
     }
 
-    // 關於本站按鈕
+    // 操作說明按鈕（已改為直接連結到 tutorial.html，此功能保留以備不時之需）
     const aboutSiteBtn = document.getElementById('aboutSiteBtn');
     if (aboutSiteBtn) {
         aboutSiteBtn.addEventListener('click', function () {
@@ -89,45 +89,124 @@ function initImageCarousel() {
 
     const slides = carouselContainer.querySelectorAll('.noticeboard-slide');
     let currentIndex = 0;
+    let imagesLoaded = false;
 
-    // 顯示指定索引的公告
-    function showSlide(index) {
-        slides.forEach((slide, i) => {
-            // 清除所有狀態
-            slide.classList.remove('active', 'prev', 'next');
+    // 預加載所有圖片
+    function preloadImages() {
+        const images = carouselContainer.querySelectorAll('img');
+        let loadedCount = 0;
+        const totalImages = images.length;
 
-            if (i === index) {
-                slide.classList.add('active');
-            } else if (i === index - 1 || (index === 0 && i === slides.length - 1)) {
-                // 左側卡片
-                slide.classList.add('prev');
-            } else if (i === index + 1 || (index === slides.length - 1 && i === 0)) {
-                // 右側卡片
-                slide.classList.add('next');
+        if (totalImages === 0) {
+            imagesLoaded = true;
+            return;
+        }
+
+        images.forEach((img) => {
+            if (img.complete) {
+                loadedCount++;
+                if (loadedCount === totalImages) {
+                    imagesLoaded = true;
+                }
+            } else {
+                img.addEventListener('load', () => {
+                    loadedCount++;
+                    if (loadedCount === totalImages) {
+                        imagesLoaded = true;
+                    }
+                });
+                img.addEventListener('error', () => {
+                    loadedCount++;
+                    if (loadedCount === totalImages) {
+                        imagesLoaded = true;
+                    }
+                });
             }
         });
 
-        // 更新指示器
-        if (indicators) {
-            const indicatorItems = indicators.querySelectorAll('.indicator');
-            indicatorItems.forEach((indicator, i) => {
+        // 如果所有圖片已經加載完成
+        if (loadedCount === totalImages) {
+            imagesLoaded = true;
+        }
+    }
+
+    // 預加載下一張和上一張的圖片（智能預加載，避免重複請求）
+    const preloadedImages = new Set(); // 追蹤已預加載的圖片 URL
+    
+    function preloadAdjacentImages(index) {
+        const nextIndex = (index + 1) % slides.length;
+        const prevIndex = (index - 1 + slides.length) % slides.length;
+        
+        [nextIndex, prevIndex].forEach((idx) => {
+            const slide = slides[idx];
+            if (slide) {
+                const img = slide.querySelector('img');
+                if (img && img.src && !preloadedImages.has(img.src)) {
+                    // 檢查圖片是否已經在 DOM 中且已開始加載
+                    if (!img.complete) {
+                        // 使用 link rel="prefetch" 更輕量，或使用 Image 對象
+                        // 但先檢查瀏覽器緩存
+                        const preloadImg = new Image();
+                        preloadImg.onload = () => {
+                            preloadedImages.add(img.src);
+                        };
+                        preloadImg.onerror = () => {
+                            preloadedImages.add(img.src); // 即使失敗也標記，避免重試
+                        };
+                        preloadImg.src = img.src;
+                    } else {
+                        // 圖片已經加載完成，直接標記
+                        preloadedImages.add(img.src);
+                    }
+                }
+            }
+        });
+    }
+
+    // 顯示指定索引的公告
+    function showSlide(index) {
+        // 使用 requestAnimationFrame 優化動畫性能
+        requestAnimationFrame(() => {
+            slides.forEach((slide, i) => {
+                // 清除所有狀態
+                slide.classList.remove('active', 'prev', 'next');
+
                 if (i === index) {
-                    indicator.classList.add('active');
-                } else {
-                    indicator.classList.remove('active');
+                    slide.classList.add('active');
+                } else if (i === index - 1 || (index === 0 && i === slides.length - 1)) {
+                    // 左側卡片
+                    slide.classList.add('prev');
+                } else if (i === index + 1 || (index === slides.length - 1 && i === 0)) {
+                    // 右側卡片
+                    slide.classList.add('next');
                 }
             });
-        }
 
-        // 更新按鈕狀態
-        if (prevBtn) {
-            prevBtn.disabled = slides.length <= 1;
-        }
-        if (nextBtn) {
-            nextBtn.disabled = slides.length <= 1;
-        }
+            // 更新指示器
+            if (indicators) {
+                const indicatorItems = indicators.querySelectorAll('.indicator');
+                indicatorItems.forEach((indicator, i) => {
+                    if (i === index) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+            }
 
-        currentIndex = index;
+            // 更新按鈕狀態
+            if (prevBtn) {
+                prevBtn.disabled = slides.length <= 1;
+            }
+            if (nextBtn) {
+                nextBtn.disabled = slides.length <= 1;
+            }
+
+            currentIndex = index;
+            
+            // 預加載相鄰圖片
+            preloadAdjacentImages(index);
+        });
     }
 
     // 切換到指定公告
@@ -193,9 +272,33 @@ function initImageCarousel() {
     let autoPlayInterval = null;
     function startAutoPlay() {
         if (slides.length <= 1) return;
-        autoPlayInterval = setInterval(() => {
-            goToSlide(currentIndex + 1);
-        }, 5000);
+        // 等待圖片加載完成後再開始自動播放
+        if (!imagesLoaded) {
+            const checkInterval = setInterval(() => {
+                if (imagesLoaded) {
+                    clearInterval(checkInterval);
+                    autoPlayInterval = setInterval(() => {
+                        goToSlide(currentIndex + 1);
+                    }, 5000);
+                }
+            }, 100);
+            // 最多等待 3 秒
+            setTimeout(() => {
+                clearInterval(checkInterval);
+                if (!imagesLoaded) {
+                    imagesLoaded = true; // 強制開始，即使圖片未完全加載
+                }
+                if (!autoPlayInterval) {
+                    autoPlayInterval = setInterval(() => {
+                        goToSlide(currentIndex + 1);
+                    }, 5000);
+                }
+            }, 3000);
+        } else {
+            autoPlayInterval = setInterval(() => {
+                goToSlide(currentIndex + 1);
+            }, 5000);
+        }
     }
 
     function stopAutoPlay() {
@@ -213,7 +316,11 @@ function initImageCarousel() {
 
     // 初始化顯示第一則
     showSlide(0);
-    // 開始自動播放
+    // 開始預加載圖片
+    preloadImages();
+    // 預加載相鄰圖片
+    preloadAdjacentImages(0);
+    // 開始自動播放（會等待圖片加載）
     startAutoPlay();
 }
 

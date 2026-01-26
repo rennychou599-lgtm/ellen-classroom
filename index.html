@@ -237,9 +237,9 @@
                         </ul>
                     </li>
                     <li class="menu-item">
-                        <a href="#about" class="menu-link">
+                        <a href="tutorial.html" target="_blank" class="menu-link">
                             <i class="fas fa-user-graduate"></i>
-                            <span>關於本站</span>
+                            <span>操作說明</span>
                         </a>
                     </li>
                 </ul>
@@ -311,13 +311,14 @@
                                 </button>
                                 <div class="noticeboard-container">
                                     <div class="noticeboard-slide active" data-index="0">
-                                        <div class="notice-card">
+                                        <div class="notice-card" onclick="window.open('tutorial.html', '_blank')"
+                                            style="cursor: pointer;">
                                             <div style="display: flex; gap: 1.75rem; align-items: center; width: 100%;">
                                                 <div
                                                     style="flex-shrink: 0; width: 45%; max-width: 300px; height: 180px; display: flex; align-items: center; justify-content: center;">
                                                     <img src="images2/ellenlogo.png" alt="鈺倫の教室"
                                                         style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;"
-                                                        loading="lazy">
+                                                        loading="eager">
                                                 </div>
                                                 <div class="notice-content" style="flex: 1;">
                                                     <h4 class="notice-title" style="color: #000000 !important;">
@@ -331,7 +332,8 @@
                                         </div>
                                     </div>
                                     <div class="noticeboard-slide" data-index="1">
-                                        <div class="notice-card">
+                                        <div class="notice-card" onclick="window.open('news.html?id=1', '_blank')"
+                                            style="cursor: pointer;">
                                             <div style="display: flex; gap: 1.75rem; align-items: center; width: 100%;">
                                                 <div
                                                     style="flex-shrink: 0; width: 45%; max-width: 300px; height: 180px; display: flex; align-items: center; justify-content: center;">
@@ -353,7 +355,8 @@
                                         </div>
                                     </div>
                                     <div class="noticeboard-slide" data-index="2">
-                                        <div class="notice-card">
+                                        <div class="notice-card" onclick="window.open('news.html?id=2', '_blank')"
+                                            style="cursor: pointer;">
                                             <div style="display: flex; gap: 1.75rem; align-items: center; width: 100%;">
                                                 <div
                                                     style="flex-shrink: 0; width: 45%; max-width: 300px; height: 180px; display: flex; align-items: center; justify-content: center;">
@@ -374,7 +377,8 @@
                                         </div>
                                     </div>
                                     <div class="noticeboard-slide" data-index="3">
-                                        <div class="notice-card carnival-card">
+                                        <div class="notice-card carnival-card"
+                                            onclick="window.open('news.html?id=3', '_blank')" style="cursor: pointer;">
                                             <div style="display: flex; gap: 1.75rem; align-items: center; width: 100%;">
                                                 <div
                                                     style="flex-shrink: 0; width: 45%; max-width: 300px; height: 180px; display: flex; align-items: center; justify-content: center;">
@@ -682,7 +686,7 @@
                     <ul>
                         <li><a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">首頁</a>
                         </li>
-                        <li><a href="#about">關於本站</a></li>
+                        <li><a href="tutorial.html" target="_blank">操作說明</a></li>
                     </ul>
                 </div>
                 <div class="footer-contact">
@@ -692,7 +696,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 鈺倫の教室. All rights reserved. <span style="margin-left: 1rem; color: #5a6c7d;">Version
+                <p>&copy; 2026 鈺倫の教室. All rights reserved. <span style="margin-left: 1rem; color: #5a6c7d;">Version
                         1.0</span></p>
             </div>
         </div>
@@ -728,6 +732,7 @@
 
     <script src="auth.js"></script>
     <script src="script.js"></script>
+    <script src="chat-widget.js"></script>
     <script>
         // 首頁登入功能
         (function () {
